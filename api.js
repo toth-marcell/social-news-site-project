@@ -67,11 +67,15 @@ app.post("/post", LoggedInOnly, async (req, res) => {
     return res.status(400).json({
       msg: "The link and link type; or the text field must be filled.",
     });
+  if ((link && !linkType) || (linkType && !link))
+    return res
+      .status(400)
+      .json({ msg: "If the link is set the link type must be set too." });
   await Post.create({
     title,
-    link,
-    linkType,
-    text,
+    link: link == "" ? null : link,
+    linkType: linkType == "" ? null : linkType,
+    text: text == "" ? null : text,
     category,
     UserId: res.locals.user.id,
   });
