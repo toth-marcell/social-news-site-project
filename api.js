@@ -1,6 +1,7 @@
 import express from "express";
-import { Post, User } from "./models.js";
 import JWT from "jsonwebtoken";
+import { ComparePassword, HashPassword } from "./auth.js";
+import { Post, User } from "./models.js";
 
 const app = express();
 export default app;
@@ -32,7 +33,7 @@ app.post("/register", async (req, res) => {
       .json({ msg: "You must fill out the name and password fields!" });
   if (await User.findOne({ where: { name } }))
     return res.status(400).json("That name is already taken!");
-  await User.create({ name, password, about });
+  await User.create({ name, password: HashPassword(password), about });
   res.json({ msg: "Success! You can now log in." });
 });
 
@@ -44,7 +45,7 @@ app.post("/login", async (req, res) => {
       .json("You must fill out the name and password fields!");
   const user = await User.findOne({ where: { name } });
   if (user) {
-    if (user.password == password) {
+    if (ComparePassword(password, user.password)) {
       res.json({
         msg: "Success!",
         token: JWT.sign({ id: user.id }, process.env.SECRET, {
