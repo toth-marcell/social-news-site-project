@@ -47,4 +47,26 @@ export const Post = sequelize.define("Post", {
 User.hasMany(Post);
 Post.belongsTo(User);
 
+export const Comment = sequelize.define("Comment", {
+  text: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+});
+
+Comment.belongsTo(User);
+User.hasMany(Comment);
+
+Comment.belongsTo(Post);
+Post.hasMany(Comment);
+
+Comment.belongsTo(Comment, { foreignKey: "ParentId" });
+Comment.hasMany(Comment, { foreignKey: "ParentId" });
+
+User.belongsToMany(Post, { through: "PostVote" });
+Post.belongsToMany(User, { through: "PostVote" });
+
+User.belongsToMany(Comment, { through: "CommentVote" });
+Comment.belongsToMany(User, { through: "CommentVote" });
+
 await sequelize.sync();
