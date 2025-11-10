@@ -60,13 +60,13 @@ User.hasMany(Comment);
 Comment.belongsTo(Post);
 Post.hasMany(Comment);
 
-Comment.belongsTo(Comment, { foreignKey: "ParentId" });
-Comment.hasMany(Comment, { foreignKey: "ParentId" });
+Comment.belongsTo(Comment, { foreignKey: "ParentId", as: "Parent" });
+Comment.hasMany(Comment, { foreignKey: "ParentId", as: "Children" });
 
-User.belongsToMany(Post, { through: "PostVote" });
-Post.belongsToMany(User, { through: "PostVote" });
+User.belongsToMany(Post, { through: "PostVote", as: "VotedPosts" });
+Post.belongsToMany(User, { through: "PostVote", as: "Votes" });
 
-User.belongsToMany(Comment, { through: "CommentVote" });
-Comment.belongsToMany(User, { through: "CommentVote" });
+User.belongsToMany(Comment, { through: "CommentVote", as: "VotedComments" });
+Comment.belongsToMany(User, { through: "CommentVote", as: "Votes" });
 
 await sequelize.sync();
