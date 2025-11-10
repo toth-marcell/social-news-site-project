@@ -1,0 +1,10 @@
+openapi: 3.0.4
+servers:
+  - url: /api
+paths:
+  /register:
+    post:
+      summary: Create a new account
+  /login:
+    post:
+      summary: Get a JWT for an account
