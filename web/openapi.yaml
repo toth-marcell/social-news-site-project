@@ -19,6 +19,22 @@ components:
             properties:
               msg:
                 example: "You must be logged in to do that!"
+  schemas:
+    post:
+      required:
+        - title
+        - category
+      properties:
+        title:
+          type: string
+        link:
+          type: string
+        linkType:
+          type: string
+        text:
+          type: string
+        category:
+          type: string
 paths:
   /register:
     post:
@@ -95,5 +111,51 @@ paths:
       responses:
         200:
           description: User information
+        401:
+          $ref: "#/components/responses/unauthorized"
+  /post:
+    get:
+      tags: [Posts]
+      summary: Get all posts
+      responses:
+        200:
+          description: Success!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/post"
+    post:
+      tags: [Posts]
+      summary: Create new post
+      description: The link and link type; or the text field must be filled. If the link is set the link type must be set too.
+      security: [bearerAuth: []]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/post"
+      responses:
+        200:
+          description: Success!
+        401:
+          $ref: "#/components/responses/unauthorized"
+  /post/{id}:
+    delete:
+      tags: [Posts]
+      summary: Delete post by id
+      security: [bearerAuth: []]
+      responses:
+        200:
+          description: Success!
+        403:
+          description: You can only delete your own posts, unless you are an admin.
+          content:
+            application/json:
+              schema:
+                properties:
+                  msg:
+                    example: You can only delete your own posts, unless you are an admin.
         401:
           $ref: "#/components/responses/unauthorized"

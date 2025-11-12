@@ -2,6 +2,7 @@ import express from "express";
 import JWT from "jsonwebtoken";
 import { Login, Register } from "./auth.js";
 import { Post, User } from "./models.js";
+import { CreatePost, DeletePost } from "./posts.js";
 const app = express();
 export default app;
 
@@ -42,36 +43,20 @@ app.get("/post", async (req, res) => {
 
 app.post("/post", LoggedInOnly, async (req, res) => {
   const { title, link, linkType, text, category } = req.body;
-  if (!(title && category))
-    return res.status(400).json("The title and category must be filled!");
-  if (!((link && linkType) || text))
-    return res.status(400).json({
-      msg: "The link and link type; or the text field must be filled.",
-    });
-  if ((link && !linkType) || (linkType && !link))
-    return res
-      .status(400)
-      .json({ msg: "If the link is set the link type must be set too." });
-  await Post.create({
+  const result = await CreatePost(
     title,
-    link: link == "" ? null : link,
-    linkType: linkType == "" ? null : linkType,
-    text: text == "" ? null : text,
+    link,
+    linkType,
+    text,
     category,
-    UserId: res.locals.user.id,
-  });
-  res.json({ msg: "Success!" });
+    res.locals.user
+  );
+  res.status(result.status).json({ msg: result.msg, id: result.id });
 });
 
 app.delete("/post/:id", LoggedInOnly, async (req, res) => {
-  const post = await Post.findByPk(req.params.id);
-  if (!post) return res.status(404).json({ msg: "No such post!" });
-  if (!(post.UserId == res.locals.user.id || res.locals.user.isAdmin))
-    return res.status(401).json({
-      msg: "You can only delete your own posts, unless you are an admin.",
-    });
-  await post.destroy();
-  res.json({ msg: "Success!" });
+  const result = DeletePost(req.params.id, res.locals.user);
+  res.status(result.status).json({ msg: result.msg });
 });
 
 app.put("/post", LoggedInOnly, async (req, res) => {
