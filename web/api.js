@@ -1,8 +1,7 @@
 import express from "express";
 import JWT from "jsonwebtoken";
-import { ComparePassword, HashPassword } from "./auth.js";
+import { Login, Register } from "./auth.js";
 import { Post, User } from "./models.js";
-
 const app = express();
 export default app;
 
@@ -10,7 +9,7 @@ app.use(express.json());
 
 app.use(async (req, res, next) => {
   try {
-    const jwt = req.headers.authorization;
+    const jwt = req.headers.authorization.replace(/^Bearer /, "");
     const id = JWT.verify(jwt, process.env.SECRET).id;
     const user = await User.findByPk(id);
     res.locals.user = user;
@@ -27,33 +26,14 @@ function LoggedInOnly(req, res, next) {
 
 app.post("/register", async (req, res) => {
   const { name, password, about } = req.body;
-  if (!(name && password))
-    return res
-      .status(400)
-      .json({ msg: "You must fill out the name and password fields!" });
-  if (await User.findOne({ where: { name } }))
-    return res.status(400).json("That name is already taken!");
-  await User.create({ name, password: HashPassword(password), about });
-  res.json({ msg: "Success! You can now log in." });
+  const result = await Register(name, password, about);
+  res.status(result.status).json({ msg: result.msg });
 });
 
 app.post("/login", async (req, res) => {
   const { name, password } = req.body;
-  if (!(name && password))
-    return res
-      .status(400)
-      .json("You must fill out the name and password fields!");
-  const user = await User.findOne({ where: { name } });
-  if (user) {
-    if (ComparePassword(password, user.password)) {
-      res.json({
-        msg: "Success!",
-        token: JWT.sign({ id: user.id }, process.env.SECRET, {
-          expiresIn: "1y",
-        }),
-      });
-    } else res.status(400).json({ msg: "Wrong password!" });
-  } else res.status(404).json({ msg: "No user exists with that name!" });
+  const result = await Login(name, password);
+  res.status(result.status).json({ msg: result.msg, token: result.token });
 });
 
 app.get("/post", async (req, res) => {
@@ -106,4 +86,8 @@ app.put("/post", LoggedInOnly, async (req, res) => {
   if (text) await post.update({ text });
   if (category) await post.update({ category });
   res.json({ msg: "Success!" });
+});
+
+app.get("/me", LoggedInOnly, async (req, res) => {
+  res.json(res.locals.user);
 });

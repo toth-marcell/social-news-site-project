@@ -2,27 +2,36 @@ import { DataTypes, Sequelize } from "sequelize";
 
 export const sequelize = new Sequelize("sqlite:data/db.sqlite");
 
-export const User = sequelize.define("User", {
-  name: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
+export const User = sequelize.define(
+  "User",
+  {
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
+    },
+    password: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    about: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
+    isAdmin: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: false,
+    },
   },
-  password: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  about: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    defaultValue: "",
-  },
-  isAdmin: {
-    type: DataTypes.BOOLEAN,
-    allowNull: false,
-    defaultValue: false,
-  },
-});
+  {
+    defaultScope: { attributes: { exclude: "password" } },
+    scopes: {
+      includePassword: {},
+    },
+  }
+);
 
 export const Post = sequelize.define("Post", {
   title: {

@@ -1,10 +1,99 @@
 openapi: 3.0.4
+info:
+  title: "Social news site API"
+  version: 1.0.0
 servers:
   - url: /api
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  responses:
+    unauthorized:
+      description: "You didn't send a valid JWT"
+      content:
+        application/json:
+          schema:
+            properties:
+              msg:
+                example: "You must be logged in to do that!"
 paths:
   /register:
     post:
+      tags: [Authentication]
       summary: Create a new account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - password
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+                about:
+                  type: string
+      responses:
+        200:
+          description: "Successful account creation"
+          content:
+            application/json:
+              schema:
+                properties:
+                  msg:
+                    example: "Success! You can now log in."
+        400:
+          description: "Not all required fields were sent, or the username is already taken"
+          content:
+            application/json:
+              schema:
+                properties:
+                  msg:
+                    anyOf:
+                      - example: "You must fill out the name and password fields!"
+                      - example: "That name is already taken!"
   /login:
     post:
+      tags: [Authentication]
       summary: Get a JWT for an account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - password
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+      responses:
+        200:
+          description: "Successful login"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  msg:
+                    example: "Success!"
+                  token:
+                    description: JWT
+  /me:
+    get:
+      tags: [Users]
+      summary: Get info about yourself
+      security: [bearerAuth: []]
+      responses:
+        200:
+          description: User information
+        401:
+          $ref: "#/components/responses/unauthorized"
