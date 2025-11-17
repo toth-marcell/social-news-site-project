@@ -1,8 +1,13 @@
 import express from "express";
 import apiApp from "./api.js";
 
+import { exit } from "process";
 import dotenv from "dotenv";
 dotenv.config({ quiet: true });
+if (!(process.env.PORT && process.env.SECRET)) {
+  console.error("Not all required env variables set, see .env.example");
+  exit(1);
+}
 
 const app = express();
 
