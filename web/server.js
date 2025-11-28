@@ -1,5 +1,5 @@
 import express from "express";
-import apiApp from "./api.js";
+import apiRouter from "./api.js";
 
 import { exit } from "process";
 import dotenv from "dotenv";
@@ -21,7 +21,7 @@ app.use(
 );
 
 app.use(express.static("public"));
-app.use("/api", apiApp);
+app.use("/api", apiRouter);
 
 const port = process.env.PORT;
 app.listen(port, () => console.log(`Listening: http://localhost:${port}`));
