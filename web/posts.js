@@ -20,15 +20,14 @@ export const CreatePost = async (
       status: 400,
       msg: "If the link is set the link type must be set too.",
     };
-  const post = await Post.create({
+  const post = await user.createPost({
     title,
     link: link == "" ? null : link,
     linkType: linkType == "" ? null : linkType,
     text: text == "" ? null : text,
     category,
-    UserId: user.id,
   });
-  return { status: 200, msg: "Success!", id: post.id };
+  return { status: 201, msg: "Success!", id: post.id };
 };
 
 export const DeletePost = async (id, user) => {
@@ -40,5 +39,31 @@ export const DeletePost = async (id, user) => {
       msg: "You can only delete your own posts, unless you are an admin.",
     };
   await post.destroy();
+  return { status: 200, msg: "Success!" };
+};
+
+export const EditPost = async (
+  id,
+  title,
+  link,
+  linkType,
+  text,
+  category,
+  user
+) => {
+  const post = await Post.findByPk(id);
+  if (!post) return { status: 404, msg: "No such post!" };
+  if (!(post.UserId == user.id || user.isAdmin))
+    return {
+      status: 403,
+      msg: "You can only edit your own posts, unless you are an admin.",
+    };
+  if (!(title || link || linkType || text || category))
+    return { status: 400, msg: "Not changing anything." };
+  if (title) await post.update({ title });
+  if (link) await post.update({ link });
+  if (linkType) await post.update({ linkType });
+  if (text) await post.update({ text });
+  if (category) await post.update({ category });
   return { status: 200, msg: "Success!" };
 };

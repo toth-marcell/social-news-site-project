@@ -35,6 +35,13 @@ components:
           type: string
         category:
           type: string
+  parameters:
+    idInPath:
+      in: path
+      name: id
+      schema:
+        type: integer
+      required: true
 paths:
   /register:
     post:
@@ -146,6 +153,8 @@ paths:
       tags: [Posts]
       summary: Delete post by id
       security: [bearerAuth: []]
+      parameters:
+        - $ref: "#/components/parameters/idInPath"
       responses:
         200:
           description: Success!
@@ -157,5 +166,29 @@ paths:
                 properties:
                   msg:
                     example: You can only delete your own posts, unless you are an admin.
+        401:
+          $ref: "#/components/responses/unauthorized"
+    put:
+      tags: [Posts]
+      summary: Edit post by id
+      security: [bearerAuth: []]
+      parameters:
+        - $ref: "#/components/parameters/idInPath"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/post"
+      responses:
+        200:
+          description: Success!
+        403:
+          description: You can only edit your own posts, unless you are an admin.
+          content:
+            application/json:
+              schema:
+                properties:
+                  msg:
+                    example: You can only edit your own posts, unless you are an admin.
         401:
           $ref: "#/components/responses/unauthorized"

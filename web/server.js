@@ -30,4 +30,9 @@ app.use(express.static("public"));
 app.use("/api", apiRouter);
 
 const port = process.env.PORT;
-app.listen(port, () => console.log(`Listening: http://localhost:${port}`));
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
+  console.log(`Website at: http://localhost:${port}`);
+  console.log(`API documentation at: http://localhost:${port}/api-docs`);
+  console.log(`API at: http://localhost:${port}/api`);
+});

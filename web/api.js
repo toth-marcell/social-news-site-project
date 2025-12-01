@@ -2,7 +2,7 @@ import express from "express";
 import JWT from "jsonwebtoken";
 import { Login, Register } from "./auth.js";
 import { Post, User } from "./models.js";
-import { CreatePost, DeletePost } from "./posts.js";
+import { CreatePost, DeletePost, EditPost } from "./posts.js";
 
 const router = express.Router();
 export default router;
@@ -60,18 +60,19 @@ router.delete("/post/:id", LoggedInOnly, async (req, res) => {
   res.status(result.status).json({ msg: result.msg });
 });
 
-router.put("/post", LoggedInOnly, async (req, res) => {
-  const { id, title, link, linkType, text, category } = req.body;
-  const post = await Post.findByPk(id);
-  if (!post) return res.status(404).json({ msg: "No such post!" });
-  if (!(title || link || linkType || text || category))
-    return res.status(400).json("Not changing anything.");
-  if (title) await post.update({ title });
-  if (link) await post.update({ link });
-  if (linkType) await post.update({ linkType });
-  if (text) await post.update({ text });
-  if (category) await post.update({ category });
-  res.json({ msg: "Success!" });
+router.put("/post/:id", LoggedInOnly, async (req, res) => {
+  const { title, link, linkType, text, category } = req.body;
+  const { id } = req.params.id;
+  const result = await EditPost(
+    id,
+    title,
+    link,
+    linkType,
+    text,
+    category,
+    res.locals.user
+  );
+  res.status(result.status).json({ msg: result.msg });
 });
 
 router.get("/me", LoggedInOnly, async (req, res) => {
