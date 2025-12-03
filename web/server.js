@@ -1,16 +1,13 @@
-import express from "express";
-import apiRouter from "./api.js";
-
-import { exit } from "process";
 import dotenv from "dotenv";
+import { exit } from "process";
 dotenv.config({ quiet: true });
 if (!(process.env.PORT && process.env.SECRET, process.env.SITENAME)) {
   console.error("Not all required env variables set, see .env.example");
   exit(1);
 }
 
-import { User } from "./models.js";
 import { HashPassword } from "./auth.js";
+import { User } from "./models.js";
 if (
   !(await User.findOne()) &&
   process.env.DEFAULT_ADMIN_NAME &&
@@ -22,11 +19,13 @@ if (
     isAdmin: true,
   });
   console.log(
-    `Created default admin user with name "${process.env.DEFAULT_ADMIN_NAME}" and password "${process.env.DEFAULT_ADMIN_PASSWORD}"`
+    `Created default admin user with name "${process.env.DEFAULT_ADMIN_NAME}" and password "${process.env.DEFAULT_ADMIN_PASSWORD}"`,
   );
 }
 
+import express from "express";
 const app = express();
+app.locals.siteName = process.env.SITENAME;
 
 import WriteLog from "./log.js";
 app.use(WriteLog);
@@ -43,11 +42,15 @@ import swaggerUI from "swagger-ui-express";
 app.use(
   "/api-docs",
   swaggerUI.serve,
-  swaggerUI.setup(null, { swaggerOptions: { url: "/openapi.json" } })
+  swaggerUI.setup(null, { swaggerOptions: { url: "/openapi.json" } }),
 );
 
-app.use(express.static("public"));
+import apiRouter from "./api.js";
 app.use("/api", apiRouter);
+
+import webRouter from "./web.js";
+app.use(webRouter);
+app.set("view engine", "ejs");
 
 const port = process.env.PORT;
 app.listen(port, () => {

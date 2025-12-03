@@ -1,0 +1,20 @@
+<header class="container">
+  <nav>
+    <ul>
+      <li>
+        <h1><a href="/"><%= siteName %></a></h1>
+      </li>
+    </ul>
+    <ul>
+      <% if (user) { %>
+      <li>
+        <a href="/logout"><button>Log out</button></a>
+      </li>
+      <% } else { %>
+      <li>
+        <a href="/login"><button>Log in</button></a>
+      </li>
+      <% } %>
+    </ul>
+  </nav>
+</header>

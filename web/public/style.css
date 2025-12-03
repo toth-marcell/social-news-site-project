@@ -1,0 +1,11 @@
+:root {
+  --pico-font-size: 100%;
+}
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100vh;
+}
+h1 > a {
+  color: currentColor;
+}
