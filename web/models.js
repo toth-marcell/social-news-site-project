@@ -78,4 +78,15 @@ Post.belongsToMany(User, { through: "PostVote", as: "Votes" });
 User.belongsToMany(Comment, { through: "CommentVote", as: "VotedComments" });
 Comment.belongsToMany(User, { through: "CommentVote", as: "Votes" });
 
+export const Log = sequelize.define(
+  "Log",
+  {
+    path: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+  },
+  { updatedAt: false }
+);
+
 await sequelize.sync();

@@ -1,7 +1,7 @@
 import express from "express";
 import JWT from "jsonwebtoken";
 import { Login, Register } from "./auth.js";
-import { Post, User } from "./models.js";
+import { Log, Post, User } from "./models.js";
 import { CreatePost, DeletePost, EditPost } from "./posts.js";
 
 const router = express.Router();
@@ -21,11 +21,6 @@ router.use(async (req, res, next) => {
   next();
 });
 
-function LoggedInOnly(req, res, next) {
-  if (res.locals.user) next();
-  else res.status(401).json({ msg: "You must be logged in to do that!" });
-}
-
 router.post("/register", async (req, res) => {
   const { name, password, about } = req.body;
   const result = await Register(name, password, about);
@@ -41,6 +36,11 @@ router.post("/login", async (req, res) => {
 router.get("/post", async (req, res) => {
   res.json(await Post.findAll());
 });
+
+function LoggedInOnly(req, res, next) {
+  if (res.locals.user) next();
+  else res.status(401).json({ msg: "You must be logged in to do that!" });
+}
 
 router.post("/post", LoggedInOnly, async (req, res) => {
   const { title, link, linkType, text, category } = req.body;
@@ -77,4 +77,16 @@ router.put("/post/:id", LoggedInOnly, async (req, res) => {
 
 router.get("/me", LoggedInOnly, async (req, res) => {
   res.json(res.locals.user);
+});
+
+function AdminOnly(req, res, next) {
+  if (res.locals.user && res.locals.user.isAdmin) next();
+  else
+    res
+      .status(403)
+      .json({ msg: "You must be logged in as an admin to do that!" });
+}
+
+router.get("/logs", AdminOnly, async (req, res) => {
+  res.json(await Log.findAll());
 });

@@ -28,6 +28,9 @@ if (
 
 const app = express();
 
+import WriteLog from "./log.js";
+app.use(WriteLog);
+
 import { readFileSync } from "fs";
 import YAML from "yaml";
 const APISpec = YAML.parse(readFileSync("openapi.yaml", "utf-8"));

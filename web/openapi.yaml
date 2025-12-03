@@ -192,3 +192,11 @@ paths:
                     example: You can only edit your own posts, unless you are an admin.
         401:
           $ref: "#/components/responses/unauthorized"
+  /logs:
+    get:
+      tags: [Administration]
+      summary: Get all log entries
+      security: [bearerAuth: []]
+      responses:
+        200:
+          description: Success!
