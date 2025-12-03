@@ -3,10 +3,10 @@ import { hash } from "crypto";
 import JWT from "jsonwebtoken";
 import { User } from "./models.js";
 
-function HashPassword(pass) {
+export const HashPassword = (pass) => {
   const lengthHashed = hash("sha256", pass);
   return hashSync(lengthHashed);
-}
+};
 
 function ComparePassword(inputPass, hashedPass) {
   const lengthHashed = hash("sha256", inputPass);
