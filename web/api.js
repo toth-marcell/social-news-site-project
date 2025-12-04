@@ -56,7 +56,7 @@ router.post("/post", LoggedInOnly, async (req, res) => {
 });
 
 router.delete("/post/:id", LoggedInOnly, async (req, res) => {
-  const result = DeletePost(req.params.id, res.locals.user);
+  const result = await DeletePost(req.params.id, res.locals.user);
   res.status(result.status).json({ msg: result.msg });
 });
 
