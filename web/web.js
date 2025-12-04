@@ -1,6 +1,7 @@
 import express from "express";
 import JWT from "jsonwebtoken";
 import { User } from "./models.js";
+import { GetPosts } from "./posts.js";
 
 const router = express.Router();
 export default router;
@@ -25,5 +26,7 @@ router.use(async (req, res, next) => {
   next();
 });
 
-router.get("/", async (req, res) => res.render("index"));
+router.get("/", async (req, res) =>
+  res.render("index", { posts: await GetPosts() }),
+);
 router.get("/login", async (req, res) => res.render("login"));

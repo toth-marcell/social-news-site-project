@@ -6,6 +6,21 @@ body {
   grid-template-rows: auto 1fr auto;
   height: 100vh;
 }
-h1 > a {
+h1 > a,
+h2 > a {
   color: currentColor;
+  text-decoration: none;
+}
+h1 > a:hover,
+h2 > a:hover {
+  text-decoration: underline var(--pico-primary);
+}
+article > * {
+  margin-right: 10px;
+}
+article button {
+  padding: 5px;
+}
+article h2 {
+  display: inline-block;
 }
