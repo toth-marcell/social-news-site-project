@@ -1,14 +1,19 @@
-<%- include("head") -%>
-<form method="post">
+<% pageName = "Log in" %> <%- include("head") -%>
+<form method="post" action="/login">
   <h2>Log in</h2>
   <label>
     Name
-    <input type="text" name="name">
+    <input type="text" name="name" value="<%= name %>">
   </label>
   <label>
     Password
-    <input type="text" name="password">
+    <input type="text" name="password" value="<%= password %>">
   </label>
+  <% if (typeof(msg) != "undefined") { %>
+  <mark class="msg"><%= msg %></mark>
+  <% } %> <% if (typeof(msg_fail) != "undefined") { %>
+  <mark class="msg msg-fail"><%= msg_fail %></mark>
+  <% } %>
   <button type="submit">Log in</button>
 </form>
 <%- include("foot") -%>

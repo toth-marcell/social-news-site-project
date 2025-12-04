@@ -1,4 +1,4 @@
-<%- include("head") -%> <% for (post of posts) { %>
+<% pageName = "Frontpage" %> <%- include("head") -%> <% for (post of posts) { %>
 <article>
   <button class="">
     <svg
@@ -6,6 +6,7 @@
       width="1em"
       height="1em"
       viewBox="0 0 24 24"
+      aria-label="up arrow"
     >
       <path
         fill="none"

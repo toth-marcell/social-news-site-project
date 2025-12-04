@@ -7,10 +7,14 @@
     </ul>
     <ul>
       <% if (user) { %>
+      <li>Logged in as <%= user.name %></li>
       <li>
         <a href="/logout"><button>Log out</button></a>
       </li>
       <% } else { %>
+      <li>
+        <a href="/register"><button>Register</button></a>
+      </li>
       <li>
         <a href="/login"><button>Log in</button></a>
       </li>

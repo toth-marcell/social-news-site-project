@@ -6,6 +6,9 @@ body {
   grid-template-rows: auto 1fr auto;
   height: 100vh;
 }
+nav li {
+  margin-inline: 5px;
+}
 h1 > a,
 h2 > a {
   color: currentColor;
@@ -23,4 +26,12 @@ article button {
 }
 article h2 {
   display: inline-block;
+}
+.msg {
+  border-radius: var(--pico-border-radius);
+  display: inline-block;
+  margin-bottom: 5px;
+}
+.msg-fail {
+  --pico-mark-background-color: #d93526;
 }

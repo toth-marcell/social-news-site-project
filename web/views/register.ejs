@@ -1,0 +1,17 @@
+<% pageName = "Register" %> <%- include("head") -%>
+<form method="post" action="/register">
+  <h2>Register</h2>
+  <label>
+    Name
+    <input type="text" name="name" value="<%= name %>">
+  </label>
+  <label>
+    Password
+    <input type="text" name="password" value="<%= password %>">
+  </label>
+  <% if (typeof(msg_fail) != "undefined") { %>
+  <mark class="msg msg-fail"><%= msg_fail %></mark>
+  <% } %>
+  <button type="submit">Register</button>
+</form>
+<%- include("foot") -%>
