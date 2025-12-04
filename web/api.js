@@ -2,7 +2,7 @@ import express from "express";
 import JWT from "jsonwebtoken";
 import { Login, Register } from "./auth.js";
 import { Log, Post, User } from "./models.js";
-import { CreatePost, DeletePost, EditPost } from "./posts.js";
+import { CreatePost, DeletePost, EditPost, GetPosts } from "./posts.js";
 
 const router = express.Router();
 export default router;
@@ -34,7 +34,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/post", async (req, res) => {
-  res.json(await Post.findAll());
+  res.json(await GetPosts());
 });
 
 function LoggedInOnly(req, res, next) {
@@ -50,7 +50,7 @@ router.post("/post", LoggedInOnly, async (req, res) => {
     linkType,
     text,
     category,
-    res.locals.user
+    res.locals.user,
   );
   res.status(result.status).json({ msg: result.msg, id: result.id });
 });
@@ -70,7 +70,7 @@ router.put("/post/:id", LoggedInOnly, async (req, res) => {
     linkType,
     text,
     category,
-    res.locals.user
+    res.locals.user,
   );
   res.status(result.status).json({ msg: result.msg });
 });
