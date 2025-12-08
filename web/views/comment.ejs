@@ -1,0 +1,5 @@
+<article style="margin-left: <%= level * 50 %>px">
+  <%= comment.UserId %> <%= comment.text %>
+</article>
+<% if (comment.Children.length > 0) { %> <% for (comment of comment.Children) {
+%> <%- include("comment", {comment, level: level + 1}) -%> <% }} %>
