@@ -1,4 +1,4 @@
-import { Post } from "./models.js";
+import { Comment, Post } from "./models.js";
 
 export const GetPosts = async () => {
   const posts = await Post.findAll();
@@ -11,6 +11,32 @@ export const GetPosts = async () => {
     );
   }
   return postObjects;
+};
+
+async function fetchComments(commentObject, commentData) {
+  commentData.Children = await Promise.all(
+    (await commentObject.getChildren()).map((x) => fetchComments(x, x.get())),
+  );
+  return (commentObject, commentData);
+}
+
+export const GetPost = async (id) => {
+  const postObject = await Post.findByPk(id, {
+    include: {
+      model: Comment,
+      where: { ParentId: null },
+    },
+  });
+  const post = postObject.get();
+  post.votes = await postObject.countVotes();
+  console.log(post);
+  for (let i = 0; i < postObject.Comments.length; i++) {
+    post.Comments[i] = await fetchComments(
+      postObject.Comments[i],
+      postObject.Comments[i].get(),
+    );
+  }
+  return post;
 };
 
 export const CreatePost = async (
