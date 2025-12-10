@@ -4,6 +4,11 @@
       <li>
         <h1><a href="/"><%= siteName %></a></h1>
       </li>
+      <% if (user) { %>
+      <li>
+        <a href="/newpost"><button>New post</button></a>
+      </li>
+      <% } %>
     </ul>
     <ul>
       <% if (user) { %>

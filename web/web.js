@@ -3,7 +3,7 @@ import express from "express";
 import JWT from "jsonwebtoken";
 import { Login, Register } from "./auth.js";
 import { User } from "./models.js";
-import { GetPost, GetPosts } from "./posts.js";
+import { CreatePost, GetPost, GetPosts } from "./posts.js";
 
 const router = express.Router();
 export default router;
@@ -74,4 +74,45 @@ router.post("/login", async (req, res) => {
 router.get("/logout", (req, res) => {
   res.clearCookie("token");
   res.redirect("/");
+});
+
+function LoggedInOnly(req, res, next) {
+  if (res.locals.user) next();
+  else
+    res
+      .status(401)
+      .render("msg", { msg_fail: "You must be logged in to do that!" });
+}
+
+router.get("/newpost", LoggedInOnly, (req, res) =>
+  res.render("newPost", {
+    title: "",
+    link: "",
+    linkType: "",
+    text: "",
+    category: "",
+  }),
+);
+router.post("/newpost", LoggedInOnly, async (req, res) => {
+  const { title, link, linkType, text, category } = req.body;
+  const result = await CreatePost(
+    title,
+    link,
+    linkType,
+    text,
+    category,
+    res.locals.user,
+  );
+  if (result.status == 201) {
+    res.redirect("/posts/" + result.id);
+  } else {
+    res.status(result.status).render("newPost", {
+      title,
+      link,
+      linkType,
+      text,
+      category,
+      msg_fail: result.msg,
+    });
+  }
 });

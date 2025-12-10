@@ -1,31 +1,57 @@
 <% pageName = post.title %> <%- include("head") -%>
 <article>
-  <button class="">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-      aria-label="up arrow"
-    >
-      <path
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M12 8l-7 7M12 8l7 7"
-      />
-    </svg>
-    <%= post.votes %>
-  </button>
-  <button class="contrast"><%= post.category %></button>
-  <span><%= post.createdAt.toISOString() %></span>
+  <div>
+    <button>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        aria-label="upvote arrow"
+      >
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 8l-7 7M12 8l7 7"
+        />
+      </svg>
+      <%= post.votes %>
+    </button>
+    <button>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+      >
+        <g
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+        >
+          <path
+            d="M12 20h5c0.5 0 1 -0.5 1 -1v-14M12 20h-5c-0.5 0 -1 -0.5 -1 -1v-14"
+          />
+          <path d="M4 5h16" />
+          <path d="M10 4h4M10 9v7M14 9v7" />
+        </g>
+      </svg>
+    </button>
+    <button class="contrast"><%= post.category %></button>
+    <span><%= post.createdAt.toISOString() %></span>
+  </div>
   <hr>
   <h2><a href="/posts/<%= post.id %>"><%= post.title %></a></h2>
   <% if (post.link) { %>
   <button class="outline contrast"><%= post.linkType %></button>
   <a href="<%= post.link %>"><%= post.link %></a>
+  <% } %> <% if (post.text) { %>
+  <p><%= post.text %></p>
   <% } %>
 </article>
 <% for (comment of post.Comments) { %> <%- include("comment", {comment, level:

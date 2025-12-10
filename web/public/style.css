@@ -14,6 +14,9 @@ h2 > a {
   color: currentColor;
   text-decoration: none;
 }
+h1 > a {
+  vertical-align: sub;
+}
 h1 > a:hover,
 h2 > a:hover {
   text-decoration: underline var(--pico-primary);
@@ -26,6 +29,16 @@ article button {
 }
 article h2 {
   display: inline-block;
+}
+article > div {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+article > div > * {
+  display: flex;
+  gap: 5px;
+  align-items: center;
 }
 .msg {
   border-radius: var(--pico-border-radius);

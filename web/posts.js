@@ -17,6 +17,7 @@ async function fetchComments(commentObject, commentData) {
   commentData.Children = await Promise.all(
     (await commentObject.getChildren()).map((x) => fetchComments(x, x.get())),
   );
+  commentData.votes = await commentObject.countVotes();
   return (commentObject, commentData);
 }
 

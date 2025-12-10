@@ -1,0 +1,40 @@
+<% pageName = "New post" %> <%- include("head") -%>
+<form method="post">
+  <h2>New post</h2>
+  <p>
+    The title and category must be filled. The link and link type; or the text
+    field must be filled.
+  </p>
+  <label>
+    Title
+    <input type="text" name="title" value="<%= title %>" required>
+  </label>
+  <label>
+    Link
+    <input type="text" name="link" value="<%= link %>">
+  </label>
+  <label>
+    Link type
+    <input type="text" name="linkType" value="<%= linkType %>" list="linkTypes">
+    <datalist id="linkTypes">
+      <option>website</option>
+      <option>pdf</option>
+      <option>video</option>
+    </datalist>
+  </label>
+  <label>
+    Text
+    <textarea name="text" rows="5"><%= text %></textarea>
+  </label>
+  <label>
+    Category
+    <input type="text" name="category" value="<%= category %>" required>
+  </label>
+  <% if (typeof(msg) != "undefined") { %>
+  <mark class="msg"><%= msg %></mark>
+  <% } %> <% if (typeof(msg_fail) != "undefined") { %>
+  <mark class="msg msg-fail"><%= msg_fail %></mark>
+  <% } %>
+  <button type="submit">Submit</button>
+</form>
+<%- include("foot") -%>

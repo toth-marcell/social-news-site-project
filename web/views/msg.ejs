@@ -1,0 +1,5 @@
+<%- include("head") -%> <% if (typeof(msg) != "undefined") { %>
+<mark class="msg"><%= msg %></mark>
+<% } %> <% if (typeof(msg_fail) != "undefined") { %>
+<mark class="msg msg-fail"><%= msg_fail %></mark>
+<% } %> <%- include("foot") -%>
