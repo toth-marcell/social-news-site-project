@@ -51,6 +51,7 @@ app.use("/api", apiRouter);
 import webRouter from "./web.js";
 app.use(webRouter);
 app.set("view engine", "ejs");
+app.set("view options", { rmWhitespace: true });
 
 const port = process.env.PORT;
 app.listen(port, () => {
