@@ -25,11 +25,11 @@ export const GetPost = async (id) => {
     include: {
       model: Comment,
       where: { ParentId: null },
+      required: false,
     },
   });
   const post = postObject.get();
   post.votes = await postObject.countVotes();
-  console.log(post);
   for (let i = 0; i < postObject.Comments.length; i++) {
     post.Comments[i] = await fetchComments(
       postObject.Comments[i],
