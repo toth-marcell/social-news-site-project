@@ -2,4 +2,6 @@
 <mark class="msg"><%= msg %></mark>
 <% } %> <% if (typeof(msg_fail) != "undefined") { %>
 <mark class="msg msg-fail"><%= msg_fail %></mark>
-<% } %> <%- include("foot") -%>
+<% } %> <% if (typeof(links) != "undefined") { %> <% for (link of links) { %>
+<a href="<%= link.href %>"><button><%= link.text %></button></a>
+<% }} %> <%- include("foot") -%>

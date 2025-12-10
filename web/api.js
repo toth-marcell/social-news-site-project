@@ -1,7 +1,7 @@
 import express from "express";
 import JWT from "jsonwebtoken";
 import { Login, Register } from "./auth.js";
-import { Log, Post, User } from "./models.js";
+import { Log, User } from "./models.js";
 import { CreatePost, DeletePost, EditPost, GetPosts } from "./posts.js";
 
 const router = express.Router();

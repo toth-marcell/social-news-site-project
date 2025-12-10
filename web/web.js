@@ -3,7 +3,7 @@ import express from "express";
 import JWT from "jsonwebtoken";
 import { Login, Register } from "./auth.js";
 import { User } from "./models.js";
-import { CreatePost, GetPost, GetPosts } from "./posts.js";
+import { CreatePost, DeletePost, GetPost, GetPosts } from "./posts.js";
 
 const router = express.Router();
 export default router;
@@ -113,6 +113,18 @@ router.post("/newpost", LoggedInOnly, async (req, res) => {
       text,
       category,
       msg_fail: result.msg,
+    });
+  }
+});
+
+router.post("/deletepost/:id", LoggedInOnly, async (req, res) => {
+  const result = await DeletePost(req.params.id, res.locals.user);
+  if (result.status == 200) {
+    res.status(result.status).render("msg", { msg: result.msg });
+  } else {
+    res.status(result.status).render("msg", {
+      msg_fail: result.msg,
+      links: [{ href: "/posts/" + req.params.id, text: "Go back" }],
     });
   }
 });

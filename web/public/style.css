@@ -24,8 +24,12 @@ h2 > a:hover {
 article > * {
   margin-right: 10px;
 }
-article button {
+article button,
+article > div > form > button[type="submit"] {
   padding: 5px;
+}
+article > div > form > button[type="submit"] {
+  margin: 0;
 }
 article h2 {
   display: inline-block;
@@ -42,8 +46,9 @@ article > div > * {
 }
 .msg {
   border-radius: var(--pico-border-radius);
-  display: inline-block;
+  display: block;
   margin-bottom: 5px;
+  text-align: center;
 }
 .msg-fail {
   --pico-mark-background-color: #d93526;
