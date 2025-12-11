@@ -61,5 +61,14 @@
   <p><%= post.text %></p>
   <% } %>
 </article>
+<article>
+  <form method="post">
+    <label>
+      Comment
+      <textarea name="text"></textarea>
+    </label>
+    <button type="submit">Add comment</button>
+  </form>
+</article>
 <% for (comment of post.Comments) { %> <%- include("comment", {comment, level:
 0}) -%> <% } %> <%- include("foot") -%>
