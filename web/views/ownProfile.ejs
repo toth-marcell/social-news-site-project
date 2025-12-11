@@ -1,0 +1,33 @@
+<% pageName = "Your profile" %> <%- include("head") -%>
+<article>
+  <h2><%= pageName %></h2>
+  <p>Admin: <%= profile.isAdmin ? "yes" : "no" %></p>
+  <p>Account created at: <%= profile.createdAt %></p>
+  <h3>About</h3>
+  <p><%= profile.about || "(no about text)" %></p>
+</article>
+<article>
+  <form method="post">
+    <h2>Update details</h2>
+    <p>(Leave a field empty if not changing it)</p>
+    <label>
+      Name
+      <input type="text" name="name" value="<%= name  %>">
+    </label>
+    <label>
+      Password
+      <input type="password" name="password" value="<%= password %>">
+    </label>
+    <label>
+      About
+      <textarea name="about" rows="5"><%= about %></textarea>
+    </label>
+    <% if (typeof(msg) != "undefined") { %>
+    <mark class="msg"><%= msg %></mark>
+    <% } %> <% if (typeof(msg_fail) != "undefined") { %>
+    <mark class="msg msg-fail"><%= msg_fail %></mark>
+    <% } %>
+    <button type="submit">Update details</button>
+  </form>
+</article>
+<%- include("foot") -%>

@@ -46,3 +46,12 @@ export const Login = async (name, password) => {
   }
   return { status: 404, msg: "No user exists with that name!" };
 };
+
+export const EditUser = async (name, password, about, user) => {
+  if (!(name || password || about))
+    return { status: 400, msg: "Not changing anything!" };
+  if (name) await user.update({ name });
+  if (password) await user.update({ password: HashPassword(password) });
+  if (about) await user.update({ about });
+  return { status: 200, msg: "Success!" };
+};

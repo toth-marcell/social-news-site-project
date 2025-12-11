@@ -120,6 +120,29 @@ paths:
           description: User information
         401:
           $ref: "#/components/responses/unauthorized"
+    put:
+      tags: [Users]
+      summary: Edit your name, password and about text
+      security: [bearerAuth: []]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+                about:
+                  type: string
+      responses:
+        200:
+          description: Success!
+        400:
+          description: No properties specified to change
+        401:
+          $ref: "#/components/responses/unauthorized"
   /post:
     get:
       tags: [Posts]

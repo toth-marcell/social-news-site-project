@@ -1,7 +1,9 @@
-import { Comment, Post } from "./models.js";
+import { Comment, Post, User } from "./models.js";
 
 export const GetPosts = async () => {
-  const posts = await Post.findAll();
+  const posts = await Post.findAll({
+    include: { model: User, attributes: ["name", "id"] },
+  });
   const postObjects = [];
   for (const post of posts) {
     postObjects.push(
@@ -23,11 +25,14 @@ async function fetchComments(commentObject, commentData) {
 
 export const GetPost = async (id) => {
   const postObject = await Post.findByPk(id, {
-    include: {
-      model: Comment,
-      where: { ParentId: null },
-      required: false,
-    },
+    include: [
+      {
+        model: Comment,
+        where: { ParentId: null },
+        required: false,
+      },
+      { model: User, attributes: ["name", "id"] },
+    ],
   });
   const post = postObject.get();
   post.votes = await postObject.countVotes();

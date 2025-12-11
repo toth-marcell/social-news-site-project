@@ -1,6 +1,6 @@
 import express from "express";
 import JWT from "jsonwebtoken";
-import { Login, Register } from "./auth.js";
+import { EditUser, Login, Register } from "./auth.js";
 import { Log, User } from "./models.js";
 import { CreatePost, DeletePost, EditPost, GetPosts } from "./posts.js";
 
@@ -77,6 +77,12 @@ router.put("/post/:id", LoggedInOnly, async (req, res) => {
 
 router.get("/me", LoggedInOnly, async (req, res) => {
   res.json(res.locals.user);
+});
+
+router.put("/me", LoggedInOnly, async (req, res) => {
+  const { name, password, about } = req.body;
+  const result = await EditUser(name, password, about, res.locals.user);
+  res.status(result.status).json({ msg: result.msg });
 });
 
 function AdminOnly(req, res, next) {

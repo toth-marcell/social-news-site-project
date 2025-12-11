@@ -12,7 +12,7 @@
     </ul>
     <ul>
       <% if (user) { %>
-      <li>Logged in as <%= user.name %></li>
+      <li>Logged in as <a href="/users/<%= user.id %>"><%= user.name %></a></li>
       <li>
         <a href="/logout"><button>Log out</button></a>
       </li>

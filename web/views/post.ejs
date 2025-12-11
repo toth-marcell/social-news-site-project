@@ -47,6 +47,10 @@
     </form>
     <button class="contrast"><%= post.category %></button>
     <span><%= post.createdAt.toISOString() %></span>
+    <span>
+      by
+      <a href="/users/<%= post.User.id %>"><%= post.User.name %></a>
+    </span>
   </div>
   <hr>
   <h2><a href="/posts/<%= post.id %>"><%= post.title %></a></h2>

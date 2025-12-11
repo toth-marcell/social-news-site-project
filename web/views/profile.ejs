@@ -1,0 +1,9 @@
+<% pageName = profile.name + "'s" + " profile" %> <%- include("head") -%>
+<article>
+  <h2><%= pageName %></h2>
+  <p>Admin: <%= profile.isAdmin ? "yes" : "no" %></p>
+  <p>Account created at: <%= profile.createdAt %></p>
+  <h3>About</h3>
+  <p><%= profile.about || "(no about text)" %></p>
+</article>
+<%- include("foot") -%>

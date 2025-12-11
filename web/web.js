@@ -1,7 +1,7 @@
 import cookieParser from "cookie-parser";
 import express from "express";
 import JWT from "jsonwebtoken";
-import { Login, Register } from "./auth.js";
+import { EditUser, Login, Register } from "./auth.js";
 import { User } from "./models.js";
 import { CreatePost, DeletePost, GetPost, GetPosts } from "./posts.js";
 
@@ -76,6 +76,19 @@ router.get("/logout", (req, res) => {
   res.redirect("/");
 });
 
+router.get("/users/:id", async (req, res) => {
+  if (res.locals.user && res.locals.user.id == req.params.id)
+    return res.render("ownProfile", {
+      profile: res.locals.user,
+      name: res.locals.user.name,
+      password: "",
+      about: res.locals.user.about,
+    });
+  const profile = await User.findByPk(req.params.id);
+  if (!profile) res.render("msg", { msg_fail: "No such user!" });
+  else res.render("profile", { profile });
+});
+
 function LoggedInOnly(req, res, next) {
   if (res.locals.user) next();
   else
@@ -83,6 +96,30 @@ function LoggedInOnly(req, res, next) {
       .status(401)
       .render("msg", { msg_fail: "You must be logged in to do that!" });
 }
+
+router.post("/users/:id", LoggedInOnly, async (req, res) => {
+  if (res.locals.user.id != req.params.id)
+    return res.status(403).render("msg", { msg_fail: "You can't do that!" });
+  const { name, password, about } = req.body;
+  const result = await EditUser(name, password, about, res.locals.user);
+  if (result.status == 200) {
+    res.render("ownProfile", {
+      profile: res.locals.user,
+      name: res.locals.user.name,
+      password: "",
+      about: res.locals.user.about,
+      msg: result.msg,
+    });
+  } else {
+    res.render("ownProfile", {
+      profile: res.locals.user,
+      name,
+      password,
+      about,
+      msg_fail: result.msg,
+    });
+  }
+});
 
 router.get("/newpost", LoggedInOnly, (req, res) =>
   res.render("newPost", {
