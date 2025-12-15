@@ -57,9 +57,9 @@
   <% if (post.link) { %>
   <button class="outline contrast"><%= post.linkType %></button>
   <a href="<%= post.link %>"><%= post.link %></a>
-  <% } %> <% if (post.text) { %>
-  <p><%= post.text %></p>
-  <% } %>
+  <% } if (post.text) { for (paragraph of post.text.split("\r\n\r\n")) { %>
+  <p><%= paragraph %></p>
+  <% }} %>
 </article>
 <article>
   <form method="post">

@@ -17,7 +17,11 @@ export const GetPosts = async () => {
 
 async function fetchComments(commentObject, commentData) {
   commentData.Children = await Promise.all(
-    (await commentObject.getChildren()).map((x) => fetchComments(x, x.get())),
+    (
+      await commentObject.getChildren({
+        include: { model: User, attributes: ["name"] },
+      })
+    ).map((x) => fetchComments(x, x.get())),
   );
   commentData.votes = await commentObject.countVotes();
   return (commentObject, commentData);
@@ -30,6 +34,7 @@ export const GetPost = async (id) => {
         model: Comment,
         where: { ParentId: null },
         required: false,
+        include: { model: User, attributes: ["name"] },
       },
       { model: User, attributes: ["name", "id"] },
     ],
@@ -112,3 +117,10 @@ export const EditPost = async (
   if (category) await post.update({ category });
   return { status: 200, msg: "Success!" };
 };
+
+export async function TopComment(text, PostId, user) {
+  const post = await Post.findByPk(PostId);
+  if (!post) return { status: 404, msg: "No such post!" };
+  const comment = await post.createComment({ text, UserId: user.id });
+  return { status: 200, comment };
+}

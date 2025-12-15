@@ -4,6 +4,11 @@
   <p>Admin: <%= profile.isAdmin ? "yes" : "no" %></p>
   <p>Account created at: <%= profile.createdAt %></p>
   <h3>About</h3>
-  <p><%= profile.about || "(no about text)" %></p>
+  <% if (profile.about) { for (paragraph of profile.about.split("\r\n\r\n")) {
+  %>
+  <p><%= paragraph %></p>
+  <% }} else { %>
+  <p>"(no about text)"</p>
+  <% } %>
 </article>
 <%- include("foot") -%>

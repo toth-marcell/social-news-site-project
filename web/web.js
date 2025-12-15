@@ -3,7 +3,13 @@ import express from "express";
 import JWT from "jsonwebtoken";
 import { EditUser, Login, Register } from "./auth.js";
 import { User } from "./models.js";
-import { CreatePost, DeletePost, GetPost, GetPosts } from "./posts.js";
+import {
+  CreatePost,
+  DeletePost,
+  GetPost,
+  GetPosts,
+  TopComment,
+} from "./posts.js";
 
 const router = express.Router();
 export default router;
@@ -164,4 +170,12 @@ router.post("/deletepost/:id", LoggedInOnly, async (req, res) => {
       links: [{ href: "/posts/" + req.params.id, text: "Go back" }],
     });
   }
+});
+
+router.post("/posts/:id", LoggedInOnly, async (req, res) => {
+  const { text } = req.body || {};
+  const result = await TopComment(text, req.params.id, res.locals.user);
+  if (result.status == 200) {
+    res.redirect("/posts/" + req.params.id);
+  } else res.json(result);
 });

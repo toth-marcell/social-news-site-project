@@ -18,7 +18,13 @@
     </svg>
     <%= comment.votes %>
   </button>
-  <%= comment.UserId %> <%= comment.text %>
+  <span>
+    by
+    <a href="/users/<%= post.User.id %>"><%= comment.User.name %></a>
+  </span>
+  <% for (paragraph of comment.text.split("\r\n\r\n")) { %>
+  <p><%= paragraph %></p>
+  <% } %>
 </article>
 <% if (comment.Children.length > 0) { %> <% for (comment of comment.Children) {
 %> <%- include("comment", {comment, level: level + 1}) -%> <% }} %>
