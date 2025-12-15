@@ -6,22 +6,7 @@ if (!(process.env.PORT && process.env.SECRET, process.env.SITENAME)) {
   exit(1);
 }
 
-import { HashPassword } from "./auth.js";
-import { User } from "./models.js";
-if (
-  !(await User.findOne()) &&
-  process.env.DEFAULT_ADMIN_NAME &&
-  process.env.DEFAULT_ADMIN_PASSWORD
-) {
-  await User.create({
-    name: process.env.DEFAULT_ADMIN_NAME,
-    password: HashPassword(process.env.DEFAULT_ADMIN_PASSWORD),
-    isAdmin: true,
-  });
-  console.log(
-    `Created default admin user with name "${process.env.DEFAULT_ADMIN_NAME}" and password "${process.env.DEFAULT_ADMIN_PASSWORD}"`,
-  );
-}
+import "./defaultAdmin.js";
 
 import express from "express";
 const app = express();

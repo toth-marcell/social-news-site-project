@@ -1,8 +1,9 @@
 import { faker } from "@faker-js/faker";
 import { User } from "./models.js";
 import { HashPassword } from "./auth.js";
+import "./defaultAdmin.js";
 
-for (let i = 0; i < faker.number.int(1, 5); i++) {
+for (let i = 0; i < faker.number.int(5, 20); i++) {
   const name = faker.internet.username();
   const user = await User.create({
     name,

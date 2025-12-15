@@ -8,6 +8,14 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "server.js",
       "cwd": "${workspaceFolder}/web"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Generate test data",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "generateTestData.js",
+      "cwd": "${workspaceFolder}/web"
     }
   ]
 }
