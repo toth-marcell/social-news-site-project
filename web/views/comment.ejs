@@ -20,7 +20,7 @@
   </button>
   <span>
     by
-    <a href="/users/<%= post.User.id %>"><%= comment.User.name %></a>
+    <a href="/users/<%= comment.UserId %>"><%= comment.User.name %></a>
   </span>
   <% for (paragraph of comment.text.split("\r\n\r\n")) { %>
   <p><%= paragraph %></p>
