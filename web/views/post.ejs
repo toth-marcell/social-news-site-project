@@ -67,6 +67,9 @@
       Comment
       <textarea name="text"></textarea>
     </label>
+    <% if (typeof(msg_fail) != "undefined") { %>
+    <mark class="msg msg-fail"><%= msg_fail %></mark>
+    <% } %>
     <button type="submit">Add comment</button>
   </form>
 </article>

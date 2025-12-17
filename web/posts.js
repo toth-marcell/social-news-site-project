@@ -119,8 +119,39 @@ export const EditPost = async (
 };
 
 export async function TopComment(text, PostId, user) {
+  if (!text)
+    return { status: 400, msg: "You can't submit a comment with no text!" };
   const post = await Post.findByPk(PostId);
   if (!post) return { status: 404, msg: "No such post!" };
   const comment = await post.createComment({ text, UserId: user.id });
+  return { status: 200, comment };
+}
+
+export async function GetSingleComment(id) {
+  const comment = await Comment.findByPk(id, {
+    include: [
+      { model: User, attributes: ["name"] },
+      { model: Post, attributes: ["title"] },
+    ],
+  });
+  if (!comment) return { status: 404, msg: "No such comment!" };
+  return {
+    status: 200,
+    comment: Object.assign(comment.get(), {
+      votes: await comment.countVotes(),
+    }),
+  };
+}
+
+export async function ChildComment(text, ParentId, user) {
+  if (!text)
+    return { status: 400, msg: "You can't submit a comment with no text!" };
+  const parent = await Comment.findByPk(ParentId);
+  if (!parent) return { status: 404, msg: "No such parent comment!" };
+  const comment = await parent.createChild({
+    text,
+    UserId: user.id,
+    PostId: parent.PostId,
+  });
   return { status: 200, comment };
 }

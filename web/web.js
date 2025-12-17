@@ -4,10 +4,12 @@ import JWT from "jsonwebtoken";
 import { EditUser, Login, Register } from "./auth.js";
 import { User } from "./models.js";
 import {
+  ChildComment,
   CreatePost,
   DeletePost,
   GetPost,
   GetPosts,
+  GetSingleComment,
   TopComment,
 } from "./posts.js";
 
@@ -176,6 +178,29 @@ router.post("/posts/:id", LoggedInOnly, async (req, res) => {
   const { text } = req.body || {};
   const result = await TopComment(text, req.params.id, res.locals.user);
   if (result.status == 200) {
-    res.redirect("/posts/" + req.params.id);
-  } else res.json(result);
+    res.redirect("/posts/" + req.params.id + "#c" + result.comment.id);
+  } else
+    res.status(result.status).render("post", {
+      post: await GetPost(req.params.id),
+      msg_fail: result.msg,
+    });
+});
+
+router.get("/comments/:id", LoggedInOnly, async (req, res) => {
+  const result = await GetSingleComment(req.params.id);
+  if (result.status == 200) {
+    res.render("commentPage", { comment: result.comment });
+  } else res.status(result.status).render("msg", { msg_fail: result.msg });
+});
+
+router.post("/comments/:id", LoggedInOnly, async (req, res) => {
+  const { text } = req.body || {};
+  const result = await ChildComment(text, req.params.id, res.locals.user);
+  if (result.status == 200) {
+    res.redirect("/posts/" + result.comment.PostId + "#c" + result.comment.id);
+  } else
+    res.status(result.status).render("commentPage", {
+      comment: (await GetSingleComment(req.params.id)).comment,
+      msg_fail: result.msg,
+    });
 });
