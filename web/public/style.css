@@ -10,7 +10,8 @@ nav li {
   margin-inline: 5px;
 }
 h1 > a,
-h2 > a {
+h2 > a,
+a:has(button) {
   color: currentColor;
   text-decoration: none;
 }

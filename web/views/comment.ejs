@@ -1,28 +1,57 @@
 <article style="margin-left: <%= level * 50 %>px" id=c<%= comment.id %>>
-  <button>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      width="1em"
-      height="1em"
-      viewBox="0 0 24 24"
-      aria-label="upvote arrow"
-    >
-      <path
-        fill="none"
-        stroke="currentColor"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M12 8l-7 7M12 8l7 7"
-      />
-    </svg>
-    <%= comment.votes %>
-  </button>
-  <a href="/comments/<%= comment.id %>"><button>Reply</button></a>
-  <span>
-    by
-    <a href="/users/<%= comment.UserId %>"><%= comment.User.name %></a>
-  </span>
+  <div>
+    <button>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="1em"
+        height="1em"
+        viewBox="0 0 24 24"
+        aria-label="upvote arrow"
+      >
+        <path
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M12 8l-7 7M12 8l7 7"
+        />
+      </svg>
+      <%= comment.votes %>
+    </button>
+    <% if (user && (user.isAdmin || user.id == comment.UserId)) { %>
+    <form action="/deletecomment/<%= comment.id %>" method="post">
+      <button type="submit">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          aria-label="trash"
+        >
+          <g
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+          >
+            <path
+              d="M12 20h5c0.5 0 1 -0.5 1 -1v-14M12 20h-5c-0.5 0 -1 -0.5 -1 -1v-14"
+            />
+            <path d="M4 5h16" />
+            <path d="M10 4h4M10 9v7M14 9v7" />
+          </g>
+        </svg>
+      </button>
+    </form>
+    <a href="/comments/<%= comment.id %>"><button>Reply</button></a>
+    <% } %>
+    <span>
+      by
+      <a href="/users/<%= comment.UserId %>"><%= comment.User.name %></a>
+    </span>
+  </div>
   <% for (paragraph of comment.text.split("\r\n\r\n")) { %>
   <p><%= paragraph %></p>
   <% } %>

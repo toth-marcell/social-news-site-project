@@ -20,6 +20,7 @@
       </svg>
       <%= post.votes %>
     </button>
+    <% if (user && (user.isAdmin || user.id == post.UserId)) { %>
     <form action="/deletepost/<%= post.id %>" method="post">
       <button type="submit">
         <svg
@@ -45,6 +46,7 @@
         </svg>
       </button>
     </form>
+    <% } %>
     <button class="contrast"><%= post.category %></button>
     <span><%= post.createdAt.toISOString() %></span>
     <span>
@@ -61,6 +63,7 @@
   <p><%= paragraph %></p>
   <% }} %>
 </article>
+<% if (user && (user.isAdmin || user.id == post.UserId)) { %>
 <article>
   <form method="post">
     <label>
@@ -73,5 +76,5 @@
     <button type="submit">Add comment</button>
   </form>
 </article>
-<% for (comment of post.Comments) { %> <%- include("comment", {comment, level:
+<% } for (comment of post.Comments) { %> <%- include("comment", {comment, level:
 0}) -%> <% } %> <%- include("foot") -%>
