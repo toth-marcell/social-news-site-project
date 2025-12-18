@@ -1,6 +1,6 @@
 import { Comment, Post, User } from "./models.js";
 
-export const GetPosts = async () => {
+export async function GetPosts() {
   const posts = await Post.findAll({
     include: { model: User, attributes: ["name", "id"] },
   });
@@ -13,7 +13,7 @@ export const GetPosts = async () => {
     );
   }
   return postObjects;
-};
+}
 
 async function fetchComments(commentObject, commentData) {
   commentData.Children = await Promise.all(
@@ -27,7 +27,7 @@ async function fetchComments(commentObject, commentData) {
   return (commentObject, commentData);
 }
 
-export const GetPost = async (id) => {
+export async function GetPost(id) {
   const postObject = await Post.findByPk(id, {
     include: [
       {
@@ -48,16 +48,9 @@ export const GetPost = async (id) => {
     );
   }
   return post;
-};
+}
 
-export const CreatePost = async (
-  title,
-  link,
-  linkType,
-  text,
-  category,
-  user,
-) => {
+export async function CreatePost(title, link, linkType, text, category, user) {
   if (!(title && category))
     return { status: 400, msg: "The title and category must be filled!" };
   if (!((link && linkType) || text))
@@ -78,9 +71,9 @@ export const CreatePost = async (
     category,
   });
   return { status: 201, msg: "Success!", id: post.id };
-};
+}
 
-export const DeletePost = async (id, user) => {
+export async function DeletePost(id, user) {
   const post = await Post.findByPk(id);
   if (!post) return { status: 404, msg: "No such post!" };
   if (!(post.UserId == user.id || user.isAdmin))
@@ -90,9 +83,9 @@ export const DeletePost = async (id, user) => {
     };
   await post.destroy();
   return { status: 200, msg: "Success!" };
-};
+}
 
-export const EditPost = async (
+export async function EditPost(
   id,
   title,
   link,
@@ -100,7 +93,7 @@ export const EditPost = async (
   text,
   category,
   user,
-) => {
+) {
   const post = await Post.findByPk(id);
   if (!post) return { status: 404, msg: "No such post!" };
   if (!(post.UserId == user.id || user.isAdmin))
@@ -116,7 +109,7 @@ export const EditPost = async (
   if (text) await post.update({ text });
   if (category) await post.update({ category });
   return { status: 200, msg: "Success!" };
-};
+}
 
 export async function TopComment(text, PostId, user) {
   if (!text)

@@ -3,17 +3,17 @@ import { hash } from "crypto";
 import JWT from "jsonwebtoken";
 import { User } from "./models.js";
 
-export const HashPassword = (pass) => {
+export function HashPassword(pass) {
   const lengthHashed = hash("sha256", pass);
   return hashSync(lengthHashed);
-};
+}
 
 function ComparePassword(inputPass, hashedPass) {
   const lengthHashed = hash("sha256", inputPass);
   return compareSync(lengthHashed, hashedPass);
 }
 
-export const Register = async (name, password, about) => {
+export async function Register(name, password, about) {
   if (!(name && password))
     return {
       status: 400,
@@ -23,9 +23,9 @@ export const Register = async (name, password, about) => {
     return { status: 400, msg: "That name is already taken!" };
   await User.create({ name, password: HashPassword(password), about });
   return { status: 200, msg: "Success! You can now log in." };
-};
+}
 
-export const Login = async (name, password) => {
+export async function Login(name, password) {
   if (!(name && password))
     return {
       status: 400,
@@ -45,13 +45,13 @@ export const Login = async (name, password) => {
     return { status: 400, msg: "Wrong password!" };
   }
   return { status: 404, msg: "No user exists with that name!" };
-};
+}
 
-export const EditUser = async (name, password, about, user) => {
+export async function EditUser(name, password, about, user) {
   if (!(name || password || about))
     return { status: 400, msg: "Not changing anything!" };
   if (name) await user.update({ name });
   if (password) await user.update({ password: HashPassword(password) });
   if (about) await user.update({ about });
   return { status: 200, msg: "Success!" };
-};
+}
