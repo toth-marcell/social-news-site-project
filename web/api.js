@@ -89,13 +89,13 @@ router.put("/me", LoggedInOnly, async (req, res) => {
 });
 
 function AdminOnly(req, res, next) {
-  if (res.locals.user && res.locals.user.isAdmin) next();
+  if (res.locals.user.isAdmin) next();
   else
     res
       .status(403)
       .json({ msg: "You must be logged in as an admin to do that!" });
 }
 
-router.get("/logs", AdminOnly, async (req, res) => {
+router.get("/logs", LoggedInOnly, AdminOnly, async (req, res) => {
   res.json(await Log.findAll());
 });

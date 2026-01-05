@@ -16,11 +16,21 @@ components:
       content:
         application/json:
           schema:
+            required: [msg]
             properties:
               msg:
                 example: "You must be logged in to do that!"
+    adminOnly:
+      description: "You must be logged in as an admin to do that!"
+      content:
+        application/json:
+          schema:
+            required: [msg]
+            properties:
+              msg:
+                example: "You must be logged in as an admin to do that!"
   schemas:
-    post:
+    postContents:
       required:
         - title
         - category
@@ -35,6 +45,26 @@ components:
           type: string
         category:
           type: string
+    post:
+      allOf:
+        - $ref: "#/components/schemas/postContents"
+        - properties:
+            id:
+              type: integer
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+            UserId:
+              type: integer
+            User:
+              properties:
+                name:
+                  type: string
+            votes:
+              type: integer
   parameters:
     idInPath:
       in: path
@@ -51,7 +81,6 @@ paths:
         content:
           application/json:
             schema:
-              type: object
               required:
                 - name
                 - password
@@ -60,11 +89,12 @@ paths:
                   type: string
                 password:
                   type: string
+                  format: password
                 about:
                   type: string
       responses:
         200:
-          description: "Successful account creation"
+          description: "Success! You can now log in."
           content:
             application/json:
               schema:
@@ -72,10 +102,11 @@ paths:
                   msg:
                     example: "Success! You can now log in."
         400:
-          description: "Not all required fields were sent, or the username is already taken"
+          description: "Not all required fields were sent, or the username is already taken."
           content:
             application/json:
               schema:
+                required: [msg]
                 properties:
                   msg:
                     anyOf:
@@ -89,7 +120,6 @@ paths:
         content:
           application/json:
             schema:
-              type: object
               required:
                 - name
                 - password
@@ -98,18 +128,38 @@ paths:
                   type: string
                 password:
                   type: string
+                  format: password
       responses:
         200:
-          description: "Successful login"
+          description: "Success!"
           content:
             application/json:
               schema:
-                type: object
                 properties:
                   msg:
                     example: "Success!"
                   token:
                     description: JWT
+        400:
+          description: "Not all required fields were sent, or the password is wrong for that user."
+          content:
+            application/json:
+              schema:
+                required: [msg]
+                properties:
+                  msg:
+                    anyOf:
+                      - example: "You must fill out the name and password fields!"
+                      - example: "Wrong password!"
+        404:
+          description: "No user exists with that name!"
+          content:
+            application/json:
+              schema:
+                required: [msg]
+                properties:
+                  msg:
+                    example: "No user exists with that name!"
   /me:
     get:
       tags: [Users]
@@ -118,8 +168,32 @@ paths:
       responses:
         200:
           description: User information
-        401:
-          $ref: "#/components/responses/unauthorized"
+          content:
+            application/json:
+              schema:
+                required:
+                  - id
+                  - name
+                  - about
+                  - isAdmin
+                  - createdAt
+                  - updatedAt
+                properties:
+                  id:
+                    type: integer
+                  name:
+                    type: string
+                  about:
+                    type: string
+                  isAdmin:
+                    type: boolean
+                  createdAt:
+                    type: string
+                    format: date-time
+                  updatedAt:
+                    type: string
+                    format: date-time
+        401: { $ref: "#/components/responses/unauthorized" }
     put:
       tags: [Users]
       summary: Edit your name, password and about text
@@ -128,12 +202,12 @@ paths:
         content:
           application/json:
             schema:
-              type: object
               properties:
                 name:
                   type: string
                 password:
                   type: string
+                  format: password
                 about:
                   type: string
       responses:
@@ -141,8 +215,7 @@ paths:
           description: Success!
         400:
           description: No properties specified to change
-        401:
-          $ref: "#/components/responses/unauthorized"
+        401: { $ref: "#/components/responses/unauthorized" }
   /posts:
     get:
       tags: [Posts]
@@ -165,19 +238,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/post"
+              $ref: "#/components/schemas/postContents"
       responses:
         200:
           description: Success!
-        401:
-          $ref: "#/components/responses/unauthorized"
+        401: { $ref: "#/components/responses/unauthorized" }
   /posts/{id}:
     delete:
       tags: [Posts]
       summary: Delete post by id
       security: [bearerAuth: []]
-      parameters:
-        - $ref: "#/components/parameters/idInPath"
+      parameters: [{ $ref: "#/components/parameters/idInPath" }]
       responses:
         200:
           description: Success!
@@ -189,19 +260,17 @@ paths:
                 properties:
                   msg:
                     example: You can only delete your own posts, unless you are an admin.
-        401:
-          $ref: "#/components/responses/unauthorized"
+        401: { $ref: "#/components/responses/unauthorized" }
     put:
       tags: [Posts]
       summary: Edit post by id
       security: [bearerAuth: []]
-      parameters:
-        - $ref: "#/components/parameters/idInPath"
+      parameters: [{ $ref: "#/components/parameters/idInPath" }]
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/post"
+              $ref: "#/components/schemas/postContents"
       responses:
         200:
           description: Success!
@@ -213,8 +282,7 @@ paths:
                 properties:
                   msg:
                     example: You can only edit your own posts, unless you are an admin.
-        401:
-          $ref: "#/components/responses/unauthorized"
+        401: { $ref: "#/components/responses/unauthorized" }
   /logs:
     get:
       tags: [Administration]
@@ -223,3 +291,26 @@ paths:
       responses:
         200:
           description: Success!
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  required:
+                    - id
+                    - path
+                    - createdAt
+                    - UserId
+                  properties:
+                    id:
+                      type: integer
+                    path:
+                      type: string
+                    createdAt:
+                      type: string
+                      format: date-time
+                    UserId:
+                      type: integer
+                      nullable: true
+        401: { $ref: "#/components/responses/unauthorized" }
+        403: { $ref: "#/components/responses/adminOnly" }
