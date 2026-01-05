@@ -39,6 +39,7 @@ export async function GetPost(id) {
       { model: User, attributes: ["name", "id"] },
     ],
   });
+  if (!postObject) return { status: 404, msg: "No such post!" };
   const post = postObject.get();
   post.votes = await postObject.countVotes();
   for (let i = 0; i < postObject.Comments.length; i++) {
@@ -47,7 +48,7 @@ export async function GetPost(id) {
       postObject.Comments[i].get(),
     );
   }
-  return post;
+  return { status: 200, post };
 }
 
 export async function CreatePost(title, link, linkType, text, category, user) {

@@ -47,7 +47,9 @@ router.get("/", async (req, res) =>
 );
 
 router.get("/posts/:id", async (req, res) => {
-  res.render("post", { post: await GetPost(req.params.id) });
+  const result = await GetPost(req.params.id);
+  if (result.status == 200) res.render("post", { post: result.post });
+  else res.status(result.status).render("msg", { msg_fail: result.msg });
 });
 
 router.get("/register", (req, res) =>
@@ -183,7 +185,7 @@ router.post("/posts/:id", LoggedInOnly, async (req, res) => {
     res.redirect("/posts/" + req.params.id + "#c" + result.comment.id);
   } else
     res.status(result.status).render("post", {
-      post: await GetPost(req.params.id),
+      post: (await GetPost(req.params.id)).post,
       msg_fail: result.msg,
     });
 });

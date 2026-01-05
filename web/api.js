@@ -3,7 +3,13 @@ import JWT from "jsonwebtoken";
 import { EditUser, Login, Register } from "./auth.js";
 import WriteLog from "./log.js";
 import { Log, User } from "./models.js";
-import { CreatePost, DeletePost, EditPost, GetPosts } from "./posts.js";
+import {
+  CreatePost,
+  DeletePost,
+  EditPost,
+  GetPost,
+  GetPosts,
+} from "./posts.js";
 
 const router = express.Router();
 export default router;
@@ -56,6 +62,12 @@ router.post("/posts", LoggedInOnly, async (req, res) => {
     res.locals.user,
   );
   res.status(result.status).json({ msg: result.msg, id: result.id });
+});
+
+router.get("/posts/:id", async (req, res) => {
+  const result = await GetPost(req.params.id);
+  if (result.status == 200) res.json(result.post);
+  else res.status(result.status).json({ msg: result.msg });
 });
 
 router.delete("/posts/:id", LoggedInOnly, async (req, res) => {
