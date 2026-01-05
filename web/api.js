@@ -36,7 +36,7 @@ router.post("/login", async (req, res) => {
   res.status(result.status).json({ msg: result.msg, token: result.token });
 });
 
-router.get("/post", async (req, res) => {
+router.get("/posts", async (req, res) => {
   res.json(await GetPosts());
 });
 
@@ -45,7 +45,7 @@ function LoggedInOnly(req, res, next) {
   else res.status(401).json({ msg: "You must be logged in to do that!" });
 }
 
-router.post("/post", LoggedInOnly, async (req, res) => {
+router.post("/posts", LoggedInOnly, async (req, res) => {
   const { title, link, linkType, text, category } = req.body;
   const result = await CreatePost(
     title,
@@ -58,12 +58,12 @@ router.post("/post", LoggedInOnly, async (req, res) => {
   res.status(result.status).json({ msg: result.msg, id: result.id });
 });
 
-router.delete("/post/:id", LoggedInOnly, async (req, res) => {
+router.delete("/posts/:id", LoggedInOnly, async (req, res) => {
   const result = await DeletePost(req.params.id, res.locals.user);
   res.status(result.status).json({ msg: result.msg });
 });
 
-router.put("/post/:id", LoggedInOnly, async (req, res) => {
+router.put("/posts/:id", LoggedInOnly, async (req, res) => {
   const { title, link, linkType, text, category } = req.body;
   const { id } = req.params.id;
   const result = await EditPost(

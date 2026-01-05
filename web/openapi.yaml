@@ -143,7 +143,7 @@ paths:
           description: No properties specified to change
         401:
           $ref: "#/components/responses/unauthorized"
-  /post:
+  /posts:
     get:
       tags: [Posts]
       summary: Get all posts
@@ -171,7 +171,7 @@ paths:
           description: Success!
         401:
           $ref: "#/components/responses/unauthorized"
-  /post/{id}:
+  /posts/{id}:
     delete:
       tags: [Posts]
       summary: Delete post by id
