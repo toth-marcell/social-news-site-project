@@ -2,6 +2,7 @@ import cookieParser from "cookie-parser";
 import express from "express";
 import JWT from "jsonwebtoken";
 import { EditUser, Login, Register } from "./auth.js";
+import WriteLog from "./log.js";
 import { User } from "./models.js";
 import {
   ChildComment,
@@ -38,6 +39,7 @@ router.use(async (req, res, next) => {
   next();
 });
 
+router.use(WriteLog);
 router.use(express.urlencoded());
 
 router.get("/", async (req, res) =>

@@ -1,6 +1,7 @@
 import express from "express";
 import JWT from "jsonwebtoken";
 import { EditUser, Login, Register } from "./auth.js";
+import WriteLog from "./log.js";
 import { Log, User } from "./models.js";
 import { CreatePost, DeletePost, EditPost, GetPosts } from "./posts.js";
 
@@ -20,6 +21,8 @@ router.use(async (req, res, next) => {
   }
   next();
 });
+
+router.use(WriteLog);
 
 router.post("/register", async (req, res) => {
   const { name, password, about } = req.body;

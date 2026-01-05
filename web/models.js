@@ -89,4 +89,7 @@ export const Log = sequelize.define(
   { updatedAt: false },
 );
 
+Log.belongsTo(User);
+User.hasMany(Log);
+
 await sequelize.sync();

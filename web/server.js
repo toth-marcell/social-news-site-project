@@ -12,9 +12,6 @@ import express from "express";
 const app = express();
 app.locals.siteName = process.env.SITENAME;
 
-import WriteLog from "./log.js";
-app.use(WriteLog);
-
 import { readFileSync } from "fs";
 import YAML from "yaml";
 const APISpec = YAML.parse(readFileSync("openapi.yaml", "utf-8"));
