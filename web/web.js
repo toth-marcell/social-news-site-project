@@ -3,7 +3,7 @@ import express from "express";
 import JWT from "jsonwebtoken";
 import { EditUser, Login, Register } from "./auth.js";
 import WriteLog from "./log.js";
-import { User } from "./models.js";
+import { User, Post } from "./models.js";
 import {
   ChildComment,
   CreatePost,
@@ -12,6 +12,8 @@ import {
   GetPosts,
   GetSingleComment,
   TopComment,
+  UpvoteComment,
+  UpvotePost,
 } from "./posts.js";
 
 const router = express.Router();
@@ -207,4 +209,14 @@ router.post("/comments/:id", LoggedInOnly, async (req, res) => {
       comment: (await GetSingleComment(req.params.id)).comment,
       msg_fail: result.msg,
     });
+});
+
+router.post("/postVote/:id", LoggedInOnly, async (req, res) => {
+  await UpvotePost(req.params.id, res.locals.user);
+  res.redirect("/posts/" + req.params.id);
+});
+
+router.post("/commentVote/:id", LoggedInOnly, async (req, res) => {
+  const result = await UpvoteComment(req.params.id, res.locals.user);
+  res.redirect("/posts/" + result.comment.PostId + "#c" + result.comment.id);
 });

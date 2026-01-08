@@ -1,4 +1,4 @@
-import { Comment, Post, User } from "./models.js";
+import { Comment, CommentVote, Post, PostVote, User } from "./models.js";
 
 export async function GetPosts() {
   const posts = await Post.findAll({
@@ -148,4 +148,27 @@ export async function ChildComment(text, ParentId, user) {
     PostId: parent.PostId,
   });
   return { status: 200, comment };
+}
+
+export async function UpvotePost(PostId, user) {
+  const post = await Post.findByPk(PostId);
+  if (!post) return { status: 404, msg: "Post not found!" };
+  const existingVote = await PostVote.findOne({
+    where: { PostId, UserId: user.id },
+  });
+  if (existingVote) return { status: 400, msg: "You already voted on this!" };
+  await PostVote.create({ PostId, UserId: user.id });
+  return { status: 200, msg: "Success!" };
+}
+
+export async function UpvoteComment(CommentId, user) {
+  const comment = await Comment.findByPk(CommentId);
+  if (!comment) return { status: 404, msg: "Comment not found!" };
+  const existingVote = await CommentVote.findOne({
+    where: { CommentId, UserId: user.id },
+  });
+  if (existingVote)
+    return { status: 400, msg: "You already voted on this!", comment };
+  await CommentVote.create({ CommentId, UserId: user.id });
+  return { status: 200, msg: "Success!", comment };
 }

@@ -72,11 +72,13 @@ Post.hasMany(Comment);
 Comment.belongsTo(Comment, { foreignKey: "ParentId", as: "Parent" });
 Comment.hasMany(Comment, { foreignKey: "ParentId", as: "Children" });
 
-User.belongsToMany(Post, { through: "PostVote", as: "VotedPosts" });
-Post.belongsToMany(User, { through: "PostVote", as: "Votes" });
+export const PostVote = sequelize.define("PostVote");
+User.belongsToMany(Post, { through: PostVote, as: "VotedPosts" });
+Post.belongsToMany(User, { through: PostVote, as: "Votes" });
 
-User.belongsToMany(Comment, { through: "CommentVote", as: "VotedComments" });
-Comment.belongsToMany(User, { through: "CommentVote", as: "Votes" });
+export const CommentVote = sequelize.define("CommentVote");
+User.belongsToMany(Comment, { through: CommentVote, as: "VotedComments" });
+Comment.belongsToMany(User, { through: CommentVote, as: "Votes" });
 
 export const Log = sequelize.define(
   "Log",

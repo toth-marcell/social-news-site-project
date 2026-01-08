@@ -1,25 +1,27 @@
 <%- include("head") -%>
 <article>
   <div>
-    <button>
-      <svg
-        xmlns="http://www.w3.org/2000/svg"
-        width="1em"
-        height="1em"
-        viewBox="0 0 24 24"
-        aria-label="upvote arrow"
-      >
-        <path
-          fill="none"
-          stroke="currentColor"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M12 8l-7 7M12 8l7 7"
-        />
-      </svg>
-      <%= comment.votes %>
-    </button>
+    <form action="/commentVote/<%= comment.id %>" method="post">
+      <button>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="1em"
+          height="1em"
+          viewBox="0 0 24 24"
+          aria-label="upvote arrow"
+        >
+          <path
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8l-7 7M12 8l7 7"
+          />
+        </svg>
+        <%= comment.votes %>
+      </button>
+    </form>
     <% if (user.isAdmin || user.id == comment.UserId) { %>
     <form action="/deletecomment/<%= comment.id %>" method="post">
       <button type="submit">
