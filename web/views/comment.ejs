@@ -51,6 +51,7 @@
     <% if (user) { %>
     <a href="/comments/<%= comment.id %>"><button>Reply</button></a>
     <% } %>
+    <span><%= comment.createdAt.toISOString() %></span>
     <span>
       by
       <a href="/users/<%= comment.UserId %>"><%= comment.User.name %></a>

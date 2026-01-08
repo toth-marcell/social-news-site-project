@@ -49,6 +49,7 @@
       </button>
     </form>
     <% } %>
+    <span><%= comment.createdAt.toISOString() %></span>
     <span
       >by
       <a href="/users/<%= comment.UserId %>"><%= comment.User.name %></a></span
