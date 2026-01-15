@@ -213,10 +213,14 @@ router.post("/comments/:id", LoggedInOnly, async (req, res) => {
 
 router.post("/postVote/:id", LoggedInOnly, async (req, res) => {
   await UpvotePost(req.params.id, res.locals.user);
-  res.redirect("/posts/" + req.params.id);
+  const redirectUrl = req.query.redirect || `/posts/${req.params.id}`;
+  res.redirect(redirectUrl);
 });
 
 router.post("/commentVote/:id", LoggedInOnly, async (req, res) => {
   const result = await UpvoteComment(req.params.id, res.locals.user);
-  res.redirect("/posts/" + result.comment.PostId + "#c" + result.comment.id);
+  const redirectUrl =
+    req.query.redirect ||
+    `/posts/${result.comment.PostId}#c${result.comment.id}`;
+  res.redirect(redirectUrl);
 });
