@@ -42,9 +42,6 @@ importers:
         specifier: ^2.8.1
         version: 2.8.2
     devDependencies:
-      '@awmottaz/prettier-plugin-void-html':
-        specifier: ^1.9.0
-        version: 1.10.0(prettier@3.7.4)
       '@faker-js/faker':
         specifier: ^10.1.0
         version: 10.1.0
@@ -56,11 +53,6 @@ importers:
         version: 1.3.1
 
 packages:
-
-  '@awmottaz/prettier-plugin-void-html@1.10.0':
-    resolution: {integrity: sha512-hDSBiHpiBpzEEm97CGMoiQQG1Tv0k1+Yjecedm/ioJs8mZ+RvpcKqmwWHP3xbd3G69bZn//Q783FYEWMYIQ6+g==}
-    peerDependencies:
-      prettier: 3.0.0 - 3.7.x
 
   '@faker-js/faker@10.1.0':
     resolution: {integrity: sha512-C3mrr3b5dRVlKPJdfrAXS8+dq+rq8Qm5SNRazca0JKgw1HQERFmrVb0towvMmw5uu8hHKNiQasMaR/tydf3Zsg==}
@@ -943,10 +935,6 @@ packages:
     hasBin: true
 
 snapshots:
-
-  '@awmottaz/prettier-plugin-void-html@1.10.0(prettier@3.7.4)':
-    dependencies:
-      prettier: 3.7.4
 
   '@faker-js/faker@10.1.0': {}
 
