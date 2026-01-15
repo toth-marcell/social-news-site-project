@@ -9,7 +9,7 @@ export async function GetPosts() {
     postObjects.push(
       Object.assign(post.get(), {
         votes: await post.countVotes(),
-      }),
+      })
     );
   }
   return postObjects;
@@ -21,7 +21,7 @@ async function fetchComments(commentObject, commentData) {
       await commentObject.getChildren({
         include: { model: User, attributes: ["name"] },
       })
-    ).map((x) => fetchComments(x, x.get())),
+    ).map((x) => fetchComments(x, x.get()))
   );
   commentData.votes = await commentObject.countVotes();
   return (commentObject, commentData);
@@ -45,7 +45,7 @@ export async function GetPost(id) {
   for (let i = 0; i < postObject.Comments.length; i++) {
     post.Comments[i] = await fetchComments(
       postObject.Comments[i],
-      postObject.Comments[i].get(),
+      postObject.Comments[i].get()
     );
   }
   return { status: 200, post };
@@ -93,7 +93,7 @@ export async function EditPost(
   linkType,
   text,
   category,
-  user,
+  user
 ) {
   const post = await Post.findByPk(id);
   if (!post) return { status: 404, msg: "No such post!" };

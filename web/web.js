@@ -23,8 +23,8 @@ router.use(express.static("public"));
 
 router.get("/pico.css", (req, res) =>
   res.sendFile(
-    import.meta.dirname + "/node_modules/@picocss/pico/css/pico.jade.min.css",
-  ),
+    import.meta.dirname + "/node_modules/@picocss/pico/css/pico.jade.min.css"
+  )
 );
 
 router.use(cookieParser());
@@ -45,7 +45,7 @@ router.use(WriteLog);
 router.use(express.urlencoded());
 
 router.get("/", async (req, res) =>
-  res.render("index", { posts: await GetPosts() }),
+  res.render("index", { posts: await GetPosts() })
 );
 
 router.get("/posts/:id", async (req, res) => {
@@ -55,7 +55,7 @@ router.get("/posts/:id", async (req, res) => {
 });
 
 router.get("/register", (req, res) =>
-  res.render("register", { name: "", password: "" }),
+  res.render("register", { name: "", password: "" })
 );
 router.post("/register", async (req, res) => {
   const { name, password } = req.body;
@@ -70,7 +70,7 @@ router.post("/register", async (req, res) => {
 });
 
 router.get("/login", (req, res) =>
-  res.render("login", { name: "", password: "" }),
+  res.render("login", { name: "", password: "" })
 );
 router.post("/login", async (req, res) => {
   const { name, password } = req.body;
@@ -142,7 +142,7 @@ router.get("/newpost", LoggedInOnly, (req, res) =>
     linkType: "",
     text: "",
     category: "",
-  }),
+  })
 );
 router.post("/newpost", LoggedInOnly, async (req, res) => {
   const { title, link, linkType, text, category } = req.body;
@@ -152,7 +152,7 @@ router.post("/newpost", LoggedInOnly, async (req, res) => {
     linkType,
     text,
     category,
-    res.locals.user,
+    res.locals.user
   );
   if (result.status == 201) {
     res.redirect("/posts/" + result.id);

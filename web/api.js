@@ -59,7 +59,7 @@ router.post("/posts", LoggedInOnly, async (req, res) => {
     linkType,
     text,
     category,
-    res.locals.user,
+    res.locals.user
   );
   res.status(result.status).json({ msg: result.msg, id: result.id });
 });
@@ -85,7 +85,7 @@ router.put("/posts/:id", LoggedInOnly, async (req, res) => {
     linkType,
     text,
     category,
-    res.locals.user,
+    res.locals.user
   );
   res.status(result.status).json({ msg: result.msg });
 });

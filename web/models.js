@@ -30,7 +30,7 @@ export const User = sequelize.define(
     scopes: {
       includePassword: {},
     },
-  },
+  }
 );
 
 export const Post = sequelize.define("Post", {
@@ -88,7 +88,7 @@ export const Log = sequelize.define(
       allowNull: false,
     },
   },
-  { updatedAt: false },
+  { updatedAt: false }
 );
 
 Log.belongsTo(User);

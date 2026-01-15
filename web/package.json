@@ -22,5 +22,8 @@
     "onlyBuiltDependencies": [
       "sqlite3"
     ]
+  },
+  "prettier": {
+    "trailingComma": "es5"
   }
 }

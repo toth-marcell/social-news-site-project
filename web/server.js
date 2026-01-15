@@ -24,7 +24,7 @@ import swaggerUI from "swagger-ui-express";
 app.use(
   "/api-docs",
   swaggerUI.serve,
-  swaggerUI.setup(null, { swaggerOptions: { url: "/openapi.json" } }),
+  swaggerUI.setup(null, { swaggerOptions: { url: "/openapi.json" } })
 );
 
 import apiRouter from "./api.js";
