@@ -43,7 +43,7 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/posts", async (req, res) => {
-  res.json(await GetPosts());
+  res.json(await GetPosts(res.locals.user));
 });
 
 function LoggedInOnly(req, res, next) {
@@ -65,7 +65,7 @@ router.post("/posts", LoggedInOnly, async (req, res) => {
 });
 
 router.get("/posts/:id", async (req, res) => {
-  const result = await GetPost(req.params.id);
+  const result = await GetPost(req.params.id, res.locals.user);
   if (result.status == 200) res.json(result.post);
   else res.status(result.status).json({ msg: result.msg });
 });

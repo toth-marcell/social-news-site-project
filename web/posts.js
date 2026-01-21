@@ -1,34 +1,43 @@
 import { Comment, CommentVote, Post, PostVote, User } from "./models.js";
 
-export async function GetPosts() {
+export async function GetPosts(user) {
   const posts = await Post.findAll({
     include: { model: User, attributes: ["name"] },
   });
-  const postObjects = [];
+  const postsData = [];
   for (const post of posts) {
-    postObjects.push(
-      Object.assign(post.get(), {
-        votes: await post.countVotes(),
-      })
-    );
+    const postData = post.get();
+    postData.votes = await post.countVotes();
+    if (user)
+      postData.voted =
+        (await PostVote.findOne({
+          where: { UserId: user.id },
+          PostId: post.id,
+        })) != null;
+    postsData.push(postData);
   }
-  return postObjects;
+  return postsData;
 }
 
-async function fetchComments(commentObject, commentData) {
+async function fetchComments(commentObject, commentData, user) {
   commentData.Children = await Promise.all(
     (
       await commentObject.getChildren({
         include: { model: User, attributes: ["name"] },
       })
-    ).map((x) => fetchComments(x, x.get()))
+    ).map((x) => fetchComments(x, x.get(), user))
   );
   commentData.votes = await commentObject.countVotes();
+  if (user)
+    commentData.voted =
+      (await CommentVote.findOne({
+        where: { UserId: user.id, CommentId: commentData.id },
+      })) != null;
   return (commentObject, commentData);
 }
 
-export async function GetPost(id) {
-  const postObject = await Post.findByPk(id, {
+export async function GetPost(id, user) {
+  const post = await Post.findByPk(id, {
     include: [
       {
         model: Comment,
@@ -39,16 +48,23 @@ export async function GetPost(id) {
       { model: User, attributes: ["name"] },
     ],
   });
-  if (!postObject) return { status: 404, msg: "No such post!" };
-  const post = postObject.get();
-  post.votes = await postObject.countVotes();
-  for (let i = 0; i < postObject.Comments.length; i++) {
-    post.Comments[i] = await fetchComments(
-      postObject.Comments[i],
-      postObject.Comments[i].get()
+  if (!post) return { status: 404, msg: "No such post!" };
+  const postData = post.get();
+  postData.votes = await post.countVotes();
+  if (user)
+    postData.voted =
+      (await PostVote.findOne({
+        where: { UserId: user.id },
+        PostId: post.id,
+      })) != null;
+  for (let i = 0; i < post.Comments.length; i++) {
+    postData.Comments[i] = await fetchComments(
+      post.Comments[i],
+      post.Comments[i].get(),
+      user
     );
   }
-  return { status: 200, post };
+  return { status: 200, post: postData };
 }
 
 export async function CreatePost(title, link, linkType, text, category, user) {
@@ -121,7 +137,7 @@ export async function TopComment(text, PostId, user) {
   return { status: 200, comment };
 }
 
-export async function GetSingleComment(id) {
+export async function GetSingleComment(id, user) {
   const comment = await Comment.findByPk(id, {
     include: [
       { model: User, attributes: ["name"] },
@@ -129,12 +145,14 @@ export async function GetSingleComment(id) {
     ],
   });
   if (!comment) return { status: 404, msg: "No such comment!" };
-  return {
-    status: 200,
-    comment: Object.assign(comment.get(), {
-      votes: await comment.countVotes(),
-    }),
-  };
+  const commentData = comment.get();
+  commentData.votes = await comment.countVotes();
+  if (user)
+    commentData.voted =
+      (await CommentVote.findOne({
+        where: { UserId: user.id, CommentId: commentData.id },
+      })) != null;
+  return { status: 200, comment: commentData };
 }
 
 export async function ChildComment(text, ParentId, user) {
@@ -156,9 +174,12 @@ export async function UpvotePost(PostId, user) {
   const existingVote = await PostVote.findOne({
     where: { PostId, UserId: user.id },
   });
-  if (existingVote) return { status: 400, msg: "You already voted on this!" };
+  if (existingVote) {
+    await existingVote.destroy();
+    return { status: 200, msg: "Upvote removed!" };
+  }
   await PostVote.create({ PostId, UserId: user.id });
-  return { status: 200, msg: "Success!" };
+  return { status: 201, msg: "Upvote added!" };
 }
 
 export async function UpvoteComment(CommentId, user) {
@@ -167,8 +188,10 @@ export async function UpvoteComment(CommentId, user) {
   const existingVote = await CommentVote.findOne({
     where: { CommentId, UserId: user.id },
   });
-  if (existingVote)
-    return { status: 400, msg: "You already voted on this!", comment };
+  if (existingVote) {
+    await existingVote.destroy();
+    return { status: 200, msg: "Upvote removed!", comment };
+  }
   await CommentVote.create({ CommentId, UserId: user.id });
-  return { status: 200, msg: "Success!", comment };
+  return { status: 201, msg: "Upvote added!", comment };
 }
