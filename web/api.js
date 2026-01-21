@@ -9,6 +9,8 @@ import {
   EditPost,
   GetPost,
   GetPosts,
+  UpvoteComment,
+  UpvotePost,
 } from "./posts.js";
 
 const router = express.Router();
@@ -87,6 +89,16 @@ router.put("/posts/:id", LoggedInOnly, async (req, res) => {
     category,
     res.locals.user
   );
+  res.status(result.status).json({ msg: result.msg });
+});
+
+router.post("/postVote/:id", LoggedInOnly, async (req, res) => {
+  const result = await UpvotePost(req.params.id, res.locals.user);
+  res.status(result.status).json({ msg: result.msg });
+});
+
+router.post("/commentVote/:id", LoggedInOnly, async (req, res) => {
+  const result = await UpvoteComment(req.params.id, res.locals.user);
   res.status(result.status).json({ msg: result.msg });
 });
 

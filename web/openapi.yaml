@@ -341,6 +341,28 @@ paths:
                   msg:
                     example: You can only edit your own posts, unless you are an admin.
         401: { $ref: "#/components/responses/unauthorized" }
+  /postVote/{id}:
+    post:
+      parameters: [{ $ref: "#/components/parameters/idInPath" }]
+      tags: [Voting]
+      summary: Add or remove vote on a post
+      security: [bearerAuth: []]
+      responses:
+        201:
+          description: Upvote added!
+        200:
+          description: Upvote removed!
+  /commentVote/{id}:
+    post:
+      parameters: [{ $ref: "#/components/parameters/idInPath" }]
+      tags: [Voting]
+      summary: Add or remove vote on a comment
+      security: [bearerAuth: []]
+      responses:
+        201:
+          description: Upvote added!
+        200:
+          description: Upvote removed!
   /logs:
     get:
       tags: [Administration]
