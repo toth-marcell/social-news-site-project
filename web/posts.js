@@ -2,7 +2,7 @@ import { Comment, CommentVote, Post, PostVote, User } from "./models.js";
 
 export async function GetPosts() {
   const posts = await Post.findAll({
-    include: { model: User, attributes: ["name", "id"] },
+    include: { model: User, attributes: ["name"] },
   });
   const postObjects = [];
   for (const post of posts) {
@@ -36,7 +36,7 @@ export async function GetPost(id) {
         required: false,
         include: { model: User, attributes: ["name"] },
       },
-      { model: User, attributes: ["name", "id"] },
+      { model: User, attributes: ["name"] },
     ],
   });
   if (!postObject) return { status: 404, msg: "No such post!" };
