@@ -1,5 +1,3 @@
-using UIKit;
-
 namespace SocialNewsApp.iOS;
 
 public class Application

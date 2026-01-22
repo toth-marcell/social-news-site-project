@@ -3,14 +3,28 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="clr-namespace:SocialNewsApp.ViewModels"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+			 xmlns:m="using:SocialNewsApp.Models"
+			 xmlns:v="using:SocialNewsApp.Views"
+			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SocialNewsApp.Views.MainView"
              x:DataType="vm:MainViewModel">
-  <Design.DataContext>
-    <!-- This only sets the DataContext for the previewer in an IDE,
-         to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
-    <vm:MainViewModel />
-  </Design.DataContext>
-
-  <TextBlock Text="{Binding Greeting}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+	<Design.DataContext>
+		<vm:MainViewModel/>
+	</Design.DataContext>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Menu>
+			<MenuItem Command="{Binding RefreshPostsCommand}" Header="Refresh"/>
+		</Menu>
+		<ItemsControl ItemsSource="{Binding Posts}" Grid.Row="1">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate DataType="m:Post">
+					<v:PostControl/>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+	</Grid>
 </UserControl>
