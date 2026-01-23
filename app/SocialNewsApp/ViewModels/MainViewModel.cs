@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.Input;
 using SocialNewsApp.Models;
 
@@ -6,7 +7,7 @@ namespace SocialNewsApp.ViewModels;
 
 public partial class MainViewModel : ViewModelBase
 {
-    ObservableCollection<Post> Posts { get; set; } = [];
+    public ObservableCollection<Post> Posts { get; set; } = [];
     API API = new("http://localhost:3000/api/");
     public RelayCommand RefreshPostsCommand { get; set; }
     public MainViewModel()
@@ -16,7 +17,7 @@ public partial class MainViewModel : ViewModelBase
     }
     async void RefreshPosts()
     {
-        foreach (Post post in await API.GetPosts()) Posts.Add(post);
+        Posts = [.. await API.GetPosts()];
         OnPropertyChanged(nameof(Posts));
     }
 }

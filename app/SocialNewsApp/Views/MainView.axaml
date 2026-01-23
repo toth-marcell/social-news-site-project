@@ -19,7 +19,7 @@
 		<Menu>
 			<MenuItem Command="{Binding RefreshPostsCommand}" Header="Refresh"/>
 		</Menu>
-		<ItemsControl ItemsSource="{Binding Posts}" Grid.Row="1">
+		<ItemsControl ItemsSource="{Binding Posts}" Grid.Row="1" Margin="10">
 			<ItemsControl.ItemTemplate>
 				<DataTemplate DataType="m:Post">
 					<v:PostControl/>
