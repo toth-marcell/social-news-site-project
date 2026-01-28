@@ -17,7 +17,9 @@
 			<RowDefinition/>
 		</Grid.RowDefinitions>
 		<Menu>
-			<MenuItem Command="{Binding RefreshPostsCommand}" Header="Refresh"/>
+			<MenuItem Command="{Binding RefreshPostsCommand}" Header="_Refresh"/>
+			<MenuItem Command="" Header="_Log in or register" IsVisible="{Binding !IsLoggedIn}"/>
+			<MenuItem Command="" Header="_Log out" IsVisible="{Binding IsLoggedIn}"/>
 		</Menu>
 		<ItemsControl ItemsSource="{Binding Posts}" Grid.Row="1" Margin="10">
 			<ItemsControl.ItemTemplate>

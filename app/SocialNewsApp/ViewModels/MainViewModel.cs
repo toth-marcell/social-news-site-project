@@ -10,6 +10,7 @@ public partial class MainViewModel : ViewModelBase
     public ObservableCollection<Post> Posts { get; set; } = [];
     API API = new("http://localhost:3000/api/");
     public RelayCommand RefreshPostsCommand { get; set; }
+    public bool IsLoggedIn => API.IsLoggedIn;
     public MainViewModel()
     {
         RefreshPostsCommand = new(RefreshPosts);

@@ -11,6 +11,7 @@ public class API
     JsonSerializerOptions jsonOptions = new() { PropertyNameCaseInsensitive = true };
     HttpClient http;
     string? token;
+    public bool IsLoggedIn => token != null;
     public async Task<List<Post>> GetPosts()
     {
         HttpResponseMessage result = await http.GetAsync("posts");
