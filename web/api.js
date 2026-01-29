@@ -2,13 +2,15 @@ import express from "express";
 import JWT from "jsonwebtoken";
 import { EditUser, Login, Register } from "./auth.js";
 import WriteLog from "./log.js";
-import { Log, User } from "./models.js";
+import { Log, Post, User } from "./models.js";
 import {
+  ChildComment,
   CreatePost,
   DeletePost,
   EditPost,
   GetPost,
   GetPosts,
+  TopComment,
   UpvoteComment,
   UpvotePost,
 } from "./posts.js";
@@ -89,6 +91,18 @@ router.put("/posts/:id", LoggedInOnly, async (req, res) => {
     category,
     res.locals.user
   );
+  res.status(result.status).json({ msg: result.msg });
+});
+
+router.post("/topComment", LoggedInOnly, async (req, res) => {
+  const { text, PostId } = req.body;
+  const result = await TopComment(text, PostId, res.locals.user);
+  res.status(result.status).json({ msg: result.msg });
+});
+
+router.post("/childComment", LoggedInOnly, async (req, res) => {
+  const { text, ParentId } = req.body;
+  const result = await ChildComment(text, ParentId, res.locals.user);
   res.status(result.status).json({ msg: result.msg });
 });
 

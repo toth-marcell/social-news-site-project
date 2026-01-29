@@ -152,7 +152,7 @@ export async function GetSingleComment(id, user) {
       (await CommentVote.findOne({
         where: { UserId: user.id, CommentId: commentData.id },
       })) != null;
-  return { status: 200, comment: commentData };
+  return { status: 200, msg: "Success!", comment: commentData };
 }
 
 export async function ChildComment(text, ParentId, user) {
@@ -165,7 +165,7 @@ export async function ChildComment(text, ParentId, user) {
     UserId: user.id,
     PostId: parent.PostId,
   });
-  return { status: 200, comment };
+  return { status: 200, msg: "Success!", comment };
 }
 
 export async function UpvotePost(PostId, user) {
