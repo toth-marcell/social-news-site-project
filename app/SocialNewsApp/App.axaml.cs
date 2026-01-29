@@ -17,22 +17,22 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
+        MainViewModel mainViewModel = new();
+        MainView mainView = new() { DataContext = mainViewModel };
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
-            desktop.MainWindow = new MainWindow
+            desktop.MainWindow = new MainWindow { Content = mainView };
+            mainViewModel.ShowDialog = new(view =>
             {
-                DataContext = new MainViewModel()
-            };
+                new MainWindow() { Content = view }.ShowDialog(desktop.MainWindow);
+            });
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            singleViewPlatform.MainView = new MainView
-            {
-                DataContext = new MainViewModel()
-            };
+            singleViewPlatform.MainView = mainView;
         }
 
         base.OnFrameworkInitializationCompleted();
