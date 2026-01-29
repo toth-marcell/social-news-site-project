@@ -25,10 +25,6 @@ public partial class App : Application
             // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new MainWindow { Content = mainView };
-            mainViewModel.ShowDialog = new(view =>
-            {
-                new MainWindow() { Content = view }.ShowDialog(desktop.MainWindow);
-            });
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
