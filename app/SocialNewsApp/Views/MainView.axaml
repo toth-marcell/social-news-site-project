@@ -21,7 +21,7 @@
 			<Menu>
 				<MenuItem Command="{Binding RefreshPostsCommand}" Header="_Refresh"/>
 				<MenuItem Command="{Binding LogInOrRegisterCommand}" Header="_Log in or register" IsVisible="{Binding !IsLoggedIn}"/>
-				<MenuItem Command="" Header="_Log out" IsVisible="{Binding IsLoggedIn}"/>
+				<MenuItem Command="{Binding LogOutCommand}" Header="_Log out" IsVisible="{Binding IsLoggedIn}"/>
 			</Menu>
 			<ItemsControl ItemsSource="{Binding Posts}" Grid.Row="1" Margin="10">
 				<ItemsControl.ItemTemplate>
@@ -32,25 +32,25 @@
 			</ItemsControl>
 		</Grid>
 		<!--Login or register page-->
-		<Grid Margin="10" RowSpacing="5" IsVisible="{Binding IsLoginOrRegisterActive}">
+		<Grid Margin="10" RowSpacing="5" IsVisible="{Binding IsLoginOrRegisterActive}" MaxWidth="500">
 			<Grid.ColumnDefinitions>
 				<ColumnDefinition Width="auto"/>
 				<ColumnDefinition/>
 				<ColumnDefinition/>
 			</Grid.ColumnDefinitions>
 			<Grid.RowDefinitions>
+				<RowDefinition/>
 				<RowDefinition Height="auto"/>
-				<RowDefinition Height="auto"/>
-				<RowDefinition Height="auto"/>
+				<RowDefinition/>
 			</Grid.RowDefinitions>
-			<TextBox Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Name}"/>
-			<Label HorizontalAlignment="Right">Name</Label>
+			<Label HorizontalAlignment="Right" VerticalAlignment="Bottom">Name</Label>
+			<TextBox Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Name}" VerticalAlignment="Bottom"/>
 			<Label Grid.Row="1" HorizontalAlignment="Right">Password</Label>
 			<TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Password}" PasswordChar="*"/>
-			<Button Grid.Row="2" Command="{Binding CancelCommand}">Cancel</Button>
-			<StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right">
-				<Button>Log in</Button>
-				<Button>Register</Button>
+			<Button Grid.Row="2" Command="{Binding CancelCommand}" VerticalAlignment="Top">Cancel</Button>
+			<StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+				<Button Command="{Binding LogInCommand}">Log in</Button>
+				<Button Command="{Binding RegisterCommand}">Register</Button>
 			</StackPanel>
 		</Grid>
 	</Grid>

@@ -13,6 +13,7 @@ public class API
     HttpClient http;
     string? token;
     public bool IsLoggedIn => token != null;
+    public void Logout() => token = null;
     public async Task<string> Login(NamePassword namePassword)
     {
         HttpResponseMessage result = await http.PostAsJsonAsync("login", namePassword, jsonOptions);
@@ -22,6 +23,13 @@ public class API
             token = response.Token;
             return response.Msg;
         }
+        else throw new Exception(response.Msg);
+    }
+    public async Task<string> Register(NamePassword namePassword)
+    {
+        HttpResponseMessage result = await http.PostAsJsonAsync("register", namePassword, jsonOptions);
+        Message response = await result.Content.ReadFromJsonAsync<Message>(jsonOptions);
+        if (result.IsSuccessStatusCode) return response.Msg;
         else throw new Exception(response.Msg);
     }
     public async Task<List<Post>> GetPosts()
