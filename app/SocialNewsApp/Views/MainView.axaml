@@ -20,16 +20,21 @@
 			</Grid.RowDefinitions>
 			<Menu>
 				<MenuItem Command="{Binding RefreshPostsCommand}" Header="_Refresh"/>
+				<Separator Height="NaN" Width="1"/>
 				<MenuItem Command="{Binding LogInOrRegisterCommand}" Header="_Log in or register" IsVisible="{Binding !IsLoggedIn}"/>
 				<MenuItem Command="{Binding LogOutCommand}" Header="_Log out" IsVisible="{Binding IsLoggedIn}"/>
+				<Separator Height="NaN" Width="1" IsVisible="{Binding IsLoggedIn}"/>
+				<MenuItem Command="{Binding NewPostCommand}" Header="_New post" IsVisible="{Binding IsLoggedIn}"/>
 			</Menu>
-			<ItemsControl ItemsSource="{Binding Posts}" Grid.Row="1" Margin="10">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate DataType="m:Post">
-						<v:PostControl/>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
+			<ScrollViewer Grid.Row="1">
+				<ItemsControl ItemsSource="{Binding Posts}" Margin="10">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate DataType="m:Post">
+							<v:PostControl/>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</ScrollViewer>
 		</Grid>
 		<!--Login or register page-->
 		<Grid Margin="10" RowSpacing="5" IsVisible="{Binding IsLoginOrRegisterActive}" MaxWidth="500">
@@ -52,6 +57,39 @@
 				<Button Command="{Binding LogInCommand}">Log in</Button>
 				<Button Command="{Binding RegisterCommand}">Register</Button>
 			</StackPanel>
+		</Grid>
+		<!--New post page-->
+		<Grid IsVisible="{Binding IsNewPostActive}" RowSpacing="5" Margin="5">
+			<Grid.ColumnDefinitions>
+				<ColumnDefinition Width="auto"/>
+				<ColumnDefinition/>
+			</Grid.ColumnDefinitions>
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition Height=".5*"/>
+				<RowDefinition Height="auto"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			<Grid.Styles>
+				<Style Selector="Label">
+					<Setter Property="HorizontalAlignment" Value="Right"/>
+					<Setter Property="VerticalAlignment" Value="Center"/>
+				</Style>
+			</Grid.Styles>
+			<Label>Title</Label>
+			<TextBox Grid.Column="1" Text="{Binding Title}"/>
+			<Label Grid.Row="1">Link</Label>
+			<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Link}"/>
+			<Label Grid.Row="2">Link type</Label>
+			<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LinkType}"/>
+			<Label Grid.Row="3">Text</Label>
+			<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Text}" AcceptsReturn="True"/>
+			<Label Grid.Row="4">Category</Label>
+			<TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Category}"/>
+			<Button Grid.Row="5" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
+			<Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding SubmitNewPostCommand}">Submit</Button>
 		</Grid>
 	</Grid>
 </UserControl>

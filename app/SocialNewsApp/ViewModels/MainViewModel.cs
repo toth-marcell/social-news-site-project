@@ -17,7 +17,8 @@ public partial class MainViewModel : ViewModelBase
         // Main Page
         RefreshPostsCommand = new(RefreshPosts);
         LogInOrRegisterCommand = new(() => { ActivePage = MainViewPage.LoginOrRegister; });
-        LogOutCommand = new(() => { API.Logout(); OnPropertyChanged(nameof(IsLoggedIn)); });
+        NewPostCommand = new(() => { ActivePage = MainViewPage.NewPost; });
+        LogOutCommand = new(() => { API.Logout(); OnPropertyChanged(nameof(IsLoggedIn)); RefreshPosts(); });
         // Login or register page
         LogInCommand = new(async () =>
         {
@@ -27,6 +28,7 @@ public partial class MainViewModel : ViewModelBase
                 OnPropertyChanged(nameof(IsLoggedIn));
                 ActivePage = MainViewPage.Main;
                 ClearAllForms();
+                RefreshPosts();
             }
             catch (Exception e)
             {
@@ -46,6 +48,21 @@ public partial class MainViewModel : ViewModelBase
                 ShowMessage("Error", e.Message);
             }
         });
+        //New post page
+        SubmitNewPostCommand = new(async () =>
+        {
+            try
+            {
+                ShowMessage("Success!", await API.SubmitPost(new(Title, Link, LinkType, Text, Category)));
+                ActivePage = MainViewPage.Main;
+                ClearAllForms();
+                RefreshPosts();
+            }
+            catch (Exception e)
+            {
+                ShowMessage("Error", e.Message);
+            }
+        });
         // Shared
         CancelCommand = new(() => { ActivePage = MainViewPage.Main; ClearAllForms(); });
         RefreshPosts();
@@ -54,9 +71,10 @@ public partial class MainViewModel : ViewModelBase
     enum MainViewPage
     {
         Main,
-        LoginOrRegister
+        LoginOrRegister,
+        NewPost
     }
-    MainViewPage activePage = MainViewPage.LoginOrRegister;
+    MainViewPage activePage = MainViewPage.Main;
     MainViewPage ActivePage
     {
         get => activePage;
@@ -68,17 +86,20 @@ public partial class MainViewModel : ViewModelBase
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsMainActive));
                 OnPropertyChanged(nameof(IsLoginOrRegisterActive));
+                OnPropertyChanged(nameof(IsNewPostActive));
             }
         }
     }
     public bool IsMainActive => ActivePage == MainViewPage.Main;
     public bool IsLoginOrRegisterActive => ActivePage == MainViewPage.LoginOrRegister;
+    public bool IsNewPostActive => ActivePage == MainViewPage.NewPost;
     // Main Page
     public ObservableCollection<Post> Posts { get; set; } = [];
     readonly API API = new("http://localhost:3000/api/");
     public RelayCommand RefreshPostsCommand { get; set; }
     public RelayCommand LogInOrRegisterCommand { get; set; }
     public RelayCommand LogOutCommand { get; set; }
+    public RelayCommand NewPostCommand { get; set; }
     async void RefreshPosts()
     {
         Posts = [.. await API.GetPosts()];
@@ -91,6 +112,18 @@ public partial class MainViewModel : ViewModelBase
     string password;
     public RelayCommand LogInCommand { get; set; }
     public RelayCommand RegisterCommand { get; set; }
+    //New post page
+    [ObservableProperty]
+    string title;
+    [ObservableProperty]
+    string link;
+    [ObservableProperty]
+    string linkType;
+    [ObservableProperty]
+    string text;
+    [ObservableProperty]
+    string category;
+    public RelayCommand SubmitNewPostCommand { get; set; }
     // Shared
     public RelayCommand CancelCommand { get; set; }
     public bool IsLoggedIn => API.IsLoggedIn;
@@ -98,8 +131,13 @@ public partial class MainViewModel : ViewModelBase
     {
         Name = "";
         Password = "";
+        Title = "";
+        Link = "";
+        LinkType = "";
+        Text = "";
+        Category = "";
     }
-    void ShowMessage(string title, string message)
+    static void ShowMessage(string title, string message)
     {
         var messageBox = MessageBoxManager.GetMessageBoxCustom(new()
         {
@@ -107,6 +145,7 @@ public partial class MainViewModel : ViewModelBase
             ContentMessage = message,
             ButtonDefinitions = [new() { Name = "Ok" }],
             MinHeight = 150,
+            MinWidth = 300,
             WindowStartupLocation = WindowStartupLocation.CenterOwner
         });
         if (Application.Current!.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
