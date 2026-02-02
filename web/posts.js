@@ -11,8 +11,7 @@ export async function GetPosts(user) {
     if (user)
       postData.voted =
         (await PostVote.findOne({
-          where: { UserId: user.id },
-          PostId: post.id,
+          where: { UserId: user.id, PostId: post.id },
         })) != null;
     postsData.push(postData);
   }
@@ -54,8 +53,7 @@ export async function GetPost(id, user) {
   if (user)
     postData.voted =
       (await PostVote.findOne({
-        where: { UserId: user.id },
-        PostId: post.id,
+        where: { UserId: user.id, PostId: post.id },
       })) != null;
   for (let i = 0; i < post.Comments.length; i++) {
     postData.Comments[i] = await fetchComments(
