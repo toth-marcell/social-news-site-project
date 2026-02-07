@@ -102,8 +102,15 @@ public partial class MainViewModel : ViewModelBase
     public RelayCommand NewPostCommand { get; set; }
     async void RefreshPosts()
     {
-        Posts = [.. await API.GetPosts()];
-        OnPropertyChanged(nameof(Posts));
+        try
+        {
+            Posts = [.. await API.GetPosts()];
+            OnPropertyChanged(nameof(Posts));
+        }
+        catch (Exception e)
+        {
+            ShowMessage("Error", e.Message);
+        }
     }
     // Login or register page
     [ObservableProperty]
