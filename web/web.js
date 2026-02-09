@@ -8,6 +8,7 @@ import {
   ChildComment,
   CreatePost,
   DeletePost,
+  EditPost,
   GetPost,
   GetPosts,
   GetSingleComment,
@@ -158,6 +159,38 @@ router.post("/newpost", LoggedInOnly, async (req, res) => {
     res.redirect("/posts/" + result.id);
   } else {
     res.status(result.status).render("newPost", {
+      title,
+      link,
+      linkType,
+      text,
+      category,
+      msg_fail: result.msg,
+    });
+  }
+});
+
+router.get("/editpost/:id", LoggedInOnly, async (req, res) => {
+  const result = await GetPost(req.params.id);
+  if (result.status == 200) res.render("editPost", result.post);
+  else res.status(result.status).render("msg", { msg_fail: result.msg });
+});
+
+router.post("/editpost/:id", LoggedInOnly, async (req, res) => {
+  const { title, link, linkType, text, category } = req.body;
+  const result = await EditPost(
+    req.params.id,
+    title,
+    link,
+    linkType,
+    text,
+    category,
+    res.locals.user
+  );
+  if (result.status == 200) {
+    res.redirect("/posts/" + req.params.id);
+  } else {
+    res.status(result.status).render("editPost", {
+      id: req.params.id,
       title,
       link,
       linkType,

@@ -116,13 +116,19 @@ export async function EditPost(
       status: 403,
       msg: "You can only edit your own posts, unless you are an admin.",
     };
-  if (!(title || link || linkType || text || category))
-    return { status: 400, msg: "Not changing anything." };
-  if (title) await post.update({ title });
-  if (link) await post.update({ link });
-  if (linkType) await post.update({ linkType });
-  if (text) await post.update({ text });
-  if (category) await post.update({ category });
+  if (!(title && category))
+    return { status: 400, msg: "The title and category must be filled!" };
+  if (!((link && linkType) || text))
+    return {
+      status: 400,
+      msg: "The link and link type; or the text field must be filled.",
+    };
+  if ((link && !linkType) || (linkType && !link))
+    return {
+      status: 400,
+      msg: "If the link is set the link type must be set too.",
+    };
+  await post.update({ title, link, linkType, text, category });
   return { status: 200, msg: "Success!" };
 }
 

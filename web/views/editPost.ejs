@@ -1,0 +1,42 @@
+<% pageName = "Edit post" %>
+<%- include("head") -%>
+<form method="post">
+    <h2>Edit post with id <%= id %></h2>
+    <p>
+        The title and category must be filled. The link and link type; or the text
+        field must be filled.
+    </p>
+    <label>
+        Title
+        <input type="text" name="title" value="<%= title %>" required>
+    </label>
+    <label>
+        Link
+        <input type="text" name="link" value="<%= link %>">
+    </label>
+    <label>
+        Link type
+        <%- include("linkTypes") -%>
+        <input type="text" name="linkType" value="<%= linkType %>" list="linkTypes">
+    </label>
+    <label>
+        Text
+        <textarea name="text" rows="5"><%= text %></textarea>
+    </label>
+    <label>
+        Category
+        <input type="text" name="category" value="<%= category %>" required>
+    </label>
+    <% if (typeof(msg) != "undefined") { %>
+    <mark class="msg"><%= msg %></mark>
+    <% } %> <% if (typeof(msg_fail) != "undefined") { %>
+    <mark class="msg msg-fail"><%= msg_fail %></mark>
+    <% } %>
+    <div class="grid">
+        <a href="/posts/<%= id %>">
+            <button type="button" class="secondary">Cancel</button>
+        </a>
+        <button type="submit">Submit</button>
+    </div>
+</form>
+<%- include("foot") -%>
