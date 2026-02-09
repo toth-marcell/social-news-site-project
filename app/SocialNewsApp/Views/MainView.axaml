@@ -30,14 +30,14 @@
 				<ItemsControl ItemsSource="{Binding Posts}" Margin="10">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate DataType="m:Post">
-							<v:PostControl Cursor="Hand"/>
+							<v:PostControl/>
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 				</ItemsControl>
 			</ScrollViewer>
 		</Grid>
 		<!--Post details page-->
-		<v:PostDetailsControl IsVisible="{Binding IsPostDetailsActive}"/>
+		<v:PostDetailsControl IsVisible="{Binding IsPostDetailsActive}" Margin="10"/>
 		<!--Login or register page-->
 		<Grid Margin="10" RowSpacing="5" IsVisible="{Binding IsLoginOrRegisterActive}" MaxWidth="500">
 			<Grid.ColumnDefinitions>

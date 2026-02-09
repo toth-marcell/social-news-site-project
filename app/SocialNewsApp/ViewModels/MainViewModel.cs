@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -19,6 +21,11 @@ public partial class MainViewModel : ViewModelBase
         LogInOrRegisterCommand = new(() => { ActivePage = MainViewPage.LoginOrRegister; });
         NewPostCommand = new(() => { ActivePage = MainViewPage.NewPost; });
         LogOutCommand = new(() => { API.Logout(); OnPropertyChanged(nameof(IsLoggedIn)); RefreshPosts(); });
+        PostDetailsCommand = new(async (id) =>
+        {
+            OpenPost = await API.GetPostDetails(id);
+            ActivePage = MainViewPage.PostDetails;
+        });
         // Login or register page
         LogInCommand = new(async () =>
         {
@@ -97,17 +104,18 @@ public partial class MainViewModel : ViewModelBase
     public bool IsNewPostActive => ActivePage == MainViewPage.NewPost;
     public bool IsPostDetailsActive => ActivePage == MainViewPage.PostDetails;
     // Main page
-    public ObservableCollection<Post> Posts { get; set; } = [];
+    public ObservableCollection<PostWithDetailsCommand> Posts { get; set; } = [];
     readonly API API = new("http://localhost:3000/api/");
     public RelayCommand RefreshPostsCommand { get; set; }
     public RelayCommand LogInOrRegisterCommand { get; set; }
     public RelayCommand LogOutCommand { get; set; }
     public RelayCommand NewPostCommand { get; set; }
+    public RelayCommand<int> PostDetailsCommand { get; set; }
     async void RefreshPosts()
     {
         try
         {
-            Posts = [.. await API.GetPosts()];
+            Posts = [.. (await API.GetPosts()).Select(x => new PostWithDetailsCommand(x, PostDetailsCommand))];
             OnPropertyChanged(nameof(Posts));
         }
         catch (Exception e)
@@ -117,7 +125,7 @@ public partial class MainViewModel : ViewModelBase
     }
     //Post details page
     [ObservableProperty]
-    Post openPost;
+    PostWithComments openPost;
     // Login or register page
     [ObservableProperty]
     string name;

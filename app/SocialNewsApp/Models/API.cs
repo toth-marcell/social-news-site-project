@@ -47,6 +47,10 @@ public class API
     {
         return await http.GetFromJsonAsync<List<Post>>("posts", jsonOptions);
     }
+    public async Task<PostWithComments> GetPostDetails(int id)
+    {
+        return await http.GetFromJsonAsync<PostWithComments>($"posts/{id}", jsonOptions);
+    }
     public async Task<string> SubmitPost(PostContents post)
     {
         HttpResponseMessage result = await http.PostAsJsonAsync("posts", post, jsonOptions);
