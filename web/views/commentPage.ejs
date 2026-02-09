@@ -3,10 +3,7 @@
   <div>
     <form action="/commentVote/<%= comment.id %>?redirect=/comments/<%= comment.id %>" method="post">
       <button class="<%= comment.voted ? 'outline' : '' %>">
-        <svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" aria-label="upvote arrow">
-          <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 8l-7 7M12 8l7 7" />
-        </svg>
+        <%- include("upvoteArrow") -%>
         <%= comment.votes %>
       </button>
     </form>
@@ -23,7 +20,7 @@
       </button>
     </form>
     <% } %>
-    <span><%= comment.createdAt.toISOString() %></span>
+    <span><%= dateFormat(comment.createdAt) %></span>
     <span>by
       <a href="/users/<%= comment.UserId %>"><%= comment.User.name %></a></span>
     <span>on <a href="/posts/<%= comment.PostId %>"><%= comment.Post.title %></a>

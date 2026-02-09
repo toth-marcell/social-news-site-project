@@ -30,6 +30,8 @@ app.use(
 import apiRouter from "./api.js";
 app.use("/api", apiRouter);
 
+app.locals.dateFormat = (date) =>
+  date.toISOString().replace("T", " ").replace(/\..*/, "");
 import webRouter from "./web.js";
 app.use(webRouter);
 app.set("view engine", "ejs");

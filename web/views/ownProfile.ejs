@@ -2,7 +2,7 @@
 <article>
   <h2><%= pageName %></h2>
   <p>Admin: <%= profile.isAdmin ? "yes" : "no" %></p>
-  <p>Account created at: <%= profile.createdAt %></p>
+  <p>Account created at: <%= dateFormat(profile.createdAt) %></p>
   <h3>About</h3>
   <% if (profile.about) { for (paragraph of profile.about.split("\r\n\r\n")) {
   %>
