@@ -17,13 +17,13 @@
 		<StackPanel Orientation="Horizontal" Spacing="5">
 			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding Voted}" Opacity=".5"/>
 			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !Voted}"/>
-			<SelectableTextBlock Text="{Binding Category}" VerticalAlignment="Center" />
-			<SelectableTextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
-			<SelectableTextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
+			<TextBlock Text="{Binding Category}" VerticalAlignment="Center" />
+			<TextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
+			<TextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
 		</StackPanel>
 		<StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="5">
-			<SelectableTextBlock Text="{Binding Title}" FontSize="20" VerticalAlignment="Center"/>
-			<SelectableTextBlock Text="{Binding LinkType}" VerticalAlignment="Center"/>
+			<TextBlock Text="{Binding Title}" FontSize="20" VerticalAlignment="Center"/>
+			<TextBlock Text="{Binding LinkType}" VerticalAlignment="Center"/>
 			<HyperlinkButton Content="{Binding Link}" NavigateUri="{Binding Link}" VerticalAlignment="Center"/>
 		</StackPanel>
 	</Grid>

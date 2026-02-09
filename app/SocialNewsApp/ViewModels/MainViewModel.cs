@@ -14,7 +14,7 @@ public partial class MainViewModel : ViewModelBase
 {
     public MainViewModel()
     {
-        // Main Page
+        // Main page
         RefreshPostsCommand = new(RefreshPosts);
         LogInOrRegisterCommand = new(() => { ActivePage = MainViewPage.LoginOrRegister; });
         NewPostCommand = new(() => { ActivePage = MainViewPage.NewPost; });
@@ -71,6 +71,7 @@ public partial class MainViewModel : ViewModelBase
     enum MainViewPage
     {
         Main,
+        PostDetails,
         LoginOrRegister,
         NewPost
     }
@@ -87,13 +88,15 @@ public partial class MainViewModel : ViewModelBase
                 OnPropertyChanged(nameof(IsMainActive));
                 OnPropertyChanged(nameof(IsLoginOrRegisterActive));
                 OnPropertyChanged(nameof(IsNewPostActive));
+                OnPropertyChanged(nameof(IsPostDetailsActive));
             }
         }
     }
     public bool IsMainActive => ActivePage == MainViewPage.Main;
     public bool IsLoginOrRegisterActive => ActivePage == MainViewPage.LoginOrRegister;
     public bool IsNewPostActive => ActivePage == MainViewPage.NewPost;
-    // Main Page
+    public bool IsPostDetailsActive => ActivePage == MainViewPage.PostDetails;
+    // Main page
     public ObservableCollection<Post> Posts { get; set; } = [];
     readonly API API = new("http://localhost:3000/api/");
     public RelayCommand RefreshPostsCommand { get; set; }
@@ -112,6 +115,9 @@ public partial class MainViewModel : ViewModelBase
             ShowMessage("Error", e.Message);
         }
     }
+    //Post details page
+    [ObservableProperty]
+    Post openPost;
     // Login or register page
     [ObservableProperty]
     string name;

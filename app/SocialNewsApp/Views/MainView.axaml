@@ -12,7 +12,7 @@
 		<vm:MainViewModel/>
 	</Design.DataContext>
 	<Grid>
-		<!--Main Page-->
+		<!--Main page-->
 		<Grid IsVisible="{Binding IsMainActive}">
 			<Grid.RowDefinitions>
 				<RowDefinition Height="auto"/>
@@ -30,12 +30,14 @@
 				<ItemsControl ItemsSource="{Binding Posts}" Margin="10">
 					<ItemsControl.ItemTemplate>
 						<DataTemplate DataType="m:Post">
-							<v:PostControl/>
+							<v:PostControl Cursor="Hand"/>
 						</DataTemplate>
 					</ItemsControl.ItemTemplate>
 				</ItemsControl>
 			</ScrollViewer>
 		</Grid>
+		<!--Post details page-->
+		<v:PostDetailsControl IsVisible="{Binding IsPostDetailsActive}"/>
 		<!--Login or register page-->
 		<Grid Margin="10" RowSpacing="5" IsVisible="{Binding IsLoginOrRegisterActive}" MaxWidth="500">
 			<Grid.ColumnDefinitions>

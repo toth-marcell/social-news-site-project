@@ -1,0 +1,34 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SocialNewsApp.Views.PostDetailsControl"
+			 xmlns:vm="clr-namespace:SocialNewsApp.ViewModels;assembly=SocialNewsApp"
+			 x:DataType="vm:MainViewModel">
+	<Design.DataContext>
+		<vm:MainViewModel/>
+	</Design.DataContext>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Button Command="{Binding CancelCommand}">Back</Button>
+		<StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="5">
+			<Button Content="{Binding OpenPost.Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding OpenPost.Voted}" Opacity=".5"/>
+			<Button Content="{Binding OpenPost.Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !OpenPost.Voted}"/>
+			<SelectableTextBlock Text="{Binding OpenPost.Category}" VerticalAlignment="Center" />
+			<SelectableTextBlock Text="{Binding OpenPost.CreatedAt}" VerticalAlignment="Center"/>
+			<SelectableTextBlock Text="{Binding OpenPost.User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
+		</StackPanel>
+		<StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="5">
+			<SelectableTextBlock Text="{Binding OpenPost.Title}" FontSize="20" VerticalAlignment="Center"/>
+			<SelectableTextBlock Text="{Binding OpenPost.LinkType}" VerticalAlignment="Center"/>
+			<HyperlinkButton Content="{Binding OpenPost.Link}" NavigateUri="{Binding OpenPost.Link}" VerticalAlignment="Center"/>
+		</StackPanel>
+		<SelectableTextBlock Grid.Row="3" Text="{Binding OpenPost.Text}"/>
+	</Grid>
+</UserControl>
