@@ -85,6 +85,7 @@ export async function CreatePost(title, link, linkType, text, category, user) {
     text: text == "" ? null : text,
     category,
   });
+  await UpvotePost(post.id, user);
   return { status: 201, msg: "Success!", id: post.id };
 }
 
@@ -138,6 +139,7 @@ export async function TopComment(text, PostId, user) {
   const post = await Post.findByPk(PostId);
   if (!post) return { status: 404, msg: "No such post!" };
   const comment = await post.createComment({ text, UserId: user.id });
+  await UpvoteComment(comment.id, user);
   return { status: 200, comment };
 }
 
@@ -169,6 +171,7 @@ export async function ChildComment(text, ParentId, user) {
     UserId: user.id,
     PostId: parent.PostId,
   });
+  await UpvoteComment(comment.id, user);
   return { status: 200, msg: "Success!", comment };
 }
 
