@@ -2,7 +2,7 @@ import express from "express";
 import JWT from "jsonwebtoken";
 import { EditUser, Login, Register } from "./auth.js";
 import WriteLog from "./log.js";
-import { Log, Post, User } from "./models.js";
+import { Log, User } from "./models.js";
 import {
   ChildComment,
   CreatePost,
@@ -122,7 +122,33 @@ router.get("/me", LoggedInOnly, async (req, res) => {
 
 router.put("/me", LoggedInOnly, async (req, res) => {
   const { name, password, about } = req.body;
-  const result = await EditUser(name, password, about, res.locals.user);
+  const result = await EditUser(
+    res.locals.user,
+    name,
+    password,
+    about,
+    res.locals.user
+  );
+  res.status(result.status).json({ msg: result.msg });
+});
+
+router.get("/users/:id", LoggedInOnly, async (req, res) => {
+  const profile = await User.findByPk(req.params.id);
+  if (!profile) return res.status(404).json({ msg: "No such user!" });
+  res.json(profile);
+});
+
+router.put("/users/:id", LoggedInOnly, async (req, res) => {
+  const profile = await User.findByPk(req.params.id);
+  if (!profile) return res.status(404).json({ msg: "No such user!" });
+  const { name, password, about } = req.body;
+  const result = await EditUser(
+    profile,
+    name,
+    password,
+    about,
+    res.locals.user
+  );
   res.status(result.status).json({ msg: result.msg });
 });
 

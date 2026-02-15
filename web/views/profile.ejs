@@ -1,8 +1,11 @@
-<% pageName = profile.name + "'s" + " profile" %> <%- include("head") -%>
+<% pageName = `${profile.name}'s profile` %>
+<%- include("head") -%>
 <article>
   <h2><%= pageName %></h2>
-  <p>Admin: <%= profile.isAdmin ? "yes" : "no" %></p>
-  <p>Account created at: <%= dateFormat(profile.createdAt) %></p>
+  <% if (profile.isAdmin) { %>
+  <mark>Admin</mark>
+  <% } %>
+  <p>A member since <%= dateFormat(profile.createdAt) %></p>
   <h3>About</h3>
   <% if (profile.about) { for (paragraph of profile.about.split("\r\n\r\n")) {
   %>
@@ -11,4 +14,31 @@
   <p>(no about text)</p>
   <% } %>
 </article>
+<% if (user && (profile.id == user.id || user.isAdmin)) { %>
+<article>
+  <form method="post">
+    <h2><%= user.isAdmin && profile.id != user.id ? "Change details of this user as an admin" : "Update your details" %>
+    </h2>
+    <label>
+      Name
+      <input type="text" name="name" value="<%= name %>">
+    </label>
+    <label>
+      Password
+      <p><small>Leave empty if not changing it</small></p>
+      <input type="password" name="password" value="<%= password %>">
+    </label>
+    <label>
+      About
+      <textarea name="about" rows="5"><%= about %></textarea>
+    </label>
+    <% if (typeof(msg) != "undefined") { %>
+    <mark class="msg"><%= msg %></mark>
+    <% } %> <% if (typeof(msg_fail) != "undefined") { %>
+    <mark class="msg msg-fail"><%= msg_fail %></mark>
+    <% } %>
+    <button type="submit">Update details</button>
+  </form>
+</article>
+<% } %>
 <%- include("foot") -%>

@@ -92,16 +92,14 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/users/:id", async (req, res) => {
-  if (res.locals.user && res.locals.user.id == req.params.id)
-    return res.render("ownProfile", {
-      profile: res.locals.user,
-      name: res.locals.user.name,
-      password: "",
-      about: res.locals.user.about,
-    });
   const profile = await User.findByPk(req.params.id);
-  if (!profile) res.render("msg", { msg_fail: "No such user!" });
-  else res.render("profile", { profile });
+  if (!profile) return res.render("msg", { msg_fail: "No such user!" });
+  res.render("profile", {
+    profile,
+    name: profile.name,
+    password: "",
+    about: profile.about,
+  });
 });
 
 function LoggedInOnly(req, res, next) {
@@ -113,27 +111,24 @@ function LoggedInOnly(req, res, next) {
 }
 
 router.post("/users/:id", LoggedInOnly, async (req, res) => {
-  if (res.locals.user.id != req.params.id)
-    return res.status(403).render("msg", { msg_fail: "You can't do that!" });
+  const profile = await User.findByPk(req.params.id);
+  if (!profile) return res.render("msg", { msg_fail: "No such user!" });
   const { name, password, about } = req.body;
-  const result = await EditUser(name, password, about, res.locals.user);
-  if (result.status == 200) {
-    res.render("ownProfile", {
-      profile: res.locals.user,
-      name: res.locals.user.name,
-      password: "",
-      about: res.locals.user.about,
-      msg: result.msg,
-    });
-  } else {
-    res.render("ownProfile", {
-      profile: res.locals.user,
-      name,
-      password,
-      about,
-      msg_fail: result.msg,
-    });
-  }
+  const result = await EditUser(
+    profile,
+    name,
+    password,
+    about,
+    res.locals.user
+  );
+  if (result.status == 200) return res.redirect(`/users/${req.params.id}`);
+  res.render("profile", {
+    profile: res.locals.user,
+    name,
+    password,
+    about,
+    msg_fail: result.msg,
+  });
 });
 
 router.get("/newpost", LoggedInOnly, (req, res) =>
