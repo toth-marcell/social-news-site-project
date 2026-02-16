@@ -1,9 +1,11 @@
-<% pageName = "Frontpage" %> <%- include("head") -%> <% for (post of posts) { %>
+<% pageName = "Frontpage" %>
+<%- include("head") -%>
+<% for (post of posts) { %>
 <article id="p<%= post.id %>">
   <div>
     <form action="/postVote/<%= post.id %>?redirect=/#p<%= post.id %>" method="post">
       <button class="<%= post.voted ? 'outline' : '' %>">
-        <%- include("upvoteArrow") -%>
+        <%- include("icons/upvoteArrow") -%>
         <%= post.votes %>
       </button>
     </form>
@@ -21,4 +23,5 @@
   <a href="<%= post.link %>"><%= post.link %></a>
   <% } %>
 </article>
-<% } %> <%- include("foot") -%>
+<% } %>
+<%- include("foot") -%>

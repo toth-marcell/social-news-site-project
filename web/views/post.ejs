@@ -1,33 +1,22 @@
-<% pageName = post.title %> <%- include("head") -%>
+<% pageName = post.title %>
+<%- include("head") -%>
 <article>
   <div>
     <form action="/postVote/<%= post.id %>" method="post">
       <button class="<%= post.voted ? 'outline' : '' %>">
-        <%- include("upvoteArrow") -%>
+        <%- include("icons/upvoteArrow") -%>
         <%= post.votes %>
       </button>
     </form>
     <% if (user && (user.isAdmin || user.id == post.UserId)) { %>
     <form action="/deletepost/<%= post.id %>" method="post">
       <button type="submit">
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" aria-label="trash">
-          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-            <path d="M12 20h5c0.5 0 1 -0.5 1 -1v-14M12 20h-5c-0.5 0 -1 -0.5 -1 -1v-14" />
-            <path d="M4 5h16" />
-            <path d="M10 4h4M10 9v7M14 9v7" />
-          </g>
-        </svg>
+        <%- include("icons/trash") -%>
       </button>
     </form>
     <a href="/editpost/<%= post.id %>">
       <button>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-          <g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2">
-            <path d="M7 17v-4l10 -10l4 4l-10 10h-4" />
-            <path d="M3 21h18" />
-            <path d="M14 6l4 4" />
-          </g>
-        </svg>
+        <%- include("icons/edit") -%>
       </button>
     </a>
     <% } %>
@@ -60,5 +49,7 @@
     <button type="submit">Add comment</button>
   </form>
 </article>
-<% } for (comment of post.Comments) { %> <%- include("comment", {comment, level:
-0}) -%> <% } %> <%- include("foot") -%>
+<% } for (comment of post.Comments) { %>
+<%- include("comment", {comment, level: 0}) -%>
+<% } %>
+<%- include("foot") -%>
