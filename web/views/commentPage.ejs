@@ -13,6 +13,11 @@
         <%- include("icons/trash") -%>
       </button>
     </form>
+    <a href="/editcomment/<%= comment.id %>">
+      <button>
+        <%- include("icons/edit") -%>
+      </button>
+    </a>
     <% } %>
     <span><%= dateFormat(comment.createdAt) %></span>
     <span>by

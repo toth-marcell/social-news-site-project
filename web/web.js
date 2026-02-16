@@ -3,11 +3,13 @@ import express from "express";
 import JWT from "jsonwebtoken";
 import { EditUser, Login, Register } from "./auth.js";
 import WriteLog from "./log.js";
-import { User } from "./models.js";
+import { User, Comment } from "./models.js";
 import {
   ChildComment,
   CreatePost,
+  DeleteComment,
   DeletePost,
+  EditComment,
   EditPost,
   GetPost,
   GetPosts,
@@ -237,6 +239,38 @@ router.post("/comments/:id", LoggedInOnly, async (req, res) => {
       comment: (await GetSingleComment(req.params.id, res.locals.user)).comment,
       msg_fail: result.msg,
     });
+});
+
+router.get("/editcomment/:id", LoggedInOnly, async (req, res) => {
+  const comment = await Comment.findByPk(req.params.id);
+  if (!comment)
+    return res.status(404).render("msg", { msg_fail: "No such comment!" });
+  if (!res.locals.user.isAdmin && comment.UserId != res.locals.user.id) {
+    return res.status(403).render("msg", {
+      msg_fail: "You can only edit your own comments, unless you are an admin.",
+    });
+  }
+  res.render("editComment", comment.get());
+});
+
+router.post("/editcomment/:id", LoggedInOnly, async (req, res) => {
+  const { id } = req.params;
+  const { text } = req.body;
+  const result = await EditComment(id, text, res.locals.user);
+  if (result.status == 200) return res.redirect(`/comments/${req.params.id}`);
+  res.render("editComment", { id, text, msg_fail: result.msg });
+});
+
+router.post("/deletecomment/:id", LoggedInOnly, async (req, res) => {
+  const result = await DeleteComment(req.params.id, res.locals.user);
+  if (result.status == 200) {
+    res.status(result.status).render("msg", { msg: result.msg });
+  } else {
+    res.status(result.status).render("msg", {
+      msg_fail: result.msg,
+      links: [{ href: "/comments/" + req.params.id, text: "Go back" }],
+    });
+  }
 });
 
 router.post("/postVote/:id", LoggedInOnly, async (req, res) => {

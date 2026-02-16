@@ -415,6 +415,31 @@ paths:
         401: { $ref: "#/components/responses/unauthorized" }
         404:
           description: No such parent comment!
+  /comments/{id}:
+    parameters: [{ $ref: "#/components/parameters/idInPath" }]
+    delete:
+      tags: [Comments]
+      summary: Delete a comment
+      security: [bearerAuth: []]
+      responses:
+        404:
+          description: No such comment!
+        403:
+          description: You can only delete your own comments, unless you are an admin.
+        200:
+          description: Success!
+    put:
+      tags: [Comments]
+      summary: Edit a comment
+      security: [bearerAuth: []]
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                text:
+                  type: string
+              required: [text]
   /postVote/{id}:
     post:
       parameters: [{ $ref: "#/components/parameters/idInPath" }]

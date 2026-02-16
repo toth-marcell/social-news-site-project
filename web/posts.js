@@ -175,6 +175,32 @@ export async function ChildComment(text, ParentId, user) {
   return { status: 200, msg: "Success!", comment };
 }
 
+export async function DeleteComment(id, user) {
+  const comment = await Comment.findByPk(id);
+  if (!comment) return { status: 404, msg: "No such comment!" };
+  if (!(comment.UserId == user.id || user.isAdmin))
+    return {
+      status: 403,
+      msg: "You can only delete your own comments, unless you are an admin.",
+    };
+  await comment.destroy();
+  return { status: 200, msg: "Success!" };
+}
+
+export async function EditComment(id, text, user) {
+  if (!text) return { status: 400, msg: "You can't have an empty comment!" };
+  const comment = await Comment.findByPk(id);
+  if (!comment) return { status: 404, msg: "No such comment!" };
+  if (!user.isAdmin && comment.UserId != user.id) {
+    return {
+      status: 403,
+      msg: "You can only edit your own comments, unless you are an admin.",
+    };
+  }
+  await comment.update({ text });
+  return { status: 200, msg: "Success!" };
+}
+
 export async function UpvotePost(PostId, user) {
   const post = await Post.findByPk(PostId);
   if (!post) return { status: 404, msg: "Post not found!" };

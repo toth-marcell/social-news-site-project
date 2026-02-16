@@ -6,7 +6,9 @@ import { Log, User } from "./models.js";
 import {
   ChildComment,
   CreatePost,
+  DeleteComment,
   DeletePost,
+  EditComment,
   EditPost,
   GetPost,
   GetPosts,
@@ -103,6 +105,20 @@ router.post("/topComment", LoggedInOnly, async (req, res) => {
 router.post("/childComment", LoggedInOnly, async (req, res) => {
   const { text, ParentId } = req.body;
   const result = await ChildComment(text, ParentId, res.locals.user);
+  res.status(result.status).json({ msg: result.msg });
+});
+
+router.delete("/comments/:id", LoggedInOnly, async (req, res) => {
+  const result = await DeleteComment(req.params.id, res.locals.user);
+  res.status(result.status).json({ msg: result.msg });
+});
+
+router.put("/comments/:id", LoggedInOnly, async (req, res) => {
+  const result = await EditComment(
+    req.params.id,
+    req.body.text,
+    res.locals.user
+  );
   res.status(result.status).json({ msg: result.msg });
 });
 

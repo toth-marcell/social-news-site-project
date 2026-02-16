@@ -12,6 +12,11 @@
         <%- include("icons/trash") -%>
       </button>
     </form>
+    <a href="/editcomment/<%= comment.id %>">
+      <button>
+        <%- include("icons/edit") -%>
+      </button>
+    </a>
     <% } %>
     <% if (user) { %>
     <a href="/comments/<%= comment.id %>"><button>Reply</button></a>
