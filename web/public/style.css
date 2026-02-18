@@ -57,3 +57,8 @@ article > div > * {
 .msg-fail {
   --pico-mark-background-color: #d93526;
 }
+article > svg {
+  float: left;
+  width: 200px;
+  height: 200px;
+}

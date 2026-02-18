@@ -24,7 +24,10 @@
     <span><%= dateFormat(post.createdAt) %></span>
     <span>
       by
-      <a href="/users/<%= post.UserId %>"><%= post.User.name %></a>
+      <a href="/users/<%= post.UserId %>">
+        <%- post.User.identicon -%>
+        <%= post.User.name %>
+      </a>
     </span>
   </div>
   <hr>

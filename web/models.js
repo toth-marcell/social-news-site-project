@@ -1,4 +1,5 @@
 import { DataTypes, Sequelize } from "sequelize";
+import { toSvg } from "jdenticon";
 
 export const sequelize = new Sequelize("sqlite:data/db.sqlite");
 
@@ -23,6 +24,12 @@ export const User = sequelize.define(
       type: DataTypes.BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    identicon: {
+      type: DataTypes.VIRTUAL,
+      get: function () {
+        return toSvg(this.get("name"), 25);
+      },
     },
   },
   {

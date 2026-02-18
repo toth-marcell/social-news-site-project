@@ -24,7 +24,10 @@
     <span><%= dateFormat(comment.createdAt) %></span>
     <span>
       by
-      <a href="/users/<%= comment.UserId %>"><%= comment.User.name %></a>
+      <a href="/users/<%= comment.UserId %>">
+        <%- comment.User.identicon -%>
+        <%= comment.User.name %>
+      </a>
     </span>
   </div>
   <% for (paragraph of comment.text.split("\r\n\r\n")) { %>

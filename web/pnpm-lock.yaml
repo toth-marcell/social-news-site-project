@@ -26,6 +26,9 @@ importers:
       express:
         specifier: ^5.2.1
         version: 5.2.1
+      jdenticon:
+        specifier: ^3.3.0
+        version: 3.3.0
       jsonwebtoken:
         specifier: ^9.0.3
         version: 9.0.3
@@ -172,6 +175,9 @@ packages:
   call-bound@1.0.4:
     resolution: {integrity: sha512-+ys997U96po4Kx/ABpBCqhA9EuxJaQWDQg7295H4hBphv3IZg0boBKuwYpt4YXp6MZ5AmZQnU/tyMTlRpaSejg==}
     engines: {node: '>= 0.4'}
+
+  canvas-renderer@2.2.1:
+    resolution: {integrity: sha512-RrBgVL5qCEDIXpJ6NrzyRNoTnXxYarqm/cS/W6ERhUJts5UQtt/XPEosGN3rqUkZ4fjBArlnCbsISJ+KCFnIAg==}
 
   chownr@1.1.4:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==}
@@ -464,6 +470,11 @@ packages:
   jake@10.9.4:
     resolution: {integrity: sha512-wpHYzhxiVQL+IV05BLE2Xn34zW1S223hvjtqk0+gsPrwd/8JNLXJgZZM/iPFsYc1xyphF+6M6EvdE5E9MBGkDA==}
     engines: {node: '>=10'}
+    hasBin: true
+
+  jdenticon@3.3.0:
+    resolution: {integrity: sha512-DhuBRNRIybGPeAjMjdHbkIfiwZCCmf8ggu7C49jhp6aJ7DYsZfudnvnTY5/1vgUhrGA7JaDAx1WevnpjCPvaGg==}
+    engines: {node: '>=6.4.0'}
     hasBin: true
 
   jsonwebtoken@9.0.3:
@@ -1096,6 +1107,10 @@ snapshots:
       call-bind-apply-helpers: 1.0.2
       get-intrinsic: 1.3.0
 
+  canvas-renderer@2.2.1:
+    dependencies:
+      '@types/node': 25.0.10
+
   chownr@1.1.4: {}
 
   chownr@2.0.0: {}
@@ -1407,6 +1422,10 @@ snapshots:
       async: 3.2.6
       filelist: 1.0.4
       picocolors: 1.1.1
+
+  jdenticon@3.3.0:
+    dependencies:
+      canvas-renderer: 2.2.1
 
   jsonwebtoken@9.0.3:
     dependencies:

@@ -1,6 +1,7 @@
 <% pageName = `${profile.name}'s profile` %>
 <%- include("head") -%>
 <article>
+  <%- profile.identicon -%>
   <h2><%= pageName %></h2>
   <% if (profile.isAdmin) { %>
   <mark>Admin</mark>

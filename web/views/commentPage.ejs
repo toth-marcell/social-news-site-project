@@ -20,8 +20,13 @@
     </a>
     <% } %>
     <span><%= dateFormat(comment.createdAt) %></span>
-    <span>by
-      <a href="/users/<%= comment.UserId %>"><%= comment.User.name %></a></span>
+    <span>
+      by
+      <a href="/users/<%= comment.UserId %>">
+        <%- comment.User.identicon -%>
+        <%= comment.User.name %>
+      </a>
+    </span>
     <span>on <a href="/posts/<%= comment.PostId %>"><%= comment.Post.title %></a>
     </span>
   </div>
