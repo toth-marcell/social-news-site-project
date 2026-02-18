@@ -3,14 +3,14 @@ import { User } from "./models.js";
 import { HashPassword } from "./auth.js";
 import "./defaultAdmin.js";
 
-for (let i = 0; i < faker.number.int(5, 20); i++) {
+for (let i = 0; i < faker.number.int({ min: 100, max: 200 }); i++) {
   const name = faker.internet.username();
   const user = await User.create({
     name,
     password: HashPassword(name),
     about: faker.person.bio(),
   });
-  for (let j = 0; j < faker.number.int(2, 5); j++) {
+  for (let j = 0; j < faker.number.int({ min: 2, max: 5 }); j++) {
     let post;
     if (faker.datatype.boolean()) {
       post = await user.createPost({

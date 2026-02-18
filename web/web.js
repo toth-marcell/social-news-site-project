@@ -167,7 +167,7 @@ router.post("/newpost", LoggedInOnly, async (req, res) => {
 });
 
 router.get("/editpost/:id", LoggedInOnly, async (req, res) => {
-  const result = await GetPost(req.params.id);
+  const result = await GetPost(req.params.id, res.locals.user);
   if (result.status == 200) res.render("editPost", result.post);
   else res.status(result.status).render("msg", { msg_fail: result.msg });
 });

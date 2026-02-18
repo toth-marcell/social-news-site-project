@@ -1,41 +1,99 @@
-import { Comment, CommentVote, Post, PostVote, User } from "./models.js";
+import {
+  Comment,
+  CommentVote,
+  Post,
+  PostVote,
+  User,
+  sequelize,
+} from "./models.js";
 
 export async function GetPosts(user) {
+  const customAttrs = [
+    [
+      sequelize.literal(
+        "(SELECT COUNT(*) FROM PostVotes WHERE PostId=Post.Id)"
+      ),
+      "votes",
+    ],
+  ];
+  if (user)
+    customAttrs.push([
+      sequelize.literal(
+        `(SELECT COUNT(*) FROM PostVotes WHERE PostId=Post.Id AND UserId=${user.id})`
+      ),
+      "voted",
+    ]);
   const posts = await Post.findAll({
-    include: { model: User, attributes: ["name"] },
+    include: [{ model: User, attributes: ["name"] }],
+    attributes: { include: customAttrs },
+    group: "Post.id",
+    order: [
+      [sequelize.fn("date", sequelize.col("Post.createdAt")), "DESC"],
+      ["votes", "DESC"],
+    ],
   });
-  const postsData = [];
-  for (const post of posts) {
-    const postData = post.get();
-    postData.votes = await post.countVotes();
-    if (user)
-      postData.voted =
-        (await PostVote.findOne({
-          where: { UserId: user.id, PostId: post.id },
-        })) != null;
-    postsData.push(postData);
-  }
-  return postsData;
+  return posts.map((x) => x.get());
 }
 
 async function fetchComments(commentObject, commentData, user) {
+  const customAttrs = [
+    [
+      sequelize.literal(
+        "(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.id)"
+      ),
+      "votes",
+    ],
+  ];
+  if (user)
+    customAttrs.push([
+      sequelize.literal(
+        `(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.id AND UserId=${user.id})`
+      ),
+      "voted",
+    ]);
   commentData.Children = await Promise.all(
     (
       await commentObject.getChildren({
         include: { model: User, attributes: ["name"] },
+        attributes: { include: customAttrs },
+        order: [["votes", "DESC"]],
       })
     ).map((x) => fetchComments(x, x.get(), user))
   );
-  commentData.votes = await commentObject.countVotes();
-  if (user)
-    commentData.voted =
-      (await CommentVote.findOne({
-        where: { UserId: user.id, CommentId: commentData.id },
-      })) != null;
   return (commentObject, commentData);
 }
 
 export async function GetPost(id, user) {
+  const customAttrs = [
+    [
+      sequelize.literal(
+        "(SELECT COUNT(*) FROM PostVotes WHERE PostId=Post.Id)"
+      ),
+      "votes",
+    ],
+  ];
+  const customCommentAttrs = [
+    [
+      sequelize.literal(
+        "(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.id)"
+      ),
+      "votes",
+    ],
+  ];
+  if (user) {
+    customAttrs.push([
+      sequelize.literal(
+        `(SELECT COUNT(*) FROM PostVotes WHERE PostId=Post.Id AND UserId=${user.id})`
+      ),
+      "voted",
+    ]);
+    customCommentAttrs.push([
+      sequelize.literal(
+        `(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.id AND UserId=${user.id})`
+      ),
+      "voted",
+    ]);
+  }
   const post = await Post.findByPk(id, {
     include: [
       {
@@ -43,18 +101,16 @@ export async function GetPost(id, user) {
         where: { ParentId: null },
         required: false,
         include: { model: User, attributes: ["name"] },
+        attributes: { include: customCommentAttrs },
+        order: [["votes", "DESC"]],
+        separate: true,
       },
       { model: User, attributes: ["name"] },
     ],
+    attributes: { include: customAttrs },
   });
   if (!post) return { status: 404, msg: "No such post!" };
   const postData = post.get();
-  postData.votes = await post.countVotes();
-  if (user)
-    postData.voted =
-      (await PostVote.findOne({
-        where: { UserId: user.id, PostId: post.id },
-      })) != null;
   for (let i = 0; i < post.Comments.length; i++) {
     postData.Comments[i] = await fetchComments(
       post.Comments[i],
@@ -144,21 +200,30 @@ export async function TopComment(text, PostId, user) {
 }
 
 export async function GetSingleComment(id, user) {
+  const customAttrs = [
+    [
+      sequelize.literal(
+        "(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.Id)"
+      ),
+      "votes",
+    ],
+  ];
+  if (user)
+    customAttrs.push([
+      sequelize.literal(
+        `(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.Id AND UserId=${user.id})`
+      ),
+      "voted",
+    ]);
   const comment = await Comment.findByPk(id, {
     include: [
       { model: User, attributes: ["name"] },
       { model: Post, attributes: ["title"] },
     ],
+    attributes: { include: customAttrs },
   });
   if (!comment) return { status: 404, msg: "No such comment!" };
-  const commentData = comment.get();
-  commentData.votes = await comment.countVotes();
-  if (user)
-    commentData.voted =
-      (await CommentVote.findOne({
-        where: { UserId: user.id, CommentId: commentData.id },
-      })) != null;
-  return { status: 200, msg: "Success!", comment: commentData };
+  return { status: 200, msg: "Success!", comment: comment.get() };
 }
 
 export async function ChildComment(text, ParentId, user) {
