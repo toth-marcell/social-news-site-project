@@ -286,3 +286,12 @@ router.post("/commentVote/:id", LoggedInOnly, async (req, res) => {
     `/posts/${result.comment.PostId}#c${result.comment.id}`;
   res.redirect(redirectUrl);
 });
+
+router.use((req, res, next) => {
+  res.status(404).render("msg", { msg_fail: "Not Found" });
+});
+
+router.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).render("msg", { msg_fail: "Internal Server Error" });
+});

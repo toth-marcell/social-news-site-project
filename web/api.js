@@ -179,3 +179,12 @@ function AdminOnly(req, res, next) {
 router.get("/logs", LoggedInOnly, AdminOnly, async (req, res) => {
   res.json(await Log.findAll());
 });
+
+router.use((req, res, next) => {
+  res.status(404).json({ msg: "Not Found" });
+});
+
+router.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({ msg: "Internal Server Error" });
+});
