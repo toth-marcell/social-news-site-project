@@ -1,0 +1,40 @@
+<%- include("head") -%>
+<section>
+  <h2>Logs</h2>
+  <div class="grid">
+    <% if (offset != 0) { %>
+    <a href="/admin?offset=<%= offset - limit %>">
+      <button type="button"><%- include ("icons/left") -%></button>
+    </a>
+    <% } %>
+    <span class="centered-large-text"><%= offset %> - <%= (offset + limit > count) ? count : offset + limit %></span>
+    <% if (offset + limit < count) { %>
+    <a href="/admin?offset=<%= offset + limit %>">
+      <button type="button"><%- include ("icons/right") -%></button>
+    </a>
+    <% } %>
+  </div>
+  <table class=" striped ">
+    <thead>
+      <tr>
+        <th>Entry created at</th>
+        <th>Path</th>
+        <th>User</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (log of logs) { %>
+      <tr>
+        <td><%= dateFormat(log.createdAt) %></td>
+        <td><%= log.path %></td>
+        <td>
+          <% if (log.UserId) { %>
+          <a href=" /users/<%= log.UserId %>"><%= log.User.name %></a>
+          <% } %>
+        </td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+</section>
+<%- include("foot") -%>

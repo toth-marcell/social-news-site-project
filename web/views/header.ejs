@@ -8,6 +8,11 @@
       <li>
         <a href="/newpost"><button>New post</button></a>
       </li>
+      <% if (user.isAdmin ) { %>
+      <li>
+        <a href="/admin"><button>Admin area</button></a>
+      </li>
+      <% } %>
       <% } %>
     </ul>
     <ul>

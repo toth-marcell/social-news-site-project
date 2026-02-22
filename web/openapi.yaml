@@ -467,29 +467,43 @@ paths:
       tags: [Administration]
       summary: Get all log entries
       security: [bearerAuth: []]
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
       responses:
         200:
           description: Success!
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  required:
-                    - id
-                    - path
-                    - createdAt
-                    - UserId
-                  properties:
-                    id:
-                      type: integer
-                    path:
-                      type: string
-                    createdAt:
-                      type: string
-                      format: date-time
-                    UserId:
-                      type: integer
-                      nullable: true
+                type: object
+                properties:
+                  logs:
+                    type: array
+                    items:
+                      required:
+                        - id
+                        - path
+                        - createdAt
+                        - UserId
+                      properties:
+                        id:
+                          type: integer
+                        path:
+                          type: string
+                        createdAt:
+                          type: string
+                          format: date-time
+                        UserId:
+                          type: integer
+                          nullable: true
+                  count:
+                    type: integer
+                  limit:
+                    type: integer
+                  offset:
+                    type: integer
         401: { $ref: "#/components/responses/unauthorized" }
         403: { $ref: "#/components/responses/adminOnly" }

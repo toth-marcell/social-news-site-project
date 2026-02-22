@@ -1,8 +1,9 @@
 import express from "express";
 import JWT from "jsonwebtoken";
+import { GetLogs } from "./admin.js";
 import { EditUser, Login, Register } from "./auth.js";
 import WriteLog from "./log.js";
-import { Log, User } from "./models.js";
+import { User } from "./models.js";
 import {
   ChildComment,
   CreatePost,
@@ -148,7 +149,7 @@ router.put("/me", LoggedInOnly, async (req, res) => {
   res.status(result.status).json({ msg: result.msg });
 });
 
-router.get("/users/:id", LoggedInOnly, async (req, res) => {
+router.get("/users/:id", async (req, res) => {
   const profile = await User.findByPk(req.params.id);
   if (!profile) return res.status(404).json({ msg: "No such user!" });
   res.json(profile);
@@ -177,7 +178,8 @@ function AdminOnly(req, res, next) {
 }
 
 router.get("/logs", LoggedInOnly, AdminOnly, async (req, res) => {
-  res.json(await Log.findAll());
+  const result = await GetLogs(req.query.offset);
+  res.json(result);
 });
 
 router.use((req, res, next) => {

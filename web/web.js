@@ -1,9 +1,10 @@
 import cookieParser from "cookie-parser";
 import express from "express";
 import JWT from "jsonwebtoken";
+import { GetLogs } from "./admin.js";
 import { EditUser, Login, Register } from "./auth.js";
 import WriteLog from "./log.js";
-import { User, Comment } from "./models.js";
+import { Comment, User } from "./models.js";
 import {
   ChildComment,
   CreatePost,
@@ -285,6 +286,19 @@ router.post("/commentVote/:id", LoggedInOnly, async (req, res) => {
     req.query.redirect ||
     `/posts/${result.comment.PostId}#c${result.comment.id}`;
   res.redirect(redirectUrl);
+});
+
+function AdminOnly(req, res, next) {
+  if (res.locals.user.isAdmin) next();
+  else
+    res.status(403).render("msg", {
+      msg_fail: "You must be logged in as an admin to do that!",
+    });
+}
+
+router.get("/admin", LoggedInOnly, AdminOnly, async (req, res) => {
+  const result = await GetLogs(req.query.offset);
+  res.render("admin", result);
 });
 
 router.use((req, res, next) => {
