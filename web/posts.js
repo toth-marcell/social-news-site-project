@@ -7,7 +7,20 @@ import {
   sequelize,
 } from "./models.js";
 
-export async function GetPosts(user) {
+export async function GetPosts(sort, offset = 0, user) {
+  if (typeof offset == "string") offset = parseInt(offset);
+  let order;
+  switch (sort) {
+    case "hot":
+      order = [
+        [sequelize.fn("date", sequelize.col("Post.createdAt")), "DESC"],
+        ["votes", "DESC"],
+      ];
+      break;
+    case "new":
+      order = [["id", "DESC"]];
+      break;
+  }
   const customAttrs = [
     [
       sequelize.literal(
@@ -23,16 +36,20 @@ export async function GetPosts(user) {
       ),
       "voted",
     ]);
-  const posts = await Post.findAll({
+  const limit = 20;
+  const result = await Post.findAndCountAll({
     include: [{ model: User, attributes: ["name"] }],
     attributes: { include: customAttrs },
-    group: "Post.id",
-    order: [
-      [sequelize.fn("date", sequelize.col("Post.createdAt")), "DESC"],
-      ["votes", "DESC"],
-    ],
+    order,
+    limit,
+    offset,
   });
-  return posts.map((x) => x.get());
+  return {
+    posts: result.rows.map((x) => x.get()),
+    count: result.count,
+    limit,
+    offset,
+  };
 }
 
 async function fetchComments(commentObject, commentData, user) {

@@ -48,9 +48,15 @@ router.use(async (req, res, next) => {
 router.use(WriteLog);
 router.use(express.urlencoded());
 
-router.get("/", async (req, res) =>
-  res.render("index", { posts: await GetPosts(res.locals.user) })
-);
+router.get("/", async (req, res) => {
+  const result = await GetPosts("hot", req.query.offset, res.locals.user);
+  res.render("index", result);
+});
+
+router.get("/new", async (req, res) => {
+  const result = await GetPosts("new", req.query.offset, res.locals.user);
+  res.render("index", result);
+});
 
 router.get("/posts/:id", async (req, res) => {
   const result = await GetPost(req.params.id, res.locals.user);

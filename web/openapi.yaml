@@ -20,6 +20,22 @@ components:
             properties:
               msg:
                 example: "You must be logged in to do that!"
+    posts:
+      description: Success!
+      content:
+        application/json:
+          schema:
+            properties:
+              posts:
+                type: array
+                items:
+                  $ref: "#/components/schemas/post"
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
     adminOnly:
       description: "You must be logged in as an admin to do that!"
       content:
@@ -287,17 +303,10 @@ paths:
   /posts:
     get:
       tags: [Posts]
-      summary: Get all posts
+      summary: Get all posts sorted by hot
       security: [bearerAuth: []]
       responses:
-        200:
-          description: Success!
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/post"
+        200: { $ref: "#/components/responses/posts" }
     post:
       tags: [Posts]
       summary: Create new post
@@ -312,6 +321,13 @@ paths:
         200:
           description: Success!
         401: { $ref: "#/components/responses/unauthorized" }
+  /posts/new:
+    get:
+      tags: [Posts]
+      summary: Get all posts sorted by new
+      security: [bearerAuth: []]
+      responses:
+        200: { $ref: "#/components/responses/posts" }
   /posts/{id}:
     parameters: [{ $ref: "#/components/parameters/idInPath" }]
     get:
@@ -478,7 +494,6 @@ paths:
           content:
             application/json:
               schema:
-                type: object
                 properties:
                   logs:
                     type: array

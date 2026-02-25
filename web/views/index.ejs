@@ -27,4 +27,9 @@
   <% } %>
 </article>
 <% } %>
+<% if (offset + limit < count) { %>
+<a href="?offset=<%= offset + limit %>">
+  <button type="button">More <%- include ("icons/right") -%></button>
+</a>
+<% } %>
 <%- include("foot") -%>
