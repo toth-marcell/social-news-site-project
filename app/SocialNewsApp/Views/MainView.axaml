@@ -20,6 +20,10 @@
 			</Grid.RowDefinitions>
 			<Menu>
 				<MenuItem Command="{Binding RefreshPostsCommand}" Header="_Refresh"/>
+				<MenuItem Header="{Binding PostSort, StringFormat=_Sorting by {0}}">
+					<MenuItem Header="_hot" Command="{Binding ChangeSortCommand}" CommandParameter="hot"/>
+					<MenuItem Header="_new" Command="{Binding ChangeSortCommand}" CommandParameter="new"/>
+				</MenuItem>
 				<Separator Height="NaN" Width="1"/>
 				<MenuItem Command="{Binding LogInOrRegisterCommand}" Header="_Log in or register" IsVisible="{Binding !IsLoggedIn}"/>
 				<MenuItem Command="{Binding LogOutCommand}" Header="_Log out" IsVisible="{Binding IsLoggedIn}"/>
@@ -27,13 +31,16 @@
 				<MenuItem Command="{Binding NewPostCommand}" Header="_New post" IsVisible="{Binding IsLoggedIn}"/>
 			</Menu>
 			<ScrollViewer Grid.Row="1">
-				<ItemsControl ItemsSource="{Binding Posts}" Margin="10">
-					<ItemsControl.ItemTemplate>
-						<DataTemplate DataType="m:Post">
-							<v:PostControl/>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
+				<StackPanel>
+					<ItemsControl ItemsSource="{Binding CurrentPage.Posts}" Margin="10">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate DataType="m:Post">
+								<v:PostControl Margin="5"/>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+					<Button HorizontalAlignment="Center" Margin="5" Command="{Binding NextPageCommand}" IsVisible="{Binding CurrentPage.IsNextPageAvailable}">More</Button>
+				</StackPanel>
 			</ScrollViewer>
 		</Grid>
 		<!--Post details page-->

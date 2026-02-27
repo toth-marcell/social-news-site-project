@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -43,9 +42,13 @@ public class API
         if (result.IsSuccessStatusCode) return response.Msg;
         else throw new Exception(response.Msg);
     }
-    public async Task<List<Post>> GetPosts()
+    public async Task<PostPage> GetHotPostPage(int offset)
     {
-        return await http.GetFromJsonAsync<List<Post>>("posts", jsonOptions);
+        return (await http.GetFromJsonAsync<PostPage>($"posts?offset={offset}", jsonOptions))!;
+    }
+    public async Task<PostPage> GetNewPostPage(int offset)
+    {
+        return (await http.GetFromJsonAsync<PostPage>($"posts/new?offset={offset}", jsonOptions))!;
     }
     public async Task<PostWithComments> GetPostDetails(int id)
     {

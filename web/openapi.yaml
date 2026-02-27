@@ -305,6 +305,11 @@ paths:
       tags: [Posts]
       summary: Get all posts sorted by hot
       security: [bearerAuth: []]
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
       responses:
         200: { $ref: "#/components/responses/posts" }
     post:
@@ -326,6 +331,11 @@ paths:
       tags: [Posts]
       summary: Get all posts sorted by new
       security: [bearerAuth: []]
+      parameters:
+        - name: offset
+          in: query
+          schema:
+            type: integer
       responses:
         200: { $ref: "#/components/responses/posts" }
   /posts/{id}:

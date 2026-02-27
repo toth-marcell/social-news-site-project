@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.ObjectModel;
-using System.Linq;
-using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
@@ -17,7 +14,12 @@ public partial class MainViewModel : ViewModelBase
     public MainViewModel()
     {
         // Main page
-        RefreshPostsCommand = new(RefreshPosts);
+        RefreshPostsCommand = new(() => RefreshPosts());
+        ChangeSortCommand = new(sort => PostSort = sort);
+        NextPageCommand = new(() =>
+        {
+            RefreshPosts(CurrentPage.Offset + CurrentPage.Limit);
+        });
         LogInOrRegisterCommand = new(() => { ActivePage = MainViewPage.LoginOrRegister; });
         NewPostCommand = new(() => { ActivePage = MainViewPage.NewPost; });
         LogOutCommand = new(() => { API.Logout(); OnPropertyChanged(nameof(IsLoggedIn)); RefreshPosts(); });
@@ -104,19 +106,41 @@ public partial class MainViewModel : ViewModelBase
     public bool IsNewPostActive => ActivePage == MainViewPage.NewPost;
     public bool IsPostDetailsActive => ActivePage == MainViewPage.PostDetails;
     // Main page
-    public ObservableCollection<PostWithDetailsCommand> Posts { get; set; } = [];
+    [ObservableProperty]
+    PostPage currentPage;
     readonly API API = new("http://localhost:3000/api/");
     public RelayCommand RefreshPostsCommand { get; set; }
+    string postSort = "hot";
+    public string PostSort
+    {
+        get => postSort;
+        set
+        {
+            postSort = value;
+            OnPropertyChanged();
+            RefreshPosts();
+        }
+    }
+    public RelayCommand<string> ChangeSortCommand { get; set; }
+    public RelayCommand NextPageCommand { get; set; }
     public RelayCommand LogInOrRegisterCommand { get; set; }
     public RelayCommand LogOutCommand { get; set; }
     public RelayCommand NewPostCommand { get; set; }
     public RelayCommand<int> PostDetailsCommand { get; set; }
-    async void RefreshPosts()
+    async void RefreshPosts(int offset = 0)
     {
         try
         {
-            Posts = [.. (await API.GetPosts()).Select(x => new PostWithDetailsCommand(x, PostDetailsCommand))];
-            OnPropertyChanged(nameof(Posts));
+            switch (PostSort)
+            {
+                case "hot":
+                    CurrentPage = await API.GetHotPostPage(offset);
+                    break;
+                case "new":
+                    CurrentPage = await API.GetNewPostPage(offset);
+                    break;
+            }
+            foreach (Post post in CurrentPage.Posts) post.DetailsCommand = PostDetailsCommand;
         }
         catch (Exception e)
         {

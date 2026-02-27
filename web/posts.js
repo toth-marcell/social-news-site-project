@@ -45,7 +45,11 @@ export async function GetPosts(sort, offset = 0, user) {
     offset,
   });
   return {
-    posts: result.rows.map((x) => x.get()),
+    posts: result.rows.map((x) => {
+      const data = x.get();
+      data.voted = !!data.voted;
+      return data;
+    }),
     count: result.count,
     limit,
     offset,
@@ -75,7 +79,11 @@ async function fetchComments(commentObject, commentData, user) {
         attributes: { include: customAttrs },
         order: [["votes", "DESC"]],
       })
-    ).map((x) => fetchComments(x, x.get(), user))
+    ).map((x) => {
+      const data = x.get();
+      data.voted = !!data.voted;
+      return fetchComments(x, data, user);
+    })
   );
   return (commentObject, commentData);
 }
@@ -128,12 +136,11 @@ export async function GetPost(id, user) {
   });
   if (!post) return { status: 404, msg: "No such post!" };
   const postData = post.get();
+  postData.voted = !!postData.voted;
   for (let i = 0; i < post.Comments.length; i++) {
-    postData.Comments[i] = await fetchComments(
-      post.Comments[i],
-      post.Comments[i].get(),
-      user
-    );
+    const data = post.Comments[i].get();
+    data.voted = !!data.voted;
+    postData.Comments[i] = await fetchComments(post.Comments[i], data, user);
   }
   return { status: 200, post: postData };
 }
@@ -240,7 +247,9 @@ export async function GetSingleComment(id, user) {
     attributes: { include: customAttrs },
   });
   if (!comment) return { status: 404, msg: "No such comment!" };
-  return { status: 200, msg: "Success!", comment: comment.get() };
+  const data = comment.get();
+  data.voted = !!data.voted;
+  return { status: 200, msg: "Success!", comment: data };
 }
 
 export async function ChildComment(text, ParentId, user) {

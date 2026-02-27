@@ -1,5 +1,6 @@
 ﻿using System;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 namespace SocialNewsApp.Models;
 
@@ -46,6 +47,7 @@ public partial class Post : PostContents
     int votes;
     [ObservableProperty]
     bool voted = false;
+    public RelayCommand<int> DetailsCommand { get; set; }
     public Post(string title, string link, string linkType, string text, string category, int id, DateTimeOffset createdAt, DateTimeOffset updatedAt, int userId, UserName user, int votes, bool voted) : base(title, link, linkType, text, category)
     {
         Id = id;
