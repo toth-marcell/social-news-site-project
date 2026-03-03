@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import JWT from "jsonwebtoken";
 import { GetLogs } from "./admin.js";
@@ -22,6 +23,7 @@ const router = express.Router();
 export default router;
 
 router.use(express.json());
+router.use(cors());
 
 router.use(async (req, res, next) => {
   try {
