@@ -1,4 +1,9 @@
-﻿namespace SocialNewsApp.Android;
+﻿using Android.App;
+using Android.Content.PM;
+using Avalonia;
+using Avalonia.Android;
+
+namespace SocialNewsApp.Android;
 
 [Activity(
     Label = "SocialNewsApp.Android",
