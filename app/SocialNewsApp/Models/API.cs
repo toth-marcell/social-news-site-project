@@ -9,7 +9,11 @@ namespace SocialNewsApp.Models;
 
 public class API
 {
-    readonly JsonSerializerOptions jsonOptions = new() { PropertyNamingPolicy = JsonNamingPolicy.CamelCase };
+    readonly JsonSerializerOptions jsonOptions = new()
+    {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        PropertyNameCaseInsensitive = true
+    };
     readonly HttpClient http;
     string? token;
     string? Token
@@ -52,7 +56,7 @@ public class API
     }
     public async Task<PostWithComments> GetPostDetails(int id)
     {
-        return await http.GetFromJsonAsync<PostWithComments>($"posts/{id}", jsonOptions);
+        return (await http.GetFromJsonAsync<PostWithComments>($"posts/{id}", jsonOptions))!;
     }
     public async Task<string> SubmitPost(PostContents post)
     {

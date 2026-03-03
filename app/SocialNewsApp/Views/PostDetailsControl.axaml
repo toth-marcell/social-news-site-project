@@ -4,13 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SocialNewsApp.Views.PostDetailsControl"
-			 xmlns:vm="clr-namespace:SocialNewsApp.ViewModels;assembly=SocialNewsApp"
+			 xmlns:vm="using:SocialNewsApp.ViewModels"
+			 xmlns:v="using:SocialNewsApp.Views"
 			 x:DataType="vm:MainViewModel">
 	<Design.DataContext>
 		<vm:MainViewModel/>
 	</Design.DataContext>
 	<Grid>
 		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
@@ -30,5 +32,14 @@
 			<HyperlinkButton Content="{Binding OpenPost.Link}" NavigateUri="{Binding OpenPost.Link}" VerticalAlignment="Center"/>
 		</StackPanel>
 		<SelectableTextBlock Grid.Row="3" Text="{Binding OpenPost.Text}"/>
+		<StackPanel Grid.Row="4">
+			<ItemsControl ItemsSource="{Binding OpenPost.Comments}">
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<v:CommentControl/>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</StackPanel>
 	</Grid>
 </UserControl>

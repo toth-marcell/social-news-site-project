@@ -1,6 +1,6 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
 
 namespace SocialNewsApp.Models;
 
@@ -75,7 +75,7 @@ public partial class Comment : ObservableObject
     [ObservableProperty]
     int postId;
     [ObservableProperty]
-    int parentId;
+    int? parentId;
     [ObservableProperty]
     UserName user;
     [ObservableProperty]
