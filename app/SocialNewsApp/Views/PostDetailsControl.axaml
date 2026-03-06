@@ -20,8 +20,8 @@
 		</Grid.RowDefinitions>
 		<Button Command="{Binding CancelCommand}">Back</Button>
 		<StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="5">
-			<Button Content="{Binding OpenPost.Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding OpenPost.Voted}" Opacity=".5"/>
-			<Button Content="{Binding OpenPost.Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !OpenPost.Voted}"/>
+			<Button Content="{Binding OpenPost.Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding OpenPost.Voted}" Opacity=".5" Command="{Binding OpenPost.UpvoteCommand}"/>
+			<Button Content="{Binding OpenPost.Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !OpenPost.Voted}" Command="{Binding OpenPost.UpvoteCommand}"/>
 			<SelectableTextBlock Text="{Binding OpenPost.Category}" VerticalAlignment="Center" />
 			<SelectableTextBlock Text="{Binding OpenPost.CreatedAt}" VerticalAlignment="Center"/>
 			<SelectableTextBlock Text="{Binding OpenPost.User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>

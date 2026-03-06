@@ -1,6 +1,6 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using System;
 
 namespace SocialNewsApp.Models;
 
@@ -47,7 +47,8 @@ public partial class Post : PostContents
     int votes;
     [ObservableProperty]
     bool voted = false;
-    public RelayCommand<int> DetailsCommand { get; set; }
+    public RelayCommand DetailsCommand { get; set; }
+    public RelayCommand? UpvoteCommand { get; set; }
     public Post(string title, string link, string linkType, string text, string category, int id, DateTimeOffset createdAt, DateTimeOffset updatedAt, int userId, UserName user, int votes, bool voted) : base(title, link, linkType, text, category)
     {
         Id = id;
@@ -84,6 +85,7 @@ public partial class Comment : ObservableObject
     int votes;
     [ObservableProperty]
     bool voted = false;
+    public RelayCommand? UpvoteCommand { get; set; }
 }
 public partial class PostWithComments : Post
 {

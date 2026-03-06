@@ -14,6 +14,6 @@ public partial class PostControl : UserControl
     private void Grid_PointerReleased(object? sender, PointerReleasedEventArgs e)
     {
         Post post = (DataContext as Post)!;
-        post.DetailsCommand.Execute(post.Id);
+        post.DetailsCommand.Execute(null);
     }
 }

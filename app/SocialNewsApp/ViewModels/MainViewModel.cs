@@ -23,11 +23,6 @@ public partial class MainViewModel : ViewModelBase
         LogInOrRegisterCommand = new(() => { ActivePage = MainViewPage.LoginOrRegister; });
         NewPostCommand = new(() => { ActivePage = MainViewPage.NewPost; });
         LogOutCommand = new(() => { API.Logout(); OnPropertyChanged(nameof(IsLoggedIn)); RefreshPosts(); });
-        PostDetailsCommand = new(async (id) =>
-        {
-            OpenPost = await API.GetPostDetails(id);
-            ActivePage = MainViewPage.PostDetails;
-        });
         // Login or register page
         LogInCommand = new(async () =>
         {
@@ -126,8 +121,7 @@ public partial class MainViewModel : ViewModelBase
     public RelayCommand LogInOrRegisterCommand { get; set; }
     public RelayCommand LogOutCommand { get; set; }
     public RelayCommand NewPostCommand { get; set; }
-    public RelayCommand<int> PostDetailsCommand { get; set; }
-    async void RefreshPosts(int offset = 0)
+    private async void RefreshPosts(int offset = 0)
     {
         try
         {
@@ -140,7 +134,72 @@ public partial class MainViewModel : ViewModelBase
                     CurrentPage = await API.GetNewPostPage(offset);
                     break;
             }
-            foreach (Post post in CurrentPage.Posts) post.DetailsCommand = PostDetailsCommand;
+            foreach (Post post in CurrentPage.Posts)
+            {
+                post.DetailsCommand = new(() => ShowPostDetails(post));
+                post.UpvoteCommand = API.IsLoggedIn ? new(() => UpvotePost(post)) : null;
+            }
+        }
+        catch (Exception e)
+        {
+            ShowMessage("Error", e.Message);
+        }
+    }
+    private void ApplyCommandsToComments(Comment comment)
+    {
+        comment.UpvoteCommand = API.IsLoggedIn ? new(() => UpvoteComment(comment)) : null;
+        foreach (Comment child in comment.Children) ApplyCommandsToComments(child);
+    }
+    private async void ShowPostDetails(Post post)
+    {
+        try
+        {
+            OpenPost = await API.GetPostDetails(post.Id);
+            OpenPost.UpvoteCommand = API.IsLoggedIn ? new(() => UpvotePost(OpenPost)) : null;
+            foreach (Comment comment in OpenPost.Comments) ApplyCommandsToComments(comment);
+            ActivePage = MainViewPage.PostDetails;
+        }
+        catch (Exception e)
+        {
+            ShowMessage("Error", e.Message);
+        }
+    }
+    private async void UpvotePost(Post post)
+    {
+        try
+        {
+            await API.UpvotePost(post.Id);
+            if (post.Voted)
+            {
+                post.Voted = false;
+                post.Votes--;
+            }
+            else
+            {
+                post.Voted = true;
+                post.Votes++;
+            }
+        }
+        catch (Exception e)
+        {
+            ShowMessage("Error", e.Message);
+        }
+    }
+    private async void UpvoteComment(Comment comment)
+    {
+        try
+        {
+            await API.UpvoteComment(comment.Id);
+            if (comment.Voted)
+            {
+                comment.Voted = false;
+                comment.Votes--;
+            }
+            else
+            {
+                comment.Voted = true;
+                comment.Votes++;
+            }
         }
         catch (Exception e)
         {

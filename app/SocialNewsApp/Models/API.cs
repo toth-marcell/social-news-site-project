@@ -4,6 +4,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
 using System.Threading.Tasks;
+using SocialNewsApp.Persistence;
 
 namespace SocialNewsApp.Models;
 
@@ -24,6 +25,7 @@ public class API
             token = value;
             if (value == null) http.DefaultRequestHeaders.Authorization = null;
             else http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value);
+            SettingsStorage.Token = value;
         }
     }
     public bool IsLoggedIn => Token != null;
@@ -31,7 +33,7 @@ public class API
     public async Task<string> Login(NamePassword namePassword)
     {
         HttpResponseMessage result = await http.PostAsJsonAsync("login", namePassword, jsonOptions);
-        MessageWithToken response = await result.Content.ReadFromJsonAsync<MessageWithToken>(jsonOptions);
+        MessageWithToken response = (await result.Content.ReadFromJsonAsync<MessageWithToken>(jsonOptions))!;
         if (result.IsSuccessStatusCode)
         {
             Token = response.Token;
@@ -42,7 +44,7 @@ public class API
     public async Task<string> Register(NamePassword namePassword)
     {
         HttpResponseMessage result = await http.PostAsJsonAsync("register", namePassword, jsonOptions);
-        Message response = await result.Content.ReadFromJsonAsync<Message>(jsonOptions);
+        Message response = (await result.Content.ReadFromJsonAsync<Message>(jsonOptions))!;
         if (result.IsSuccessStatusCode) return response.Msg;
         else throw new Exception(response.Msg);
     }
@@ -61,12 +63,23 @@ public class API
     public async Task<string> SubmitPost(PostContents post)
     {
         HttpResponseMessage result = await http.PostAsJsonAsync("posts", post, jsonOptions);
-        Message response = await result.Content.ReadFromJsonAsync<Message>(jsonOptions);
+        Message response = (await result.Content.ReadFromJsonAsync<Message>(jsonOptions))!;
         if (result.IsSuccessStatusCode) return response.Msg;
         else throw new Exception(response.Msg);
+    }
+    public async Task UpvotePost(int id)
+    {
+        HttpResponseMessage result = await http.PostAsync($"postVote/{id}", null);
+        result.EnsureSuccessStatusCode();
+    }
+    public async Task UpvoteComment(int id)
+    {
+        HttpResponseMessage result = await http.PostAsync($"commentVote/{id}", null);
+        result.EnsureSuccessStatusCode();
     }
     public API(string baseAddress)
     {
         http = new() { BaseAddress = new Uri(baseAddress) };
+        Token = SettingsStorage.Token;
     }
 }

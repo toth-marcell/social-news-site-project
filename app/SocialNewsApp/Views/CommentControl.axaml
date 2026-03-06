@@ -17,8 +17,8 @@
 			<RowDefinition/>
 		</Grid.RowDefinitions>
 		<StackPanel Orientation="Horizontal" Spacing="5">
-			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding Voted}" Opacity=".5"/>
-			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !Voted}"/>
+			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding Voted}" Opacity=".5" Command="{Binding UpvoteCommand}"/>
+			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !Voted}" Command="{Binding UpvoteCommand}"/>
 			<SelectableTextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
 			<SelectableTextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
 		</StackPanel>
