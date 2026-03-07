@@ -11,13 +11,14 @@ public static class SettingsStorage
     {
         get
         {
-            try
-            {
-                return File.ReadAllText(SettingsFolder + "token", Encoding.UTF8);
-            }
+            try { return File.ReadAllText(SettingsFolder + "token", Encoding.UTF8); }
             catch { return null; }
         }
-        set => File.WriteAllText(SettingsFolder + "token", value, Encoding.UTF8);
+        set
+        {
+            if (value == null) File.Delete(SettingsFolder + "token");
+            else File.WriteAllText(SettingsFolder + "token", value, Encoding.UTF8);
+        }
     }
     static SettingsStorage()
     {

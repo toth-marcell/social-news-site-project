@@ -22,10 +22,18 @@ public class API
         get => token;
         set
         {
-            token = value;
-            if (value == null) http.DefaultRequestHeaders.Authorization = null;
-            else http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value);
-            SettingsStorage.Token = value;
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                http.DefaultRequestHeaders.Authorization = null;
+                token = null;
+                SettingsStorage.Token = null;
+            }
+            else
+            {
+                http.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", value);
+                token = value;
+                SettingsStorage.Token = value;
+            }
         }
     }
     public bool IsLoggedIn => Token != null;
