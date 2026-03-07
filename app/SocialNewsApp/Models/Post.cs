@@ -47,8 +47,10 @@ public partial class Post : PostContents
     int votes;
     [ObservableProperty]
     bool voted = false;
-    public RelayCommand DetailsCommand { get; set; }
-    public RelayCommand? UpvoteCommand { get; set; }
+    [ObservableProperty]
+    RelayCommand? detailsCommand;
+    [ObservableProperty]
+    RelayCommand? upvoteCommand;
     public Post(string title, string link, string linkType, string text, string category, int id, DateTimeOffset createdAt, DateTimeOffset updatedAt, int userId, UserName user, int votes, bool voted) : base(title, link, linkType, text, category)
     {
         Id = id;
@@ -85,7 +87,8 @@ public partial class Comment : ObservableObject
     int votes;
     [ObservableProperty]
     bool voted = false;
-    public RelayCommand? UpvoteCommand { get; set; }
+    [ObservableProperty]
+    RelayCommand? upvoteCommand;
 }
 public partial class PostWithComments : Post
 {
