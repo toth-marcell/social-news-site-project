@@ -8,7 +8,7 @@ export function HashPassword(pass) {
   return hashSync(lengthHashed);
 }
 
-function ComparePassword(inputPass, hashedPass) {
+export function ComparePassword(inputPass, hashedPass) {
   const lengthHashed = hash("sha256", inputPass);
   return compareSync(lengthHashed, hashedPass);
 }

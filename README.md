@@ -3,16 +3,14 @@
 ## Running website/api server
 
 The server is located in the `web` directory.
-You will need to install npm dependencies and copy (and edit) the `.env.example` example config to `.env`. You can then run the server.js file using node.
+You will need to install (p)npm dependencies and copy (and edit) the `.env.example` example config to `.env`. You can then run the web server either by `pnpm run start` for production or `pnpm run dev` for a dev server which watches file changes.
 
 ```bash
 cd web
 pnpm i
 cp .env.example .env
-node server.js
+pnpm run start
 ```
-
-If you're using the Visual Studio Code IDE, there's a launch config set up for running the server in a debugger.
 
 ## Configuration options in .env
 
