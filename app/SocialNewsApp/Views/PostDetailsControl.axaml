@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SocialNewsApp.Views.PostDetailsControl"
-			 xmlns:vm="using:SocialNewsApp.ViewModels"
+			 xmlns:m="using:SocialNewsApp.Models"
 			 xmlns:v="using:SocialNewsApp.Views"
-			 x:DataType="vm:MainViewModel">
+			 x:DataType="m:PostWithComments">
 	<Design.DataContext>
-		<vm:MainViewModel/>
+		<m:PostWithComments/>
 	</Design.DataContext>
 	<Grid>
 		<Grid.RowDefinitions>
@@ -18,22 +18,22 @@
 			<RowDefinition Height="auto"/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
-		<Button Command="{Binding CancelCommand}">Back</Button>
+		<Button Command="{Binding BackCommand}">Back</Button>
 		<StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="5">
-			<Button Content="{Binding OpenPost.Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding OpenPost.Voted}" Opacity=".5" Command="{Binding OpenPost.UpvoteCommand}"/>
-			<Button Content="{Binding OpenPost.Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !OpenPost.Voted}" Command="{Binding OpenPost.UpvoteCommand}"/>
-			<SelectableTextBlock Text="{Binding OpenPost.Category}" VerticalAlignment="Center" />
-			<SelectableTextBlock Text="{Binding OpenPost.CreatedAt}" VerticalAlignment="Center"/>
-			<SelectableTextBlock Text="{Binding OpenPost.User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
+			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding Voted}" Opacity=".5" Command="{Binding UpvoteCommand}"/>
+			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !Voted}" Command="{Binding UpvoteCommand}"/>
+			<SelectableTextBlock Text="{Binding Category}" VerticalAlignment="Center" />
+			<SelectableTextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
+			<SelectableTextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
 		</StackPanel>
 		<StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="5">
-			<SelectableTextBlock Text="{Binding OpenPost.Title}" FontSize="20" VerticalAlignment="Center"/>
-			<SelectableTextBlock Text="{Binding OpenPost.LinkType}" VerticalAlignment="Center"/>
-			<HyperlinkButton Content="{Binding OpenPost.Link}" NavigateUri="{Binding OpenPost.Link}" VerticalAlignment="Center"/>
+			<SelectableTextBlock Text="{Binding Title}" FontSize="20" VerticalAlignment="Center"/>
+			<SelectableTextBlock Text="{Binding LinkType}" VerticalAlignment="Center"/>
+			<HyperlinkButton Content="{Binding Link}" NavigateUri="{Binding Link}" VerticalAlignment="Center"/>
 		</StackPanel>
-		<SelectableTextBlock Grid.Row="3" Text="{Binding OpenPost.Text}"/>
+		<SelectableTextBlock Grid.Row="3" Text="{Binding Text}"/>
 		<StackPanel Grid.Row="4">
-			<ItemsControl ItemsSource="{Binding OpenPost.Comments}">
+			<ItemsControl ItemsSource="{Binding Comments}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
 						<v:CommentControl/>

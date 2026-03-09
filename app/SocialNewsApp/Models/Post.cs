@@ -94,4 +94,6 @@ public partial class PostWithComments : Post
 {
     [ObservableProperty]
     Comment[] comments;
+    [ObservableProperty]
+    RelayCommand? backCommand;
 }

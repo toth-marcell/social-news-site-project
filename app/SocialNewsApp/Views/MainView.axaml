@@ -44,7 +44,9 @@
 			</ScrollViewer>
 		</Grid>
 		<!--Post details page-->
-		<v:PostDetailsControl IsVisible="{Binding IsPostDetailsActive}" Margin="10"/>
+		<Grid IsVisible="{Binding IsPostDetailsActive}" Margin="10">
+			<v:PostDetailsControl DataContext="{Binding OpenPost}"/>
+		</Grid>
 		<!--Login or register page-->
 		<Grid Margin="10" RowSpacing="5" IsVisible="{Binding IsLoginOrRegisterActive}" MaxWidth="500">
 			<Grid.ColumnDefinitions>

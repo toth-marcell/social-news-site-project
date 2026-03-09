@@ -155,6 +155,7 @@ public partial class MainViewModel : ViewModelBase
         try
         {
             OpenPost = await API.GetPostDetails(post.Id);
+            OpenPost.BackCommand = CancelCommand;
             OpenPost.UpvoteCommand = API.IsLoggedIn ? new(() => UpvotePost(OpenPost)) : null;
             foreach (Comment comment in OpenPost.Comments) ApplyCommandsToComments(comment);
             ActivePage = MainViewPage.PostDetails;
