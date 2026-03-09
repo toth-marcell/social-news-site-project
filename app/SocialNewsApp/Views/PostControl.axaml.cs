@@ -10,10 +10,12 @@ public partial class PostControl : UserControl
     {
         InitializeComponent();
     }
-
-    private void Grid_PointerReleased(object? sender, PointerReleasedEventArgs e)
+    private void Grid_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
-        Post post = (DataContext as Post)!;
-        post.DetailsCommand.Execute(null);
+        if (e.Properties.IsLeftButtonPressed)
+        {
+            Post post = (DataContext as Post)!;
+            post.DetailsCommand!.Execute(null);
+        }
     }
 }

@@ -1,11 +1,11 @@
-﻿using System;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.ApplicationLifetimes;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MsBox.Avalonia;
 using SocialNewsApp.Models;
+using System;
 
 namespace SocialNewsApp.ViewModels;
 
@@ -68,7 +68,7 @@ public partial class MainViewModel : ViewModelBase
             }
         });
         // Shared
-        CancelCommand = new(() => { ActivePage = MainViewPage.Main; ClearAllForms(); });
+        BackCommand = new(() => { ActivePage = MainViewPage.Main; ClearAllForms(); });
         RefreshPosts();
     }
     // Pages
@@ -137,7 +137,7 @@ public partial class MainViewModel : ViewModelBase
             foreach (Post post in CurrentPage.Posts)
             {
                 post.DetailsCommand = new(() => ShowPostDetails(post));
-                post.UpvoteCommand = API.IsLoggedIn ? new(() => UpvotePost(post)) : null;
+                post.UpvoteCommand = IsLoggedIn ? new(() => UpvotePost(post)) : null;
             }
         }
         catch (Exception e)
@@ -147,8 +147,8 @@ public partial class MainViewModel : ViewModelBase
     }
     private void ApplyCommandsToComments(Comment comment)
     {
-        comment.IsLoggedIn = API.IsLoggedIn;
-        comment.UpvoteCommand = API.IsLoggedIn ? new(() => UpvoteComment(comment)) : null;
+        comment.IsLoggedIn = IsLoggedIn;
+        comment.UpvoteCommand = IsLoggedIn ? new(() => UpvoteComment(comment)) : null;
         comment.SubmitReplyCommand = new(async (text) =>
         {
             try
@@ -168,9 +168,8 @@ public partial class MainViewModel : ViewModelBase
         try
         {
             OpenPost = await API.GetPostDetails(post.Id);
-            OpenPost.IsLoggedIn = API.IsLoggedIn;
-            OpenPost.BackCommand = CancelCommand;
-            OpenPost.UpvoteCommand = API.IsLoggedIn ? new(() => UpvotePost(OpenPost)) : null;
+            OpenPost.IsLoggedIn = IsLoggedIn;
+            OpenPost.UpvoteCommand = IsLoggedIn ? new(() => UpvotePost(OpenPost)) : null;
             OpenPost.SubmitCommentCommand = new(async (text) =>
             {
                 try
@@ -256,7 +255,7 @@ public partial class MainViewModel : ViewModelBase
     string category;
     public RelayCommand SubmitNewPostCommand { get; set; }
     // Shared
-    public RelayCommand CancelCommand { get; set; }
+    public RelayCommand BackCommand { get; set; }
     public bool IsLoggedIn => API.IsLoggedIn;
     void ClearAllForms()
     {

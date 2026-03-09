@@ -1,6 +1,6 @@
-﻿using System;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using System;
 
 namespace SocialNewsApp.Models;
 
@@ -104,8 +104,6 @@ public partial class PostWithComments : Post
     bool isLoggedIn;
     [ObservableProperty]
     Comment[] comments;
-    [ObservableProperty]
-    RelayCommand? backCommand;
     [ObservableProperty]
     RelayCommand<string>? submitCommentCommand;
     [ObservableProperty]

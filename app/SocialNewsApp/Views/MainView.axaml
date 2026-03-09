@@ -30,12 +30,12 @@
 				<Separator Height="NaN" Width="1" IsVisible="{Binding IsLoggedIn}"/>
 				<MenuItem Command="{Binding NewPostCommand}" Header="_New post" IsVisible="{Binding IsLoggedIn}"/>
 			</Menu>
-			<ScrollViewer Grid.Row="1">
+			<ScrollViewer Grid.Row="1" Margin="10">
 				<StackPanel>
-					<ItemsControl ItemsSource="{Binding CurrentPage.Posts}" Margin="10">
+					<ItemsControl ItemsSource="{Binding CurrentPage.Posts}">
 						<ItemsControl.ItemTemplate>
 							<DataTemplate DataType="m:Post">
-								<v:PostControl Margin="5"/>
+								<v:PostControl Margin="0,0,0,10"/>
 							</DataTemplate>
 						</ItemsControl.ItemTemplate>
 					</ItemsControl>
@@ -44,8 +44,15 @@
 			</ScrollViewer>
 		</Grid>
 		<!--Post details page-->
-		<Grid IsVisible="{Binding IsPostDetailsActive}" Margin="10">
-			<v:PostDetailsControl DataContext="{Binding OpenPost}"/>
+		<Grid IsVisible="{Binding IsPostDetailsActive}">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="auto"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			<Menu>
+				<MenuItem Command="{Binding BackCommand}" Header="⬅ _Back"/>
+			</Menu>
+			<v:PostDetailsControl Grid.Row="1" DataContext="{Binding OpenPost}"/>
 		</Grid>
 		<!--Login or register page-->
 		<Grid Margin="10" RowSpacing="5" IsVisible="{Binding IsLoginOrRegisterActive}" MaxWidth="500">
@@ -63,7 +70,7 @@
 			<TextBox Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Name}" VerticalAlignment="Bottom"/>
 			<Label Grid.Row="1" HorizontalAlignment="Right">Password</Label>
 			<TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding Password}" PasswordChar="*"/>
-			<Button Grid.Row="2" Command="{Binding CancelCommand}" VerticalAlignment="Top">Cancel</Button>
+			<Button Grid.Row="2" Command="{Binding BackCommand}" VerticalAlignment="Top">Cancel</Button>
 			<StackPanel Grid.Row="2" Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
 				<Button Command="{Binding LogInCommand}">Log in</Button>
 				<Button Command="{Binding RegisterCommand}">Register</Button>
@@ -99,7 +106,7 @@
 			<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Text}" AcceptsReturn="True"/>
 			<Label Grid.Row="4">Category</Label>
 			<TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Category}"/>
-			<Button Grid.Row="5" VerticalAlignment="Top" Command="{Binding CancelCommand}">Cancel</Button>
+			<Button Grid.Row="5" VerticalAlignment="Top" Command="{Binding BackCommand}">Cancel</Button>
 			<Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding SubmitNewPostCommand}">Submit</Button>
 		</Grid>
 	</Grid>

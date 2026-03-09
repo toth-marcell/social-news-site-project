@@ -10,35 +10,33 @@
 	<Design.DataContext>
 		<m:PostWithComments/>
 	</Design.DataContext>
-	<Grid>
+	<Grid Margin="10">
 		<Grid.RowDefinitions>
-			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
 			<RowDefinition Height="auto"/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
-		<Button Command="{Binding BackCommand}">Back</Button>
-		<StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="5">
+		<StackPanel Orientation="Horizontal" Spacing="5">
 			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding Voted}" Opacity=".5" Command="{Binding UpvoteCommand}"/>
 			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !Voted}" Command="{Binding UpvoteCommand}"/>
 			<SelectableTextBlock Text="{Binding Category}" VerticalAlignment="Center" />
 			<SelectableTextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
 			<SelectableTextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
 		</StackPanel>
-		<StackPanel Grid.Row="2" Orientation="Horizontal" Spacing="5">
+		<StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="5">
 			<SelectableTextBlock Text="{Binding Title}" FontSize="20" VerticalAlignment="Center"/>
 			<SelectableTextBlock Text="{Binding LinkType}" VerticalAlignment="Center"/>
 			<HyperlinkButton Content="{Binding Link}" NavigateUri="{Binding Link}" VerticalAlignment="Center"/>
 		</StackPanel>
-		<SelectableTextBlock Grid.Row="3" Text="{Binding Text}"/>
-		<StackPanel Grid.Row="4" IsVisible="{Binding IsLoggedIn}">
+		<SelectableTextBlock Grid.Row="2" Text="{Binding Text}"/>
+		<StackPanel Grid.Row="3" IsVisible="{Binding IsLoggedIn}">
 			<Label>New comment</Label>
 			<TextBox AcceptsReturn="True" Text="{Binding CommentField}"/>
 			<Button HorizontalAlignment="Right" Command="{Binding SubmitCommentCommand}" CommandParameter="{Binding CommentField}">Submit</Button>
 		</StackPanel>
-		<ScrollViewer Grid.Row="5">
+		<ScrollViewer Grid.Row="4">
 			<ItemsControl ItemsSource="{Binding Comments}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>
