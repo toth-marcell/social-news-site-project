@@ -147,7 +147,20 @@ public partial class MainViewModel : ViewModelBase
     }
     private void ApplyCommandsToComments(Comment comment)
     {
+        comment.IsLoggedIn = API.IsLoggedIn;
         comment.UpvoteCommand = API.IsLoggedIn ? new(() => UpvoteComment(comment)) : null;
+        comment.SubmitReplyCommand = new(async (text) =>
+        {
+            try
+            {
+                await API.ChildComment(comment.Id, text);
+                ShowPostDetails(OpenPost);
+            }
+            catch (Exception e)
+            {
+                ShowMessage("Error", e.Message);
+            }
+        });
         foreach (Comment child in comment.Children) ApplyCommandsToComments(child);
     }
     private async void ShowPostDetails(Post post)
@@ -155,8 +168,21 @@ public partial class MainViewModel : ViewModelBase
         try
         {
             OpenPost = await API.GetPostDetails(post.Id);
+            OpenPost.IsLoggedIn = API.IsLoggedIn;
             OpenPost.BackCommand = CancelCommand;
             OpenPost.UpvoteCommand = API.IsLoggedIn ? new(() => UpvotePost(OpenPost)) : null;
+            OpenPost.SubmitCommentCommand = new(async (text) =>
+            {
+                try
+                {
+                    await API.TopComment(OpenPost.Id, text);
+                    ShowPostDetails(OpenPost);
+                }
+                catch (Exception e)
+                {
+                    ShowMessage("Error", e.Message);
+                }
+            });
             foreach (Comment comment in OpenPost.Comments) ApplyCommandsToComments(comment);
             ActivePage = MainViewPage.PostDetails;
         }

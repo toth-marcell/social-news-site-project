@@ -66,6 +66,8 @@ public partial class Post : PostContents
 public partial class Comment : ObservableObject
 {
     [ObservableProperty]
+    bool isLoggedIn;
+    [ObservableProperty]
     int id;
     [ObservableProperty]
     string text;
@@ -89,11 +91,23 @@ public partial class Comment : ObservableObject
     bool voted = false;
     [ObservableProperty]
     RelayCommand? upvoteCommand;
+    [ObservableProperty]
+    RelayCommand<string>? submitReplyCommand;
+    [ObservableProperty]
+    string replyField;
+    [ObservableProperty]
+    bool isReplyFieldShown = false;
 }
 public partial class PostWithComments : Post
 {
     [ObservableProperty]
+    bool isLoggedIn;
+    [ObservableProperty]
     Comment[] comments;
     [ObservableProperty]
     RelayCommand? backCommand;
+    [ObservableProperty]
+    RelayCommand<string>? submitCommentCommand;
+    [ObservableProperty]
+    string commentField;
 }

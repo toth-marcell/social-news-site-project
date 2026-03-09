@@ -85,6 +85,20 @@ public class API
         HttpResponseMessage result = await http.PostAsync($"commentVote/{id}", null);
         result.EnsureSuccessStatusCode();
     }
+    public async Task<string> TopComment(int PostId, string text)
+    {
+        HttpResponseMessage result = await http.PostAsJsonAsync("topComment", new { PostId, text }, new JsonSerializerOptions { PropertyNamingPolicy = null });
+        Message response = (await result.Content.ReadFromJsonAsync<Message>(jsonOptions))!;
+        if (result.IsSuccessStatusCode) return response.Msg;
+        else throw new Exception(response.Msg);
+    }
+    public async Task<string> ChildComment(int ParentId, string text)
+    {
+        HttpResponseMessage result = await http.PostAsJsonAsync("childComment", new { ParentId, text }, new JsonSerializerOptions { PropertyNamingPolicy = null });
+        Message response = (await result.Content.ReadFromJsonAsync<Message>(jsonOptions))!;
+        if (result.IsSuccessStatusCode) return response.Msg;
+        else throw new Exception(response.Msg);
+    }
     public API(string baseAddress)
     {
         http = new() { BaseAddress = new Uri(baseAddress) };

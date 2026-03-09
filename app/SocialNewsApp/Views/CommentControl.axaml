@@ -10,27 +10,26 @@
 	<Design.DataContext>
 		<m:Comment/>
 	</Design.DataContext>
-	<Grid Margin="20,0,0,0">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="auto"/>
-			<RowDefinition Height="auto"/>
-			<RowDefinition/>
-		</Grid.RowDefinitions>
+	<StackPanel Margin="20,0,0,0">
 		<StackPanel Orientation="Horizontal" Spacing="5">
 			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding Voted}" Opacity=".5" Command="{Binding UpvoteCommand}"/>
 			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !Voted}" Command="{Binding UpvoteCommand}"/>
+			<ToggleButton IsChecked="{Binding IsReplyFieldShown}" IsVisible="{Binding IsLoggedIn}">Reply</ToggleButton>
 			<SelectableTextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
 			<SelectableTextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
 		</StackPanel>
-		<SelectableTextBlock Grid.Row="1" Text="{Binding Text}"/>
-		<StackPanel Grid.Row="2">
-			<ItemsControl ItemsSource="{Binding Children}">
-				<ItemsControl.ItemTemplate>
-					<DataTemplate>
-						<v:CommentControl/>
-					</DataTemplate>
-				</ItemsControl.ItemTemplate>
-			</ItemsControl>
+		<SelectableTextBlock Text="{Binding Text}"/>
+		<StackPanel IsVisible="{Binding IsReplyFieldShown}">
+			<Label>Reply</Label>
+			<TextBox AcceptsReturn="True" Text="{Binding ReplyField}"/>
+			<Button HorizontalAlignment="Right" Command="{Binding SubmitReplyCommand}" CommandParameter="{Binding ReplyField}">Submit</Button>
 		</StackPanel>
-	</Grid>
+		<ItemsControl ItemsSource="{Binding Children}">
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<v:CommentControl/>
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+	</StackPanel>
 </UserControl>
