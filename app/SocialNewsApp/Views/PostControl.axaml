@@ -9,7 +9,7 @@
 	<Design.DataContext>
 		<m:Post/>
 	</Design.DataContext>
-	<Grid Cursor="Hand" PointerPressed="Grid_PointerPressed">
+	<Grid Cursor="Hand" Tapped="Grid_Tapped">
 		<Grid.RowDefinitions>
 			<RowDefinition Height="auto"/>
 			<RowDefinition/>
