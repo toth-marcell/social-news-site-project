@@ -56,6 +56,11 @@ public class API
         if (result.IsSuccessStatusCode) return response.Msg;
         else throw new Exception(response.Msg);
     }
+    public async Task<User?> GetCurrentUser()
+    {
+        if (IsLoggedIn) return (await http.GetFromJsonAsync<User>("me"))!;
+        else return null;
+    }
     public async Task<PostPage> GetHotPostPage(int offset)
     {
         return (await http.GetFromJsonAsync<PostPage>($"posts?offset={offset}", jsonOptions))!;
@@ -95,6 +100,20 @@ public class API
     public async Task<string> ChildComment(int ParentId, string text)
     {
         HttpResponseMessage result = await http.PostAsJsonAsync("childComment", new { ParentId, text }, new JsonSerializerOptions { PropertyNamingPolicy = null });
+        Message response = (await result.Content.ReadFromJsonAsync<Message>(jsonOptions))!;
+        if (result.IsSuccessStatusCode) return response.Msg;
+        else throw new Exception(response.Msg);
+    }
+    public async Task<string> DeletePost(int id)
+    {
+        HttpResponseMessage result = await http.DeleteAsync($"posts/{id}");
+        Message response = (await result.Content.ReadFromJsonAsync<Message>(jsonOptions))!;
+        if (result.IsSuccessStatusCode) return response.Msg;
+        else throw new Exception(response.Msg);
+    }
+    public async Task<string> DeleteComment(int id)
+    {
+        HttpResponseMessage result = await http.DeleteAsync($"comments/{id}");
         Message response = (await result.Content.ReadFromJsonAsync<Message>(jsonOptions))!;
         if (result.IsSuccessStatusCode) return response.Msg;
         else throw new Exception(response.Msg);

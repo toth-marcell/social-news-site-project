@@ -21,6 +21,7 @@
 		<StackPanel Orientation="Horizontal" Spacing="5">
 			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding Voted}" Opacity=".5" Command="{Binding UpvoteCommand}"/>
 			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !Voted}" Command="{Binding UpvoteCommand}"/>
+			<Button Command="{Binding DeleteCommand}" IsVisible="{Binding DeleteCommand, Converter={x:Static ObjectConverters.IsNotNull}}">🚮</Button>
 			<SelectableTextBlock Text="{Binding Category}" VerticalAlignment="Center" />
 			<SelectableTextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
 			<SelectableTextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
@@ -31,12 +32,12 @@
 			<HyperlinkButton Content="{Binding Link}" NavigateUri="{Binding Link}" VerticalAlignment="Center"/>
 		</StackPanel>
 		<SelectableTextBlock Grid.Row="2" Text="{Binding Text}"/>
-		<StackPanel Grid.Row="3" IsVisible="{Binding IsLoggedIn}">
+		<StackPanel Grid.Row="3" IsVisible="{Binding SubmitCommentCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
 			<Label>New comment</Label>
 			<TextBox AcceptsReturn="True" Text="{Binding CommentField}"/>
 			<Button HorizontalAlignment="Right" Command="{Binding SubmitCommentCommand}" CommandParameter="{Binding CommentField}">Submit</Button>
 		</StackPanel>
-		<ScrollViewer Grid.Row="4">
+		<ScrollViewer Grid.Row="4" HorizontalScrollBarVisibility="Auto">
 			<ItemsControl ItemsSource="{Binding Comments}">
 				<ItemsControl.ItemTemplate>
 					<DataTemplate>

@@ -20,7 +20,7 @@ public partial class App : Application
     {
         MainViewModel mainViewModel = new();
         MainView mainView = new() { DataContext = mainViewModel };
-        TopLevel topLevel = null!;
+        TopLevel? topLevel = null;
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -36,21 +36,24 @@ public partial class App : Application
             topLevel = TopLevel.GetTopLevel(singleViewPlatform.MainView)!;
         }
 
-        topLevel.PointerPressed += (s, e) =>
+        if (topLevel != null)
         {
-            if (e.Properties.IsXButton1Pressed)
+            topLevel.PointerPressed += (s, e) =>
             {
-                mainViewModel.BackCommand.Execute(null);
-            }
-        };
-        topLevel.BackRequested += (s, e) =>
-        {
-            if (!mainViewModel.IsMainActive)
+                if (e.Properties.IsXButton1Pressed)
+                {
+                    mainViewModel.BackCommand.Execute(null);
+                }
+            };
+            topLevel.BackRequested += (s, e) =>
             {
-                mainViewModel.BackCommand.Execute(null);
-                e.Handled = true;
-            }
-        };
+                if (!mainViewModel.IsMainActive)
+                {
+                    mainViewModel.BackCommand.Execute(null);
+                    e.Handled = true;
+                }
+            };
+        }
 
         base.OnFrameworkInitializationCompleted();
     }

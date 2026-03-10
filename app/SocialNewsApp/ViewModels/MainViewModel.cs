@@ -22,7 +22,7 @@ public partial class MainViewModel : ViewModelBase
         });
         LogInOrRegisterCommand = new(() => { ActivePage = MainViewPage.LoginOrRegister; });
         NewPostCommand = new(() => { ActivePage = MainViewPage.NewPost; });
-        LogOutCommand = new(() => { API.Logout(); OnPropertyChanged(nameof(IsLoggedIn)); RefreshPosts(); });
+        LogOutCommand = new(() => { API.Logout(); OnPropertyChanged(nameof(IsLoggedIn)); CurrentUser = null; RefreshPosts(); });
         // Login or register page
         LogInCommand = new(async () =>
         {
@@ -125,6 +125,7 @@ public partial class MainViewModel : ViewModelBase
     {
         try
         {
+            CurrentUser = await API.GetCurrentUser();
             switch (PostSort)
             {
                 case "hot":
@@ -147,34 +148,14 @@ public partial class MainViewModel : ViewModelBase
     }
     private void ApplyCommandsToComments(Comment comment)
     {
-        comment.IsLoggedIn = IsLoggedIn;
-        comment.UpvoteCommand = IsLoggedIn ? new(() => UpvoteComment(comment)) : null;
-        comment.SubmitReplyCommand = new(async (text) =>
+        if (IsLoggedIn)
         {
-            try
-            {
-                await API.ChildComment(comment.Id, text);
-                ShowPostDetails(OpenPost);
-            }
-            catch (Exception e)
-            {
-                ShowMessage("Error", e.Message);
-            }
-        });
-        foreach (Comment child in comment.Children) ApplyCommandsToComments(child);
-    }
-    private async void ShowPostDetails(Post post)
-    {
-        try
-        {
-            OpenPost = await API.GetPostDetails(post.Id);
-            OpenPost.IsLoggedIn = IsLoggedIn;
-            OpenPost.UpvoteCommand = IsLoggedIn ? new(() => UpvotePost(OpenPost)) : null;
-            OpenPost.SubmitCommentCommand = new(async (text) =>
+            comment.UpvoteCommand = new(() => UpvoteComment(comment));
+            comment.SubmitReplyCommand = new(async (text) =>
             {
                 try
                 {
-                    await API.TopComment(OpenPost.Id, text);
+                    await API.ChildComment(comment.Id, text);
                     ShowPostDetails(OpenPost);
                 }
                 catch (Exception e)
@@ -182,6 +163,61 @@ public partial class MainViewModel : ViewModelBase
                     ShowMessage("Error", e.Message);
                 }
             });
+            if (CurrentUser!.IsAdmin || CurrentUser.Id == comment.UserId)
+            {
+                comment.DeleteCommand = new(async () =>
+                {
+                    try
+                    {
+                        ShowMessage("Success!", await API.DeleteComment(comment.Id));
+                        ShowPostDetails(OpenPost);
+                    }
+                    catch (Exception e)
+                    {
+                        ShowMessage("Error", e.Message);
+                    }
+                });
+            }
+        }
+        foreach (Comment child in comment.Children) ApplyCommandsToComments(child);
+    }
+    private async void ShowPostDetails(Post post)
+    {
+        try
+        {
+            OpenPost = await API.GetPostDetails(post.Id);
+            if (IsLoggedIn)
+            {
+                OpenPost.UpvoteCommand = new(() => UpvotePost(OpenPost));
+                OpenPost.SubmitCommentCommand = new(async (text) =>
+                {
+                    try
+                    {
+                        await API.TopComment(OpenPost.Id, text);
+                        ShowPostDetails(OpenPost);
+                    }
+                    catch (Exception e)
+                    {
+                        ShowMessage("Error", e.Message);
+                    }
+                });
+                if (CurrentUser!.IsAdmin || CurrentUser.Id == OpenPost.UserId)
+                {
+                    OpenPost.DeleteCommand = new(async () =>
+                    {
+                        try
+                        {
+                            ShowMessage("Success!", await API.DeletePost(OpenPost.Id));
+                            ActivePage = MainViewPage.Main;
+                            RefreshPosts();
+                        }
+                        catch (Exception e)
+                        {
+                            ShowMessage("Error", e.Message);
+                        }
+                    });
+                }
+            }
             foreach (Comment comment in OpenPost.Comments) ApplyCommandsToComments(comment);
             ActivePage = MainViewPage.PostDetails;
         }
@@ -257,6 +293,8 @@ public partial class MainViewModel : ViewModelBase
     // Shared
     public RelayCommand BackCommand { get; set; }
     public bool IsLoggedIn => API.IsLoggedIn;
+    [ObservableProperty]
+    User? currentUser;
     void ClearAllForms()
     {
         Name = "";

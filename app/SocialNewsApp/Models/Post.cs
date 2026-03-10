@@ -26,11 +26,6 @@ public partial class PostContents : ObservableObject
     }
     public PostContents() { }
 }
-public partial class UserName : ObservableObject
-{
-    [ObservableProperty]
-    string name;
-}
 public partial class Post : PostContents
 {
     [ObservableProperty]
@@ -66,8 +61,6 @@ public partial class Post : PostContents
 public partial class Comment : ObservableObject
 {
     [ObservableProperty]
-    bool isLoggedIn;
-    [ObservableProperty]
     int id;
     [ObservableProperty]
     string text;
@@ -97,15 +90,17 @@ public partial class Comment : ObservableObject
     string replyField;
     [ObservableProperty]
     bool isReplyFieldShown = false;
+    [ObservableProperty]
+    RelayCommand? deleteCommand;
 }
 public partial class PostWithComments : Post
 {
-    [ObservableProperty]
-    bool isLoggedIn;
     [ObservableProperty]
     Comment[] comments;
     [ObservableProperty]
     RelayCommand<string>? submitCommentCommand;
     [ObservableProperty]
     string commentField;
+    [ObservableProperty]
+    RelayCommand? deleteCommand;
 }

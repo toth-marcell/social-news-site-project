@@ -14,7 +14,8 @@
 		<StackPanel Orientation="Horizontal" Spacing="5">
 			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding Voted}" Opacity=".5" Command="{Binding UpvoteCommand}"/>
 			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !Voted}" Command="{Binding UpvoteCommand}"/>
-			<ToggleButton IsChecked="{Binding IsReplyFieldShown}" IsVisible="{Binding IsLoggedIn}">Reply</ToggleButton>
+			<Button Command="{Binding DeleteCommand}" IsVisible="{Binding DeleteCommand, Converter={x:Static ObjectConverters.IsNotNull}}">🚮</Button>
+			<ToggleButton IsChecked="{Binding IsReplyFieldShown}" IsVisible="{Binding SubmitReplyCommand, Converter={x:Static ObjectConverters.IsNotNull}}">Reply</ToggleButton>
 			<SelectableTextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
 			<SelectableTextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
 		</StackPanel>
