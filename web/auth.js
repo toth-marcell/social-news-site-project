@@ -42,7 +42,7 @@ export async function Login(name, password) {
         }),
       };
     }
-    return { status: 400, msg: "Wrong password!" };
+    return { status: 401, msg: "Wrong password!" };
   }
   return { status: 404, msg: "No user exists with that name!" };
 }

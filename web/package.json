@@ -29,7 +29,7 @@
     "start": "cross-env NODE_ENV=production node server.js",
     "generateTestData": "node generateTestData.js",
     "dev": "nodemon server.js",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --silent"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

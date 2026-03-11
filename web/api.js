@@ -40,13 +40,13 @@ router.use(async (req, res, next) => {
 router.use(WriteLog);
 
 router.post("/register", async (req, res) => {
-  const { name, password, about } = req.body;
+  const { name, password, about } = req.body ?? {};
   const result = await Register(name, password, about);
   res.status(result.status).json({ msg: result.msg });
 });
 
 router.post("/login", async (req, res) => {
-  const { name, password } = req.body;
+  const { name, password } = req.body ?? {};
   const result = await Login(name, password);
   res.status(result.status).json({ msg: result.msg, token: result.token });
 });
@@ -67,7 +67,7 @@ function LoggedInOnly(req, res, next) {
 }
 
 router.post("/posts", LoggedInOnly, async (req, res) => {
-  const { title, link, linkType, text, category } = req.body;
+  const { title, link, linkType, text, category } = req.body ?? {};
   const result = await CreatePost(
     title,
     link,
@@ -91,7 +91,7 @@ router.delete("/posts/:id", LoggedInOnly, async (req, res) => {
 });
 
 router.put("/posts/:id", LoggedInOnly, async (req, res) => {
-  const { title, link, linkType, text, category } = req.body;
+  const { title, link, linkType, text, category } = req.body ?? {};
   const { id } = req.params.id;
   const result = await EditPost(
     id,
@@ -106,13 +106,13 @@ router.put("/posts/:id", LoggedInOnly, async (req, res) => {
 });
 
 router.post("/topComment", LoggedInOnly, async (req, res) => {
-  const { text, PostId } = req.body;
+  const { text, PostId } = req.body ?? {};
   const result = await TopComment(text, PostId, res.locals.user);
   res.status(result.status).json({ msg: result.msg });
 });
 
 router.post("/childComment", LoggedInOnly, async (req, res) => {
-  const { text, ParentId } = req.body;
+  const { text, ParentId } = req.body ?? {};
   const result = await ChildComment(text, ParentId, res.locals.user);
   res.status(result.status).json({ msg: result.msg });
 });
@@ -146,7 +146,7 @@ router.get("/me", LoggedInOnly, async (req, res) => {
 });
 
 router.put("/me", LoggedInOnly, async (req, res) => {
-  const { name, password, about } = req.body;
+  const { name, password, about } = req.body ?? {};
   const result = await EditUser(
     res.locals.user,
     name,
@@ -166,7 +166,7 @@ router.get("/users/:id", async (req, res) => {
 router.put("/users/:id", LoggedInOnly, async (req, res) => {
   const profile = await User.findByPk(req.params.id);
   if (!profile) return res.status(404).json({ msg: "No such user!" });
-  const { name, password, about } = req.body;
+  const { name, password, about } = req.body ?? {};
   const result = await EditUser(
     profile,
     name,

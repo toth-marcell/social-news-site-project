@@ -222,16 +222,23 @@ paths:
                   token:
                     description: JWT
         400:
-          description: "Not all required fields were sent, or the password is wrong for that user."
+          description: "Not all required fields were sent."
           content:
             application/json:
               schema:
                 required: [msg]
                 properties:
                   msg:
-                    anyOf:
-                      - example: "You must fill out the name and password fields!"
-                      - example: "Wrong password!"
+                    example: "You must fill out the name and password fields!"
+        401:
+          description: "Wrong password!"
+          content:
+            application/json:
+              schema:
+                required: [msg]
+                properties:
+                  msg:
+                    example: "Wrong password!"
         404:
           description: "No user exists with that name!"
           content:

@@ -1,3 +1,5 @@
+const testing = process.env.NODE_ENV == "test";
+
 import dotenv from "dotenv";
 import { exit } from "process";
 dotenv.config({ quiet: true });
@@ -10,6 +12,7 @@ import "./defaultAdmin.js";
 
 import express from "express";
 const app = express();
+export default app;
 app.locals.siteName = process.env.SITENAME;
 
 import { readFileSync } from "fs";
@@ -38,9 +41,10 @@ app.set("view engine", "ejs");
 app.set("view options", { rmWhitespace: true });
 
 const port = process.env.PORT;
-app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
-  console.log(`Website at: http://localhost:${port}`);
-  console.log(`API documentation at: http://localhost:${port}/api-docs`);
-  console.log(`API at: http://localhost:${port}/api`);
-});
+if (!testing)
+  app.listen(port, () => {
+    console.log(`Listening on port ${port}`);
+    console.log(`Website at: http://localhost:${port}`);
+    console.log(`API documentation at: http://localhost:${port}/api-docs`);
+    console.log(`API at: http://localhost:${port}/api`);
+  });

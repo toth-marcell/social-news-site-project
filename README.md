@@ -17,7 +17,7 @@ pnpm run start
 - `PORT`: the port to run the server on
 - `SECRET`: secret used for jwt signing
 - `SITENAME`: the name of the website, used in various places
-- `DEFAULT_ADMIN_NAME` and `DEFAULT_ADMIN_PASSWORD`: if the database is empty (newly created), an admin account is created using these details. If one or both of them is empty/not set, this is not done.
+- `DEFAULT_ADMIN_NAME` and `DEFAULT_ADMIN_PASSWORD`: at startup, an admin account is created using these details. If one or both of them is empty/not set, this is not done. It is also not done if there is already an user with the given name.
 
 ## Desktop and Android application
 
