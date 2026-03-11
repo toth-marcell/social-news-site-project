@@ -7,7 +7,14 @@ body {
   height: 100vh;
 }
 nav li {
-  margin-inline: 5px;
+  margin-right: 5px;
+}
+nav {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+}
+nav > ul:nth-child(3) {
+  justify-self: end;
 }
 h1 > a,
 h2 > a,
@@ -66,4 +73,21 @@ article > svg {
   font-size: 1.2rem;
   text-align: center;
   margin: auto;
+}
+@media (max-width: 768px) {
+  nav {
+    grid-template-columns: auto 1fr;
+  }
+  nav > ul:first-child {
+    grid-column: 1 / -1;
+  }
+  article > div:first-child {
+    display: block;
+  }
+  article > div:first-child > * {
+    display: inline-block;
+  }
+  article > a {
+    display: inline-block;
+  }
 }
