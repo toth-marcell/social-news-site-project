@@ -88,8 +88,23 @@ describe("API tests", () => {
       id = res.body.id;
     });
     test("get our post back", async () => {
-      const res = await request(server).get(`/api/posts/${id}`);
+      const res = await request(server)
+        .get(`/api/posts/${id}`)
+        .auth(token, { type: "bearer" });
       expect(res.body).toMatchObject(testPost);
+      expect(res.body.voted).toBe(true);
+      expect(res.body.votes).toBe(1);
+    });
+    test("removing our upvote works", async () => {
+      const res = await request(server)
+        .post(`/api/postVote/${id}`)
+        .auth(token, { type: "bearer" });
+      expect(res.ok).toBe(true);
+      const res2 = await request(server)
+        .get(`/api/posts/${id}`)
+        .auth(token, { type: "bearer" });
+      expect(res2.body.voted).toBe(false);
+      expect(res2.body.votes).toBe(0);
     });
   });
 
