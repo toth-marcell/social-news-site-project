@@ -1,5 +1,6 @@
 ﻿using SocialNewsApp.Persistence;
 using System;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -58,7 +59,19 @@ public class API
     }
     public async Task<User?> GetCurrentUser()
     {
-        if (IsLoggedIn) return (await http.GetFromJsonAsync<User>("me"))!;
+        if (IsLoggedIn)
+        {
+            HttpResponseMessage result = await http.GetAsync("me");
+            if (result.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                Token = null;
+                throw new Exception("You have been logged out, your token may have expired.");
+            }
+            else
+            {
+                return await result.Content.ReadFromJsonAsync<User>()!;
+            }
+        }
         else return null;
     }
     public async Task<PostPage> GetHotPostPage(int offset)

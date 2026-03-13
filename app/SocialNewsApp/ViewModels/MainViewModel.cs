@@ -125,7 +125,16 @@ public partial class MainViewModel : ViewModelBase
     {
         try
         {
-            CurrentUser = await API.GetCurrentUser();
+            try
+            {
+                CurrentUser = await API.GetCurrentUser();
+            }
+            catch (Exception e)
+            {
+                CurrentUser = null;
+                OnPropertyChanged(nameof(IsLoggedIn));
+                ShowMessage("Error", e.Message);
+            }
             switch (PostSort)
             {
                 case "hot":
