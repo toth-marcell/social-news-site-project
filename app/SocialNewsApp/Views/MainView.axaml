@@ -78,38 +78,16 @@
 				<Button Command="{Binding RegisterCommand}">Register</Button>
 			</StackPanel>
 		</Grid>
-		<!--New post page-->
-		<Grid IsVisible="{Binding IsNewPostActive}" RowSpacing="5" Margin="5">
-			<Grid.ColumnDefinitions>
-				<ColumnDefinition Width="auto"/>
-				<ColumnDefinition/>
-			</Grid.ColumnDefinitions>
+		<!--Post editor-->
+		<Grid IsVisible="{Binding IsPostEditorActive}">
 			<Grid.RowDefinitions>
-				<RowDefinition Height="auto"/>
-				<RowDefinition Height="auto"/>
-				<RowDefinition Height="auto"/>
-				<RowDefinition Height=".5*"/>
 				<RowDefinition Height="auto"/>
 				<RowDefinition/>
 			</Grid.RowDefinitions>
-			<Grid.Styles>
-				<Style Selector="Label">
-					<Setter Property="HorizontalAlignment" Value="Right"/>
-					<Setter Property="VerticalAlignment" Value="Center"/>
-				</Style>
-			</Grid.Styles>
-			<Label>Title</Label>
-			<TextBox Grid.Column="1" Text="{Binding Title}"/>
-			<Label Grid.Row="1">Link</Label>
-			<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Link}"/>
-			<Label Grid.Row="2">Link type</Label>
-			<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding LinkType}"/>
-			<Label Grid.Row="3">Text</Label>
-			<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding Text}" AcceptsReturn="True"/>
-			<Label Grid.Row="4">Category</Label>
-			<TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Category}"/>
-			<Button Grid.Row="5" VerticalAlignment="Top" Command="{Binding BackCommand}">Cancel</Button>
-			<Button Grid.Row="5" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding SubmitNewPostCommand}">Submit</Button>
+			<Menu>
+				<MenuItem Command="{Binding BackCommand}" Header="⬅ _Back"/>
+			</Menu>
+			<v:PostEditorControl Grid.Row="1" DataContext="{Binding PostEditorViewModel}"/>
 		</Grid>
 	</Grid>
 </UserControl>

@@ -93,6 +93,13 @@ public class API
         if (result.IsSuccessStatusCode) return response.Msg;
         else throw new Exception(response.Msg);
     }
+    public async Task<string> EditPost(int id, PostContents post)
+    {
+        HttpResponseMessage result = await http.PutAsJsonAsync($"posts/{id}", post, jsonOptions);
+        Message response = (await result.Content.ReadFromJsonAsync<Message>(jsonOptions))!;
+        if (result.IsSuccessStatusCode) return response.Msg;
+        else throw new Exception(response.Msg);
+    }
     public async Task UpvotePost(int id)
     {
         HttpResponseMessage result = await http.PostAsync($"postVote/{id}", null);
@@ -113,6 +120,13 @@ public class API
     public async Task<string> ChildComment(int ParentId, string text)
     {
         HttpResponseMessage result = await http.PostAsJsonAsync("childComment", new { ParentId, text }, new JsonSerializerOptions { PropertyNamingPolicy = null });
+        Message response = (await result.Content.ReadFromJsonAsync<Message>(jsonOptions))!;
+        if (result.IsSuccessStatusCode) return response.Msg;
+        else throw new Exception(response.Msg);
+    }
+    public async Task<string> EditComment(int id, string text)
+    {
+        HttpResponseMessage result = await http.PutAsJsonAsync($"comments/{id}", new { text }, jsonOptions);
         Message response = (await result.Content.ReadFromJsonAsync<Message>(jsonOptions))!;
         if (result.IsSuccessStatusCode) return response.Msg;
         else throw new Exception(response.Msg);

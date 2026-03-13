@@ -21,7 +21,24 @@ public partial class MainViewModel : ViewModelBase
             RefreshPosts(CurrentPage.Offset + CurrentPage.Limit);
         });
         LogInOrRegisterCommand = new(() => { ActivePage = MainViewPage.LoginOrRegister; });
-        NewPostCommand = new(() => { ActivePage = MainViewPage.NewPost; });
+        NewPostCommand = new(() =>
+        {
+            ActivePage = MainViewPage.PostEditor;
+            PostEditorViewModel = new(new(async () =>
+            {
+                try
+                {
+                    ShowMessage("Success!", await API.SubmitPost(PostEditorViewModel.GetPost()));
+                    ActivePage = MainViewPage.Main;
+                    RefreshPosts();
+                }
+                catch (Exception e)
+                {
+                    ShowMessage("Error", e.Message);
+                }
+            }));
+
+        });
         LogOutCommand = new(() => { API.Logout(); OnPropertyChanged(nameof(IsLoggedIn)); CurrentUser = null; RefreshPosts(); });
         // Login or register page
         LogInCommand = new(async () =>
@@ -31,7 +48,6 @@ public partial class MainViewModel : ViewModelBase
                 ShowMessage("Success!", await API.Login(new(Name, Password)));
                 OnPropertyChanged(nameof(IsLoggedIn));
                 ActivePage = MainViewPage.Main;
-                ClearAllForms();
                 RefreshPosts();
             }
             catch (Exception e)
@@ -45,22 +61,6 @@ public partial class MainViewModel : ViewModelBase
             {
                 ShowMessage("Success!", await API.Register(new(Name, Password)));
                 ActivePage = MainViewPage.LoginOrRegister;
-                ClearAllForms();
-            }
-            catch (Exception e)
-            {
-                ShowMessage("Error", e.Message);
-            }
-        });
-        //New post page
-        SubmitNewPostCommand = new(async () =>
-        {
-            try
-            {
-                ShowMessage("Success!", await API.SubmitPost(new(Title, Link, LinkType, Text, Category)));
-                ActivePage = MainViewPage.Main;
-                ClearAllForms();
-                RefreshPosts();
             }
             catch (Exception e)
             {
@@ -68,16 +68,16 @@ public partial class MainViewModel : ViewModelBase
             }
         });
         // Shared
-        BackCommand = new(() => { ActivePage = MainViewPage.Main; ClearAllForms(); });
+        BackCommand = new(() => { ActivePage = BackDestination; BackDestination = MainViewPage.Main; });
         RefreshPosts();
     }
     // Pages
-    enum MainViewPage
+    public enum MainViewPage
     {
         Main,
         PostDetails,
         LoginOrRegister,
-        NewPost
+        PostEditor,
     }
     MainViewPage activePage = MainViewPage.Main;
     MainViewPage ActivePage
@@ -91,14 +91,14 @@ public partial class MainViewModel : ViewModelBase
                 OnPropertyChanged();
                 OnPropertyChanged(nameof(IsMainActive));
                 OnPropertyChanged(nameof(IsLoginOrRegisterActive));
-                OnPropertyChanged(nameof(IsNewPostActive));
+                OnPropertyChanged(nameof(IsPostEditorActive));
                 OnPropertyChanged(nameof(IsPostDetailsActive));
             }
         }
     }
     public bool IsMainActive => ActivePage == MainViewPage.Main;
     public bool IsLoginOrRegisterActive => ActivePage == MainViewPage.LoginOrRegister;
-    public bool IsNewPostActive => ActivePage == MainViewPage.NewPost;
+    public bool IsPostEditorActive => ActivePage == MainViewPage.PostEditor;
     public bool IsPostDetailsActive => ActivePage == MainViewPage.PostDetails;
     // Main page
     [ObservableProperty]
@@ -187,6 +187,19 @@ public partial class MainViewModel : ViewModelBase
                     }
                 });
             }
+            comment.EditCommand = new(async (text) =>
+            {
+                try
+                {
+                    ShowMessage("Success!", await API.EditComment(comment.Id, text!));
+                    ShowPostDetails(OpenPost);
+                }
+                catch (Exception e)
+                {
+                    ShowMessage("Error", e.Message);
+                }
+            });
+            comment.NewText = comment.Text;
         }
         foreach (Comment child in comment.Children) ApplyCommandsToComments(child);
     }
@@ -224,6 +237,23 @@ public partial class MainViewModel : ViewModelBase
                         {
                             ShowMessage("Error", e.Message);
                         }
+                    });
+                    OpenPost.EditCommand = new(() =>
+                    {
+                        PostEditorViewModel = new(OpenPost, new(async () =>
+                        {
+                            try
+                            {
+                                ShowMessage("Success!", await API.EditPost(OpenPost.Id, PostEditorViewModel.GetPost()));
+                                ShowPostDetails(OpenPost);
+                            }
+                            catch (Exception e)
+                            {
+                                ShowMessage("Error", e.Message);
+                            }
+                        }));
+                        ActivePage = MainViewPage.PostEditor;
+                        BackDestination = MainViewPage.PostDetails;
                     });
                 }
             }
@@ -277,7 +307,7 @@ public partial class MainViewModel : ViewModelBase
             ShowMessage("Error", e.Message);
         }
     }
-    //Post details page
+    // Post details page
     [ObservableProperty]
     PostWithComments openPost;
     // Login or register page
@@ -287,33 +317,16 @@ public partial class MainViewModel : ViewModelBase
     string password;
     public RelayCommand LogInCommand { get; set; }
     public RelayCommand RegisterCommand { get; set; }
-    //New post page
+    // Post editor 
     [ObservableProperty]
-    string title;
-    [ObservableProperty]
-    string link;
-    [ObservableProperty]
-    string linkType;
-    [ObservableProperty]
-    string text;
-    [ObservableProperty]
-    string category;
-    public RelayCommand SubmitNewPostCommand { get; set; }
+    PostEditorViewModel postEditorViewModel;
     // Shared
     public RelayCommand BackCommand { get; set; }
+    [ObservableProperty]
+    MainViewPage backDestination = MainViewPage.Main;
     public bool IsLoggedIn => API.IsLoggedIn;
     [ObservableProperty]
     User? currentUser;
-    void ClearAllForms()
-    {
-        Name = "";
-        Password = "";
-        Title = "";
-        Link = "";
-        LinkType = "";
-        Text = "";
-        Category = "";
-    }
     static void ShowMessage(string title, string message)
     {
         var messageBox = MessageBoxManager.GetMessageBoxCustom(new()

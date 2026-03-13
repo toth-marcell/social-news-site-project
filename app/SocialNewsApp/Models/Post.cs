@@ -58,41 +58,6 @@ public partial class Post : PostContents
     }
     public Post() { }
 }
-public partial class Comment : ObservableObject
-{
-    [ObservableProperty]
-    int id;
-    [ObservableProperty]
-    string text;
-    [ObservableProperty]
-    DateTimeOffset createdAt;
-    [ObservableProperty]
-    DateTimeOffset updatedAt;
-    [ObservableProperty]
-    int userId;
-    [ObservableProperty]
-    int postId;
-    [ObservableProperty]
-    int? parentId;
-    [ObservableProperty]
-    UserName user;
-    [ObservableProperty]
-    Comment[] children;
-    [ObservableProperty]
-    int votes;
-    [ObservableProperty]
-    bool voted = false;
-    [ObservableProperty]
-    RelayCommand? upvoteCommand;
-    [ObservableProperty]
-    RelayCommand<string>? submitReplyCommand;
-    [ObservableProperty]
-    string replyField;
-    [ObservableProperty]
-    bool isReplyFieldShown = false;
-    [ObservableProperty]
-    RelayCommand? deleteCommand;
-}
 public partial class PostWithComments : Post
 {
     [ObservableProperty]
@@ -103,4 +68,6 @@ public partial class PostWithComments : Post
     string commentField;
     [ObservableProperty]
     RelayCommand? deleteCommand;
+    [ObservableProperty]
+    RelayCommand? editCommand;
 }

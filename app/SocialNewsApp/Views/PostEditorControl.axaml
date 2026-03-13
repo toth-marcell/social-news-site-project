@@ -1,0 +1,45 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SocialNewsApp.Views.PostEditorControl"
+			 xmlns:vm="using:SocialNewsApp.ViewModels"
+			 x:DataType="vm:PostEditorViewModel">
+	<Design.DataContext>
+		<vm:PostEditorViewModel/>
+	</Design.DataContext>
+	<Grid RowSpacing="5" Margin="20,0,20,0">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="auto"/>
+			<ColumnDefinition/>
+		</Grid.ColumnDefinitions>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition Height=".5*"/>
+			<RowDefinition Height="auto"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Grid.Styles>
+			<Style Selector="Label">
+				<Setter Property="HorizontalAlignment" Value="Right"/>
+				<Setter Property="VerticalAlignment" Value="Center"/>
+			</Style>
+		</Grid.Styles>
+		<TextBlock Grid.ColumnSpan="2" Text="{Binding FormTitle}" FontSize="20" FontWeight="Bold" HorizontalAlignment="Center"/>
+		<Label Grid.Row="1" Target="title">Title</Label>
+		<TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Title}" x:Name="title"/>
+		<Label Grid.Row="2" Target="link">Link</Label>
+		<TextBox Grid.Row="2" Grid.Column="1" Text="{Binding Link}" x:Name="link"/>
+		<Label Grid.Row="3" Target="linkType">Link type</Label>
+		<TextBox Grid.Row="3" Grid.Column="1" Text="{Binding LinkType}" x:Name="linkType"/>
+		<Label Grid.Row="4" Target="text">Text</Label>
+		<TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Text}" AcceptsReturn="True" x:Name="text"/>
+		<Label Grid.Row="5" Target="category">Category</Label>
+		<TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Category}" x:Name="category"/>
+		<Button Grid.Row="6" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Command="{Binding SubmitCommand}">Submit</Button>
+	</Grid>
+</UserControl>

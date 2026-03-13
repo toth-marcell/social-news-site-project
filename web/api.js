@@ -92,7 +92,7 @@ router.delete("/posts/:id", LoggedInOnly, async (req, res) => {
 
 router.put("/posts/:id", LoggedInOnly, async (req, res) => {
   const { title, link, linkType, text, category } = req.body ?? {};
-  const { id } = req.params.id;
+  const { id } = req.params;
   const result = await EditPost(
     id,
     title,

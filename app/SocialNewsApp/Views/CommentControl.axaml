@@ -16,14 +16,19 @@
 			<Button Content="{Binding Votes, StringFormat=⬆ {0}}" VerticalAlignment="Center" IsVisible="{Binding !Voted}" Command="{Binding UpvoteCommand}"/>
 			<Button Command="{Binding DeleteCommand}" IsVisible="{Binding DeleteCommand, Converter={x:Static ObjectConverters.IsNotNull}}">🚮</Button>
 			<ToggleButton IsChecked="{Binding IsReplyFieldShown}" IsVisible="{Binding SubmitReplyCommand, Converter={x:Static ObjectConverters.IsNotNull}}">Reply</ToggleButton>
+			<ToggleButton IsChecked="{Binding IsEditing}" IsVisible="{Binding EditCommand, Converter={x:Static ObjectConverters.IsNotNull}}">Edit</ToggleButton>
 			<SelectableTextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
 			<SelectableTextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
 		</StackPanel>
-		<SelectableTextBlock Text="{Binding Text}"/>
+		<SelectableTextBlock Text="{Binding Text}" IsVisible="{Binding !IsEditing}"/>
+		<StackPanel IsVisible="{Binding IsEditing}">
+			<TextBox AcceptsReturn="True" Text="{Binding NewText}"/>
+			<Button HorizontalAlignment="Right" Command="{Binding EditCommand}" CommandParameter="{Binding NewText}" Margin="0,5,0,0">Save</Button>
+		</StackPanel>
 		<StackPanel IsVisible="{Binding IsReplyFieldShown}">
-			<Label>Reply</Label>
-			<TextBox AcceptsReturn="True" Text="{Binding ReplyField}"/>
-			<Button HorizontalAlignment="Right" Command="{Binding SubmitReplyCommand}" CommandParameter="{Binding ReplyField}">Submit</Button>
+			<Label Target="replyField">Reply</Label>
+			<TextBox AcceptsReturn="True" Text="{Binding ReplyField}" x:Name="replyField"/>
+			<Button HorizontalAlignment="Right" Command="{Binding SubmitReplyCommand}" CommandParameter="{Binding ReplyField}" Margin="0,5,0,0">Submit</Button>
 		</StackPanel>
 		<ItemsControl ItemsSource="{Binding Children}">
 			<ItemsControl.ItemTemplate>
