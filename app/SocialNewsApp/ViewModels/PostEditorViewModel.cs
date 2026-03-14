@@ -30,7 +30,7 @@ namespace SocialNewsApp.ViewModels
             Text = post.Text;
             Category = post.Category;
             SubmitCommand = submitCommand;
-            FormTitle = $"Editing post by {post.User.Name} with id {post.Id}";
+            FormTitle = $"Edit post by {post.User.Name} with id {post.Id}";
         }
         public PostEditorViewModel(RelayCommand submitCommand)
         {

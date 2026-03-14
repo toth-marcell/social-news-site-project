@@ -5,6 +5,7 @@
              xmlns:vm="clr-namespace:SocialNewsApp.ViewModels"
 			 xmlns:m="using:SocialNewsApp.Models"
 			 xmlns:v="using:SocialNewsApp.Views"
+			 xmlns:materialIcons="using:Material.Icons.Avalonia"
 			 mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="SocialNewsApp.Views.MainView"
              x:DataType="vm:MainViewModel">
@@ -52,7 +53,14 @@
 				<RowDefinition/>
 			</Grid.RowDefinitions>
 			<Menu>
-				<MenuItem Command="{Binding BackCommand}" Header="⬅ _Back"/>
+				<MenuItem Command="{Binding BackCommand}">
+					<MenuItem.Header>
+						<StackPanel Orientation="Horizontal" Spacing="5">
+							<materialIcons:MaterialIcon Kind="ArrowLeft"/>
+							<TextBlock VerticalAlignment="Center">Back</TextBlock>
+						</StackPanel>
+					</MenuItem.Header>
+				</MenuItem>
 			</Menu>
 			<v:PostDetailsControl Grid.Row="1" DataContext="{Binding OpenPost}"/>
 		</Grid>
@@ -85,7 +93,14 @@
 				<RowDefinition/>
 			</Grid.RowDefinitions>
 			<Menu>
-				<MenuItem Command="{Binding BackCommand}" Header="⬅ _Back"/>
+				<MenuItem Command="{Binding BackCommand}">
+					<MenuItem.Header>
+						<StackPanel Orientation="Horizontal" Spacing="5">
+							<materialIcons:MaterialIcon Kind="ArrowLeft"/>
+							<TextBlock VerticalAlignment="Center">Back</TextBlock>
+						</StackPanel>
+					</MenuItem.Header>
+				</MenuItem>
 			</Menu>
 			<v:PostEditorControl Grid.Row="1" DataContext="{Binding PostEditorViewModel}"/>
 		</Grid>
