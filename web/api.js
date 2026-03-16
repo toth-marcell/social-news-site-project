@@ -108,13 +108,13 @@ router.put("/posts/:id", LoggedInOnly, async (req, res) => {
 router.post("/topComment", LoggedInOnly, async (req, res) => {
   const { text, PostId } = req.body ?? {};
   const result = await TopComment(text, PostId, res.locals.user);
-  res.status(result.status).json({ msg: result.msg });
+  res.status(result.status).json({ msg: result.msg, id: result.comment.id });
 });
 
 router.post("/childComment", LoggedInOnly, async (req, res) => {
   const { text, ParentId } = req.body ?? {};
   const result = await ChildComment(text, ParentId, res.locals.user);
-  res.status(result.status).json({ msg: result.msg });
+  res.status(result.status).json({ msg: result.msg, id: result.comment.id });
 });
 
 router.delete("/comments/:id", LoggedInOnly, async (req, res) => {
@@ -125,7 +125,7 @@ router.delete("/comments/:id", LoggedInOnly, async (req, res) => {
 router.put("/comments/:id", LoggedInOnly, async (req, res) => {
   const result = await EditComment(
     req.params.id,
-    req.body.text,
+    req.body ? req.body.text : null,
     res.locals.user
   );
   res.status(result.status).json({ msg: result.msg });

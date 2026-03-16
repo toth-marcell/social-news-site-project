@@ -70,13 +70,15 @@ describe("API tests", () => {
     });
   });
 
-  describe("posts and comments", () => {
+  let PostId;
+
+  describe("posts", () => {
     const testPost = {
       title: "A great test post",
       text: "Some paragraphs go here.",
       category: "testing",
     };
-    let id;
+
     test("creating a post", async () => {
       const res = await request(server)
         .post("/api/posts")
@@ -85,26 +87,117 @@ describe("API tests", () => {
         .send(testPost);
       expect(res.ok).toBe(true);
       expect(res.body.id).toBeGreaterThan(0);
-      id = res.body.id;
+      PostId = res.body.id;
     });
-    test("get our post back", async () => {
+
+    test("get our post back, and it has our vote by default", async () => {
       const res = await request(server)
-        .get(`/api/posts/${id}`)
+        .get(`/api/posts/${PostId}`)
         .auth(token, { type: "bearer" });
       expect(res.body).toMatchObject(testPost);
       expect(res.body.voted).toBe(true);
       expect(res.body.votes).toBe(1);
     });
+
     test("removing our upvote works", async () => {
       const res = await request(server)
-        .post(`/api/postVote/${id}`)
+        .post(`/api/postVote/${PostId}`)
         .auth(token, { type: "bearer" });
       expect(res.ok).toBe(true);
       const res2 = await request(server)
-        .get(`/api/posts/${id}`)
+        .get(`/api/posts/${PostId}`)
         .auth(token, { type: "bearer" });
       expect(res2.body.voted).toBe(false);
       expect(res2.body.votes).toBe(0);
+    });
+
+    test("cannot upvote nonexistent post", async () => {
+      const res = await request(server)
+        .post("/api/postVote/aaa")
+        .auth(token, { type: "bearer" });
+      expect(res.notFound).toBe(true);
+    });
+
+    test("editing a post", async () => {
+      testPost.category = "moreTesting";
+      const res = await request(server)
+        .put(`/api/posts/${PostId}`)
+        .auth(token, { type: "bearer" })
+        .set("content-type", "application/json")
+        .send(testPost);
+      expect(res.ok).toBe(true);
+      const res2 = await request(server)
+        .get(`/api/posts/${PostId}`)
+        .auth(token, { type: "bearer" });
+      expect(res2.body).toMatchObject(testPost);
+    });
+
+    test("cannot edit nonexistent post", async () => {
+      const res = await request(server)
+        .put("/api/posts/bbbb")
+        .auth(token, { type: "bearer" });
+      expect(res.notFound).toBe(true);
+    });
+  });
+
+  describe("comments", () => {
+    let CommentId;
+    let testComment;
+
+    test("create a comment on our post", async () => {
+      testComment = {
+        text: "hello, this is a test comment",
+        PostId,
+      };
+      const res = await request(server)
+        .post("/api/topComment")
+        .auth(token, { type: "bearer" })
+        .set("content-type", "application/json")
+        .send(testComment);
+      expect(res.ok).toBe(true);
+      expect(res.body.id).toBeGreaterThan(0);
+      CommentId = res.body.id;
+    });
+
+    test("get our comment back, and it has our vote by default", async () => {
+      const res = await request(server)
+        .get(`/api/posts/${PostId}`)
+        .auth(token, { type: "bearer" });
+      const comment = res.body.Comments.find((x) => (x.id = CommentId));
+      expect(comment).not.toBeUndefined();
+      expect(comment).toMatchObject(testComment);
+      expect(comment.voted).toBe(true);
+      expect(comment.votes).toBe(1);
+    });
+
+    test("removing our upvote from the comment works", async () => {
+      const res = await request(server)
+        .post(`/api/commentVote/${PostId}`)
+        .auth(token, { type: "bearer" });
+      expect(res.ok).toBe(true);
+      const res2 = await request(server)
+        .get(`/api/posts/${PostId}`)
+        .auth(token, { type: "bearer" });
+      const comment = res2.body.Comments.find((x) => (x.id = CommentId));
+      expect(comment).not.toBeUndefined();
+      expect(comment.voted).toBe(false);
+      expect(comment.votes).toBe(0);
+    });
+
+    test("cannot upvote nonexistent comment", async () => {
+      const res = await request(server)
+        .post("/api/commentVote/aaa")
+        .auth(token, { type: "bearer" });
+      expect(res.notFound).toBe(true);
+    });
+
+    test("cannot edit nonexistent comment", async () => {
+      const res = await request(server)
+        .put("/api/comments/bbbb")
+        .auth(token, { type: "bearer" })
+        .set("content-type", "application/json")
+        .send({ text: "this will not be used" });
+      expect(res.notFound).toBe(true);
     });
   });
 

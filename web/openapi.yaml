@@ -332,6 +332,17 @@ paths:
       responses:
         200:
           description: Success!
+          content:
+            application/json:
+              schema:
+                required:
+                  - msg
+                  - id
+                properties:
+                  msg:
+                    example: "Success!"
+                  id:
+                    type: integer
         401: { $ref: "#/components/responses/unauthorized" }
   /posts/new:
     get:
@@ -421,6 +432,17 @@ paths:
       responses:
         200:
           description: Success!
+          content:
+            application/json:
+              schema:
+                required:
+                  - msg
+                  - id
+                properties:
+                  msg:
+                    example: "Success!"
+                  id:
+                    type: integer
         400:
           description: You can't submit a comment with no text!
         401: { $ref: "#/components/responses/unauthorized" }
@@ -443,6 +465,17 @@ paths:
       responses:
         200:
           description: Success!
+          content:
+            application/json:
+              schema:
+                required:
+                  - msg
+                  - id
+                properties:
+                  msg:
+                    example: "Success!"
+                  id:
+                    type: integer
         400:
           description: You can't submit a comment with no text!
         401: { $ref: "#/components/responses/unauthorized" }
@@ -473,6 +506,9 @@ paths:
                 text:
                   type: string
               required: [text]
+      responses:
+        200:
+          description: Success!
   /postVote/{id}:
     post:
       parameters: [{ $ref: "#/components/parameters/idInPath" }]
