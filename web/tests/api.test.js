@@ -138,10 +138,31 @@ describe("API tests", () => {
         .auth(token, { type: "bearer" });
       expect(res.notFound).toBe(true);
     });
+
+    test("first page of hot posts contains our post", async () => {
+      const res = await request(server)
+        .get("/api/posts")
+        .auth(token, { type: "bearer" });
+      expect(res.body.offset).toBe(0);
+      const post = res.body.posts.find((x) => x.id == PostId);
+      expect(post).not.toBeUndefined();
+      expect(post).toMatchObject(testPost);
+    });
+
+    test("first page of new posts contains our post", async () => {
+      const res = await request(server)
+        .get("/api/posts/new")
+        .auth(token, { type: "bearer" });
+      expect(res.body.offset).toBe(0);
+      const post = res.body.posts.find((x) => x.id == PostId);
+      expect(post).not.toBeUndefined();
+      expect(post).toMatchObject(testPost);
+    });
   });
 
+  let CommentId;
+
   describe("comments", () => {
-    let CommentId;
     let testComment;
 
     test("create a comment on our post", async () => {
@@ -191,6 +212,22 @@ describe("API tests", () => {
       expect(res.notFound).toBe(true);
     });
 
+    test("create a comment on our post", async () => {
+      testComment.text = "new text for test comment";
+      const res = await request(server)
+        .put(`/api/comments/${CommentId}`)
+        .auth(token, { type: "bearer" })
+        .set("content-type", "application/json")
+        .send(testComment);
+      expect(res.ok).toBe(true);
+      const res2 = await request(server)
+        .get(`/api/posts/${PostId}`)
+        .auth(token, { type: "bearer" });
+      const comment = res2.body.Comments.find((x) => (x.id = CommentId));
+      expect(comment).not.toBeUndefined();
+      expect(comment).toMatchObject(testComment);
+    });
+
     test("cannot edit nonexistent comment", async () => {
       const res = await request(server)
         .put("/api/comments/bbbb")
@@ -201,17 +238,89 @@ describe("API tests", () => {
     });
   });
 
+  describe("trying to edit and delete things without permission", () => {
+    let otherToken;
+
+    test("register and log in other user", async () => {
+      const otherUserDetails = {
+        name: "otherTestUser",
+        password: "otherTestUser",
+      };
+      const res = await request(server)
+        .post("/api/register")
+        .set("content-type", "application/json")
+        .send(otherUserDetails);
+      expect(res.ok).toBe(true);
+      const res2 = await request(server)
+        .post("/api/login")
+        .set("content-type", "application/json")
+        .send(otherUserDetails);
+      expect(res2.ok).toBe(true);
+      otherToken = res2.body.token;
+    });
+
+    test("trying to delete the test post without permission", async () => {
+      const res = await request(server)
+        .delete(`/api/posts/${PostId}`)
+        .auth(otherToken, { type: "bearer" });
+      expect(res.forbidden).toBe(true);
+      const res2 = await request(server)
+        .get(`/api/posts/${PostId}`)
+        .auth(otherToken, { type: "bearer" });
+      expect(res2.notFound).toBe(false);
+    });
+
+    test("trying to delete the test comment without permission", async () => {
+      const res = await request(server)
+        .delete(`/api/comments/${CommentId}`)
+        .auth(otherToken, { type: "bearer" });
+      expect(res.forbidden).toBe(true);
+      const res2 = await request(server)
+        .get(`/api/posts/${PostId}`)
+        .auth(token, { type: "bearer" });
+      const comment = res2.body.Comments.find((x) => (x.id = CommentId));
+      expect(comment).not.toBeUndefined();
+    });
+  });
+
+  describe("deleting post and comments", () => {
+    test("deleting comments created during test", async () => {
+      const res = await request(server)
+        .delete(`/api/comments/${CommentId}`)
+        .auth(token, { type: "bearer" });
+      expect(res.ok).toBe(true);
+      const res2 = await request(server)
+        .get(`/api/posts/${PostId}`)
+        .auth(token, { type: "bearer" });
+      const comment = res2.body.Comments.find((x) => (x.id = CommentId));
+      expect(comment).toBeUndefined();
+    });
+
+    test("deleting post created during test", async () => {
+      const res = await request(server)
+        .delete(`/api/posts/${PostId}`)
+        .auth(token, { type: "bearer" });
+      expect(res.ok).toBe(true);
+      const res2 = await request(server)
+        .get(`/api/posts/${PostId}`)
+        .auth(token, { type: "bearer" });
+      expect(res2.notFound).toBe(true);
+    });
+  });
+
   describe("admin routes", () => {
     test("cannot get logs without login", async () => {
       const res = await request(server).get("/api/logs");
       expect(res.unauthorized).toBe(true);
     });
+
     test("cannot get logs with non-admin account", async () => {
       const res = await request(server)
         .get("/api/logs")
         .auth(token, { type: "bearer" });
       expect(res.forbidden).toBe(true);
     });
+
     test("can get logs with admin account", async () => {
       const token = (
         await request(server)
