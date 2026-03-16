@@ -146,9 +146,10 @@ router.get("/me", LoggedInOnly, async (req, res) => {
 });
 
 router.put("/me", LoggedInOnly, async (req, res) => {
-  const { name, password, about } = req.body ?? {};
+  const { isAdmin, name, password, about } = req.body ?? {};
   const result = await EditUser(
     res.locals.user,
+    isAdmin,
     name,
     password,
     about,
@@ -166,9 +167,10 @@ router.get("/users/:id", async (req, res) => {
 router.put("/users/:id", LoggedInOnly, async (req, res) => {
   const profile = await User.findByPk(req.params.id);
   if (!profile) return res.status(404).json({ msg: "No such user!" });
-  const { name, password, about } = req.body ?? {};
+  const { isAdmin, name, password, about } = req.body ?? {};
   const result = await EditUser(
     profile,
+    isAdmin,
     name,
     password,
     about,

@@ -18,8 +18,19 @@
 <% if (user && (profile.id == user.id || user.isAdmin)) { %>
 <article>
   <form method="post">
-    <h2><%= user.isAdmin && profile.id != user.id ? "Change details of this user as an admin" : "Update your details" %>
+    <h2>
+      <%= user.isAdmin && profile.id != user.id ? "Change details of this user as an admin" : "Update your details" %>
     </h2>
+    <% if (user.isAdmin && profile.id != user.id) { %>
+    <label>
+      Admin?
+      <% if (isAdmin) { %>
+      <input type="checkbox" name="isAdmin" checked>
+      <% } else { %>
+      <input type="checkbox" name="isAdmin">
+      <% } %>
+    </label>
+    <% } %>
     <label>
       Name
       <input type="text" name="name" value="<%= name %>">

@@ -259,13 +259,16 @@ paths:
     put:
       tags: [Users]
       summary: Edit your name, password and about text
-      description: The username and about text must be sent (unless you want to delete the about text). The password is only updated if a non-empty password is sent.
+      description: The username and about text must be sent (unless you want to delete the about text). The password is only updated if a non-empty password is sent. isAdmin is optional as a non-admin, and required if you are an admin, but only actually edited if you are an admin (but you cannot take away your own admin status).
       security: [bearerAuth: []]
       requestBody:
         content:
           application/json:
             schema:
               properties:
+                isAdmin:
+                  type: boolean
+                  example: false
                 name:
                   type: string
                 password:
@@ -289,13 +292,16 @@ paths:
     put:
       tags: [Users]
       summary: Edit a specific user's name, password and about text as an admin
-      description: The username and about text must be sent (unless you want to delete the about text). The password is only updated if a non-empty password is sent.
+      description: The username and about text must be sent (unless you want to delete the about text). The password is only updated if a non-empty password is sent. isAdmin is optional as a non-admin, and required if you are an admin, but only actually edited if you are an admin (but you cannot take away your own admin status).
       security: [bearerAuth: []]
       requestBody:
         content:
           application/json:
             schema:
               properties:
+                isAdmin:
+                  type: boolean
+                  example: false
                 name:
                   type: string
                 password:

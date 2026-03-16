@@ -47,13 +47,18 @@ export async function Login(name, password) {
   return { status: 404, msg: "No user exists with that name!" };
 }
 
-export async function EditUser(profile, name, password, about, user) {
+export async function EditUser(profile, isAdmin, name, password, about, user) {
   if (!user.isAdmin && profile.id != user.id)
     return {
       status: 403,
       msg: "You can only edit your own profile, unless you are an admin.",
     };
   if (!name) return { status: 400, msg: "You can't have an empty name!" };
+  if (user.isAdmin && profile.id != user.id) {
+    if (isAdmin == false || typeof isAdmin == "undefined")
+      await profile.update({ isAdmin: false });
+    else await profile.update({ isAdmin: true });
+  }
   await profile.update({ name, about });
   if (password) await profile.update({ password: HashPassword(password) });
   return { status: 200, msg: "Success!" };

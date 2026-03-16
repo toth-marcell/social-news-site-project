@@ -108,6 +108,7 @@ router.get("/users/:id", async (req, res) => {
     name: profile.name,
     password: "",
     about: profile.about,
+    isAdmin: profile.isAdmin,
   });
 });
 
@@ -122,9 +123,10 @@ function LoggedInOnly(req, res, next) {
 router.post("/users/:id", LoggedInOnly, async (req, res) => {
   const profile = await User.findByPk(req.params.id);
   if (!profile) return res.render("msg", { msg_fail: "No such user!" });
-  const { name, password, about } = req.body;
+  const { isAdmin, name, password, about } = req.body;
   const result = await EditUser(
     profile,
+    isAdmin,
     name,
     password,
     about,
@@ -133,6 +135,7 @@ router.post("/users/:id", LoggedInOnly, async (req, res) => {
   if (result.status == 200) return res.redirect(`/users/${req.params.id}`);
   res.render("profile", {
     profile: res.locals.user,
+    isAdmin,
     name,
     password,
     about,
