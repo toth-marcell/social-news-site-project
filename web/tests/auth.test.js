@@ -1,5 +1,5 @@
 import { describe, expect, test } from "@jest/globals";
-import { ComparePassword, HashPassword } from "../auth.js";
+import { ComparePassword, HashPassword } from "../models/auth.js";
 
 describe("password hashing", () => {
   const hash = HashPassword("abcd");

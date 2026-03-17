@@ -1,6 +1,6 @@
 import { expect, test } from "@jest/globals";
-import { User } from "../models.js";
-import "../defaultAdmin.js";
+import { User } from "../models/models.js";
+import "../utils/defaultAdmin.js";
 
 test("default admin has been created", async () => {
   const defaultAdmin = await User.findOne({

@@ -212,7 +212,7 @@ describe("API tests", () => {
       expect(res.notFound).toBe(true);
     });
 
-    test("create a comment on our post", async () => {
+    test("edit our comment", async () => {
       testComment.text = "new text for test comment";
       const res = await request(server)
         .put(`/api/comments/${CommentId}`)
@@ -280,6 +280,40 @@ describe("API tests", () => {
         .auth(token, { type: "bearer" });
       const comment = res2.body.Comments.find((x) => (x.id = CommentId));
       expect(comment).not.toBeUndefined();
+    });
+
+    test("trying to edit a post without permission", async () => {
+      const newPostContents = {
+        title: "hi",
+        text: "This won't end up as the text because this will fail!",
+        category: "testing",
+      };
+      const res = await request(server)
+        .put(`/api/posts/${PostId}`)
+        .auth(otherToken, { type: "bearer" })
+        .set("content-type", "application/json")
+        .send(newPostContents);
+      expect(res.forbidden).toBe(true);
+      const res2 = await request(server)
+        .get(`/api/posts/${PostId}`)
+        .auth(otherToken, { type: "bearer" });
+      expect(res2.body).not.toMatchObject(newPostContents);
+    });
+
+    test("trying to edit a comment without permission", async () => {
+      const newText = "a brand new comment text";
+      const res = await request(server)
+        .put(`/api/comments/${CommentId}`)
+        .auth(otherToken, { type: "bearer" })
+        .set("content-type", "application/json")
+        .send({ text: newText });
+      expect(res.forbidden).toBe(true);
+      const res2 = await request(server)
+        .get(`/api/posts/${PostId}`)
+        .auth(otherToken, { type: "bearer" });
+      const comment = res2.body.Comments.find((x) => (x.id = CommentId));
+      expect(comment).not.toBeUndefined();
+      expect(comment.text).not.toMatch(newText);
     });
   });
 
