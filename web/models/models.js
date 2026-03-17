@@ -90,6 +90,10 @@ Comment.belongsToMany(User, { through: CommentVote, as: "Votes" });
 export const Log = sequelize.define(
   "Log",
   {
+    method: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
     path: {
       type: DataTypes.STRING,
       allowNull: false,

@@ -559,12 +559,16 @@ paths:
                     items:
                       required:
                         - id
+                        - method
                         - path
                         - createdAt
                         - UserId
+                        - User
                       properties:
                         id:
                           type: integer
+                        method:
+                          type: string
                         path:
                           type: string
                         createdAt:
@@ -572,6 +576,11 @@ paths:
                           format: date-time
                         UserId:
                           type: integer
+                          nullable: true
+                        User:
+                          properties:
+                            name:
+                              type: string
                           nullable: true
                   count:
                     type: integer

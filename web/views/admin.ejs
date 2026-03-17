@@ -18,6 +18,7 @@
     <thead>
       <tr>
         <th>Entry created at</th>
+        <th>Method</th>
         <th>Path</th>
         <th>User</th>
       </tr>
@@ -26,6 +27,7 @@
       <% for (log of logs) { %>
       <tr>
         <td><%= dateFormat(log.createdAt) %></td>
+        <td><%= log.method %></td>
         <td><%= log.path %></td>
         <td>
           <% if (log.UserId) { %>
