@@ -79,6 +79,14 @@ article:has(svg)::after {
   text-align: center;
   margin: auto;
 }
+#passwordInputGrid {
+  display: grid;
+  grid-template-columns: 1fr max-content;
+  gap: 5px;
+}
+#showPasswordButton {
+  min-width: 5em;
+}
 @media (max-width: 768px) {
   nav {
     grid-template-columns: auto 1fr;
