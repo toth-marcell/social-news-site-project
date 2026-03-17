@@ -1,6 +1,6 @@
 import { faker } from "@faker-js/faker";
-import { User } from "./models.js";
-import { HashPassword } from "./auth.js";
+import { HashPassword } from "../models/auth.js";
+import { User } from "../models/models.js";
 import "./defaultAdmin.js";
 
 for (let i = 0; i < faker.number.int({ min: 100, max: 200 }); i++) {

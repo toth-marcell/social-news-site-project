@@ -8,7 +8,7 @@ if (!(process.env.PORT && process.env.SECRET, process.env.SITENAME)) {
   exit(1);
 }
 
-import "./defaultAdmin.js";
+import "./utils/defaultAdmin.js";
 
 import express from "express";
 const app = express();
@@ -30,12 +30,12 @@ app.use(
   swaggerUI.setup(null, { swaggerOptions: { url: "/openapi.json" } })
 );
 
-import apiRouter from "./api.js";
+import apiRouter from "./routes/api.js";
 app.use("/api", apiRouter);
 
 app.locals.dateFormat = (date) =>
   date.toISOString().replace("T", " ").replace(/\..*/, "");
-import webRouter from "./web.js";
+import webRouter from "./routes/web.js";
 app.use(webRouter);
 app.set("view engine", "ejs");
 app.set("view options", { rmWhitespace: true });

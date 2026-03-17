@@ -1,5 +1,5 @@
-import { DataTypes, Sequelize } from "sequelize";
 import { toSvg } from "jdenticon";
+import { DataTypes, Sequelize } from "sequelize";
 
 export const sequelize = new Sequelize("sqlite:data/db.sqlite");
 

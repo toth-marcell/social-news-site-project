@@ -1,10 +1,10 @@
 import cors from "cors";
 import express from "express";
-import JWT from "jsonwebtoken";
-import { GetLogs } from "./admin.js";
-import { EditUser, Login, Register } from "./auth.js";
-import WriteLog from "./log.js";
-import { User } from "./models.js";
+import { AdminOnly, BearerAuth, LoggedInOnly } from "../middleware/apiAuth.js";
+import WriteLog from "../middleware/log.js";
+import { GetLogs } from "../models/admin.js";
+import { EditUser, Login, Register } from "../models/auth.js";
+import { User } from "../models/models.js";
 import {
   ChildComment,
   CreatePost,
@@ -17,26 +17,14 @@ import {
   TopComment,
   UpvoteComment,
   UpvotePost,
-} from "./posts.js";
+} from "../models/posts.js";
 
 const router = express.Router();
 export default router;
 
 router.use(express.json());
 router.use(cors());
-
-router.use(async (req, res, next) => {
-  try {
-    const jwt = req.headers.authorization.replace(/^Bearer /, "");
-    const id = JWT.verify(jwt, process.env.SECRET).id;
-    const user = await User.findByPk(id);
-    res.locals.user = user;
-  } catch {
-    res.locals.user = null;
-  }
-  next();
-});
-
+router.use(BearerAuth);
 router.use(WriteLog);
 
 router.post("/register", async (req, res) => {
@@ -60,11 +48,6 @@ router.get("/posts/new", async (req, res) => {
   const result = await GetPosts("new", req.query.offset, res.locals.user);
   res.json(result);
 });
-
-function LoggedInOnly(req, res, next) {
-  if (res.locals.user) next();
-  else res.status(401).json({ msg: "You must be logged in to do that!" });
-}
 
 router.post("/posts", LoggedInOnly, async (req, res) => {
   const { title, link, linkType, text, category } = req.body ?? {};
@@ -178,14 +161,6 @@ router.put("/users/:id", LoggedInOnly, async (req, res) => {
   );
   res.status(result.status).json({ msg: result.msg });
 });
-
-function AdminOnly(req, res, next) {
-  if (res.locals.user.isAdmin) next();
-  else
-    res
-      .status(403)
-      .json({ msg: "You must be logged in as an admin to do that!" });
-}
 
 router.get("/logs", LoggedInOnly, AdminOnly, async (req, res) => {
   const result = await GetLogs(req.query.offset);

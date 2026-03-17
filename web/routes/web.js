@@ -1,10 +1,10 @@
 import cookieParser from "cookie-parser";
 import express from "express";
-import JWT from "jsonwebtoken";
-import { GetLogs } from "./admin.js";
-import { EditUser, Login, Register } from "./auth.js";
-import WriteLog from "./log.js";
-import { Comment, User } from "./models.js";
+import WriteLog from "../middleware/log.js";
+import { AdminOnly, CookieAuth, LoggedInOnly } from "../middleware/webAuth.js";
+import { GetLogs } from "../models/admin.js";
+import { EditUser, Login, Register } from "../models/auth.js";
+import { Comment, User } from "../models/models.js";
 import {
   ChildComment,
   CreatePost,
@@ -18,35 +18,23 @@ import {
   TopComment,
   UpvoteComment,
   UpvotePost,
-} from "./posts.js";
+} from "../models/posts.js";
 
 const router = express.Router();
 export default router;
 
 router.use(express.static("public"));
-
-router.get("/pico.css", (req, res) =>
-  res.sendFile(
-    import.meta.dirname + "/node_modules/@picocss/pico/css/pico.jade.min.css"
-  )
-);
-
 router.use(cookieParser());
-
-router.use(async (req, res, next) => {
-  try {
-    const jwt = req.cookies.token;
-    const id = JWT.verify(jwt, process.env.SECRET).id;
-    const user = await User.findByPk(id);
-    res.locals.user = user;
-  } catch {
-    res.locals.user = null;
-  }
-  next();
-});
-
+router.use(CookieAuth);
 router.use(WriteLog);
 router.use(express.urlencoded());
+
+router.get("/pico.css", (req, res) => {
+  const filename = new URL(
+    import.meta.resolve("@picocss/pico/css/pico.jade.min.css")
+  ).pathname.replace(/^\/C:/, "");
+  res.sendFile(filename, { dotfiles: "allow" });
+});
 
 router.get("/", async (req, res) => {
   const result = await GetPosts("hot", req.query.offset, res.locals.user);
@@ -111,14 +99,6 @@ router.get("/users/:id", async (req, res) => {
     isAdmin: profile.isAdmin,
   });
 });
-
-function LoggedInOnly(req, res, next) {
-  if (res.locals.user) next();
-  else
-    res
-      .status(401)
-      .render("msg", { msg_fail: "You must be logged in to do that!" });
-}
 
 router.post("/users/:id", LoggedInOnly, async (req, res) => {
   const profile = await User.findByPk(req.params.id);
@@ -296,14 +276,6 @@ router.post("/commentVote/:id", LoggedInOnly, async (req, res) => {
     `/posts/${result.comment.PostId}#c${result.comment.id}`;
   res.redirect(redirectUrl);
 });
-
-function AdminOnly(req, res, next) {
-  if (res.locals.user.isAdmin) next();
-  else
-    res.status(403).render("msg", {
-      msg_fail: "You must be logged in as an admin to do that!",
-    });
-}
 
 router.get("/admin", LoggedInOnly, AdminOnly, async (req, res) => {
   const result = await GetLogs(req.query.offset);

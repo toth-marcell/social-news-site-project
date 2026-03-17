@@ -1,6 +1,6 @@
-import { HashPassword } from "./auth.js";
-import { User } from "./models.js";
 import dotenv from "dotenv";
+import { HashPassword } from "../models/auth.js";
+import { User } from "../models/models.js";
 dotenv.config({ quiet: true });
 
 const [user, created] = await User.findOrCreate({
