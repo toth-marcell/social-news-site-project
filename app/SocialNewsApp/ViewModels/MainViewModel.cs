@@ -186,20 +186,20 @@ public partial class MainViewModel : ViewModelBase
                         ShowMessage("Error", e.Message);
                     }
                 });
+                comment.EditCommand = new(async (text) =>
+                {
+                    try
+                    {
+                        ShowMessage("Success!", await API.EditComment(comment.Id, text!));
+                        ShowPostDetails(OpenPost);
+                    }
+                    catch (Exception e)
+                    {
+                        ShowMessage("Error", e.Message);
+                    }
+                });
+                comment.NewText = comment.Text;
             }
-            comment.EditCommand = new(async (text) =>
-            {
-                try
-                {
-                    ShowMessage("Success!", await API.EditComment(comment.Id, text!));
-                    ShowPostDetails(OpenPost);
-                }
-                catch (Exception e)
-                {
-                    ShowMessage("Error", e.Message);
-                }
-            });
-            comment.NewText = comment.Text;
         }
         foreach (Comment child in comment.Children) ApplyCommandsToComments(child);
     }
