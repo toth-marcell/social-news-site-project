@@ -1,5 +1,5 @@
 :root {
-  --pico-font-size: 100%;
+  --pico-font-size: 90%;
 }
 body {
   display: grid;
@@ -68,6 +68,11 @@ article > svg {
   float: left;
   width: 200px;
   height: 200px;
+}
+article:has(svg)::after {
+  display: block;
+  content: "";
+  clear: both;
 }
 .centered-large-text {
   font-size: 1.2rem;
