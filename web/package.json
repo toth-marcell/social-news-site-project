@@ -29,9 +29,10 @@
     "start": "cross-env NODE_ENV=production node server.js",
     "generateTestData": "node utils/generateTestData.js",
     "erd": "node utils/erd.js",
-    "dev": "nodemon server.js",
+    "dev": "nodemon",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --silent"
   },
+  "main": "server.js",
   "pnpm": {
     "onlyBuiltDependencies": [
       "sqlite3"
@@ -39,5 +40,13 @@
   },
   "prettier": {
     "trailingComma": "es5"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "openapi.yaml",
+      "middleware",
+      "models",
+      "routes"
+    ]
   }
 }
