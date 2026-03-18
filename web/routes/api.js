@@ -3,7 +3,7 @@ import express from "express";
 import { AdminOnly, BearerAuth, LoggedInOnly } from "../middleware/apiAuth.js";
 import WriteLog from "../middleware/log.js";
 import { GetLogs } from "../models/admin.js";
-import { EditUser, Login, Register } from "../models/auth.js";
+import { EditUser, GetProfile, Login, Register } from "../models/auth.js";
 import { User } from "../models/models.js";
 import {
   ChildComment,
@@ -135,7 +135,9 @@ router.post("/commentVote/:id", LoggedInOnly, async (req, res) => {
 });
 
 router.get("/me", LoggedInOnly, async (req, res) => {
-  res.json(res.locals.user);
+  const profile = await GetProfile(res.locals.user.id);
+  if (!profile) return res.status(404).json({ msg: "No such user!" });
+  res.json(profile);
 });
 
 router.put("/me", LoggedInOnly, async (req, res) => {
@@ -152,7 +154,7 @@ router.put("/me", LoggedInOnly, async (req, res) => {
 });
 
 router.get("/users/:id", async (req, res) => {
-  const profile = await User.findByPk(req.params.id);
+  const profile = await GetProfile(req.params.id);
   if (!profile) return res.status(404).json({ msg: "No such user!" });
   res.json(profile);
 });

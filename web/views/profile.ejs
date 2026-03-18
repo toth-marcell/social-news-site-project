@@ -6,6 +6,7 @@
   <% if (profile.isAdmin) { %>
   <mark>Admin</mark>
   <% } %>
+  <p>Points: <%= profile.get("points") %></p>
   <p>A member since <%= dateFormat(profile.createdAt) %></p>
   <span>
     view <%= profile.name %>'s posts:

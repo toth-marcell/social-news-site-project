@@ -1,11 +1,11 @@
 import JWT from "jsonwebtoken";
-import { User } from "../models/models.js";
+import { GetProfile } from "../models/auth.js";
 
 export async function CookieAuth(req, res, next) {
   try {
     const jwt = req.cookies.token;
     const id = JWT.verify(jwt, process.env.SECRET).id;
-    const user = await User.findByPk(id);
+    const user = await GetProfile(id);
     res.locals.user = user;
   } catch {
     res.locals.user = null;

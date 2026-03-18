@@ -1,7 +1,7 @@
 import { compareSync, hashSync } from "bcryptjs";
 import { hash } from "crypto";
 import JWT from "jsonwebtoken";
-import { User } from "./models.js";
+import { sequelize, User } from "./models.js";
 
 export function HashPassword(pass) {
   const lengthHashed = hash("sha256", pass);
@@ -62,4 +62,21 @@ export async function EditUser(profile, isAdmin, name, password, about, user) {
   await profile.update({ name, about });
   if (password) await profile.update({ password: HashPassword(password) });
   return { status: 200, msg: "Success!" };
+}
+
+export async function GetProfile(id) {
+  const validId = (await User.findByPk(id, { attributes: ["id"] })) != null;
+  if (!validId) return null;
+  return await User.findByPk(id, {
+    attributes: {
+      include: [
+        [
+          sequelize.literal(
+            `(SELECT COUNT(*) FROM CommentVotes WHERE CommentId IN (SELECT id FROM Comments WHERE UserId=${id})) + (SELECT COUNT(*) FROM PostVotes WHERE PostId IN (SELECT id FROM Posts WHERE UserId=${id}))`
+          ),
+          "points",
+        ],
+      ],
+    },
+  });
 }

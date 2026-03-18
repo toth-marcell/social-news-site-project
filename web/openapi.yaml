@@ -58,6 +58,8 @@ components:
               - createdAt
               - updatedAt
             properties:
+              identicon:
+                type: string
               id:
                 type: integer
               name:
@@ -66,12 +68,15 @@ components:
                 type: string
               isAdmin:
                 type: boolean
+                example: false
               createdAt:
                 type: string
                 format: date-time
               updatedAt:
                 type: string
-            format: date-time
+                format: date-time
+              points:
+                type: integer
   schemas:
     postContents:
       required:

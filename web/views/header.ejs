@@ -31,6 +31,7 @@
           <%- user.identicon -%>
           <%= user.name %>
         </a>
+        (<%= user.get("points") %> points)
       </li>
       <li>
         <a href="/logout"><button>Log out</button></a>

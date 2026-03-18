@@ -3,8 +3,8 @@ import express from "express";
 import WriteLog from "../middleware/log.js";
 import { AdminOnly, CookieAuth, LoggedInOnly } from "../middleware/webAuth.js";
 import { GetLogs } from "../models/admin.js";
-import { EditUser, Login, Register } from "../models/auth.js";
-import { Comment, User } from "../models/models.js";
+import { EditUser, GetProfile, Login, Register } from "../models/auth.js";
+import { Comment } from "../models/models.js";
 import {
   ChildComment,
   CreatePost,
@@ -99,7 +99,7 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/users/:id", async (req, res) => {
-  const profile = await User.findByPk(req.params.id);
+  const profile = await GetProfile(req.params.id);
   if (!profile) return res.render("msg", { msg_fail: "No such user!" });
   res.render("profile", {
     profile,
@@ -111,7 +111,7 @@ router.get("/users/:id", async (req, res) => {
 });
 
 router.post("/users/:id", LoggedInOnly, async (req, res) => {
-  const profile = await User.findByPk(req.params.id);
+  const profile = await GetProfile(req.params.id);
   if (!profile) return res.render("msg", { msg_fail: "No such user!" });
   const { isAdmin, name, password, about } = req.body;
   const result = await EditUser(
@@ -124,7 +124,7 @@ router.post("/users/:id", LoggedInOnly, async (req, res) => {
   );
   if (result.status == 200) return res.redirect(`/users/${req.params.id}`);
   res.render("profile", {
-    profile: res.locals.user,
+    profile,
     isAdmin,
     name,
     password,
