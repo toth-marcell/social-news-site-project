@@ -7,6 +7,33 @@ import {
   sequelize,
 } from "./models.js";
 
+const PostVotesAttr = [
+  sequelize.literal("(SELECT COUNT(*) FROM PostVotes WHERE PostId=Post.Id)"),
+  "votes",
+];
+export function PostVotedAttr(UserId) {
+  return [
+    sequelize.literal(
+      `(SELECT COUNT(*) FROM PostVotes WHERE PostId=Post.Id AND UserId=${UserId})`
+    ),
+    "voted",
+  ];
+}
+const CommentVotesAttr = [
+  sequelize.literal(
+    "(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.id)"
+  ),
+  "votes",
+];
+function CommentVotedAttr(UserId) {
+  return [
+    sequelize.literal(
+      `(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.id AND UserId=${UserId})`
+    ),
+    "voted",
+  ];
+}
+
 export async function GetPosts(sort, offset = 0, filter, user) {
   if (typeof offset == "string") offset = parseInt(offset);
   let order;
@@ -31,21 +58,8 @@ export async function GetPosts(sort, offset = 0, filter, user) {
   if (filter.user) {
     filters.push({ UserId: filter.user });
   }
-  const customAttrs = [
-    [
-      sequelize.literal(
-        "(SELECT COUNT(*) FROM PostVotes WHERE PostId=Post.Id)"
-      ),
-      "votes",
-    ],
-  ];
-  if (user)
-    customAttrs.push([
-      sequelize.literal(
-        `(SELECT COUNT(*) FROM PostVotes WHERE PostId=Post.Id AND UserId=${user.id})`
-      ),
-      "voted",
-    ]);
+  const customAttrs = [PostVotesAttr];
+  if (user) customAttrs.push(PostVotedAttr(user.id));
   const limit = 20;
   const result = await Post.findAndCountAll({
     include: [{ model: User, attributes: ["name"] }],
@@ -68,21 +82,8 @@ export async function GetPosts(sort, offset = 0, filter, user) {
 }
 
 async function fetchComments(commentObject, commentData, user) {
-  const customAttrs = [
-    [
-      sequelize.literal(
-        "(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.id)"
-      ),
-      "votes",
-    ],
-  ];
-  if (user)
-    customAttrs.push([
-      sequelize.literal(
-        `(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.id AND UserId=${user.id})`
-      ),
-      "voted",
-    ]);
+  const customAttrs = [CommentVotesAttr];
+  if (user) customAttrs.push(CommentVotedAttr(user.id));
   commentData.Children = await Promise.all(
     (
       await commentObject.getChildren({
@@ -100,35 +101,11 @@ async function fetchComments(commentObject, commentData, user) {
 }
 
 export async function GetPost(id, user) {
-  const customAttrs = [
-    [
-      sequelize.literal(
-        "(SELECT COUNT(*) FROM PostVotes WHERE PostId=Post.Id)"
-      ),
-      "votes",
-    ],
-  ];
-  const customCommentAttrs = [
-    [
-      sequelize.literal(
-        "(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.id)"
-      ),
-      "votes",
-    ],
-  ];
+  const customAttrs = [PostVotesAttr];
+  const customCommentAttrs = [CommentVotesAttr];
   if (user) {
-    customAttrs.push([
-      sequelize.literal(
-        `(SELECT COUNT(*) FROM PostVotes WHERE PostId=Post.Id AND UserId=${user.id})`
-      ),
-      "voted",
-    ]);
-    customCommentAttrs.push([
-      sequelize.literal(
-        `(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.id AND UserId=${user.id})`
-      ),
-      "voted",
-    ]);
+    customAttrs.push(PostVotedAttr(user.id));
+    customCommentAttrs.push(CommentVotedAttr(user.id));
   }
   const post = await Post.findByPk(id, {
     include: [
@@ -235,21 +212,8 @@ export async function TopComment(text, PostId, user) {
 }
 
 export async function GetSingleComment(id, user) {
-  const customAttrs = [
-    [
-      sequelize.literal(
-        "(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.Id)"
-      ),
-      "votes",
-    ],
-  ];
-  if (user)
-    customAttrs.push([
-      sequelize.literal(
-        `(SELECT COUNT(*) FROM CommentVotes WHERE CommentId=Comment.Id AND UserId=${user.id})`
-      ),
-      "voted",
-    ]);
+  const customAttrs = [CommentVotesAttr];
+  if (user) customAttrs.push(CommentVotedAttr(user.id));
   const comment = await Comment.findByPk(id, {
     include: [
       { model: User, attributes: ["name"] },
