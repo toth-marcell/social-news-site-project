@@ -55,6 +55,9 @@ article > div > * {
   gap: 5px;
   align-items: center;
 }
+article a {
+  display: inline-block;
+}
 .msg {
   border-radius: var(--pico-border-radius);
   display: block;

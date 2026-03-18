@@ -7,7 +7,7 @@ import {
   sequelize,
 } from "./models.js";
 
-export async function GetPosts(sort, offset = 0, user) {
+export async function GetPosts(sort, offset = 0, filter, user) {
   if (typeof offset == "string") offset = parseInt(offset);
   let order;
   switch (sort) {
@@ -20,6 +20,16 @@ export async function GetPosts(sort, offset = 0, user) {
     case "new":
       order = [["id", "DESC"]];
       break;
+  }
+  let filters = [];
+  if (filter.linkType) {
+    filters.push({ linkType: filter.linkType });
+  }
+  if (filter.category) {
+    filters.push({ category: filter.category });
+  }
+  if (filter.user) {
+    filters.push({ UserId: filter.user });
   }
   const customAttrs = [
     [
@@ -43,6 +53,7 @@ export async function GetPosts(sort, offset = 0, user) {
     order,
     limit,
     offset,
+    where: filters,
   });
   return {
     posts: result.rows.map((x) => {

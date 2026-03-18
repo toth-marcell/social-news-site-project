@@ -9,7 +9,7 @@
         <%= post.votes %>
       </button>
     </form>
-    <button class="contrast"><%= post.category %></button>
+    <a href="/?category=<%= post.category %>"><button class="outline"><%= post.category %></button></a>
     <span><%= dateFormat(post.createdAt) %></span>
     <span>
       by
@@ -22,7 +22,7 @@
   <hr>
   <h2><a href="/posts/<%= post.id %>"><%= post.title %></a></h2>
   <% if (post.link) { %>
-  <button class="outline contrast"><%= post.linkType %></button>
+  <a href="/?linkType=<%= post.linkType %>"><button class="outline contrast"><%= post.linkType %></button></a>
   <a href="<%= post.link %>"><%= post.link %></a>
   <% } %>
 </article>

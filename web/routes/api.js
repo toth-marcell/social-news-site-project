@@ -40,12 +40,22 @@ router.post("/login", async (req, res) => {
 });
 
 router.get("/posts", async (req, res) => {
-  const result = await GetPosts("hot", req.query.offset, res.locals.user);
+  const result = await GetPosts(
+    "hot",
+    req.query.offset,
+    req.query,
+    res.locals.user
+  );
   res.json(result);
 });
 
 router.get("/posts/new", async (req, res) => {
-  const result = await GetPosts("new", req.query.offset, res.locals.user);
+  const result = await GetPosts(
+    "new",
+    req.query.offset,
+    req.query,
+    res.locals.user
+  );
   res.json(result);
 });
 

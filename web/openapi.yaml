@@ -153,6 +153,26 @@ components:
       schema:
         type: integer
       required: true
+    offset:
+      in: query
+      name: offset
+      schema:
+        type: integer
+    linkType:
+      in: query
+      name: linkType
+      schema:
+        type: string
+    category:
+      in: query
+      name: category
+      schema:
+        type: string
+    user:
+      in: query
+      name: user
+      schema:
+        type: integer
 paths:
   /register:
     post:
@@ -319,10 +339,10 @@ paths:
       summary: Get all posts sorted by hot
       security: [bearerAuth: []]
       parameters:
-        - name: offset
-          in: query
-          schema:
-            type: integer
+        - { $ref: "#/components/parameters/offset" }
+        - { $ref: "#/components/parameters/linkType" }
+        - { $ref: "#/components/parameters/category" }
+        - { $ref: "#/components/parameters/user" }
       responses:
         200: { $ref: "#/components/responses/posts" }
     post:
@@ -356,10 +376,10 @@ paths:
       summary: Get all posts sorted by new
       security: [bearerAuth: []]
       parameters:
-        - name: offset
-          in: query
-          schema:
-            type: integer
+        - { $ref: "#/components/parameters/offset" }
+        - { $ref: "#/components/parameters/linkType" }
+        - { $ref: "#/components/parameters/category" }
+        - { $ref: "#/components/parameters/user" }
       responses:
         200: { $ref: "#/components/responses/posts" }
   /posts/{id}:

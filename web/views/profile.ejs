@@ -7,6 +7,11 @@
   <mark>Admin</mark>
   <% } %>
   <p>A member since <%= dateFormat(profile.createdAt) %></p>
+  <span>
+    view <%= profile.name %>'s posts:
+    <a href="/?user=<%= profile.id %>">hot</a>
+    <a href="/new?user=<%= profile.id %>">new</a>
+  </span>
   <h3>About</h3>
   <% if (profile.about) { for (paragraph of profile.about.split("\r\n\r\n")) {
   %>

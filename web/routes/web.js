@@ -37,12 +37,22 @@ router.get("/pico.css", (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const result = await GetPosts("hot", req.query.offset, res.locals.user);
+  const result = await GetPosts(
+    "hot",
+    req.query.offset,
+    req.query,
+    res.locals.user
+  );
   res.render("index", result);
 });
 
 router.get("/new", async (req, res) => {
-  const result = await GetPosts("new", req.query.offset, res.locals.user);
+  const result = await GetPosts(
+    "new",
+    req.query.offset,
+    req.query,
+    res.locals.user
+  );
   res.render("index", result);
 });
 
