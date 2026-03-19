@@ -37,6 +37,8 @@ router.get("/pico.css", (req, res) => {
   res.sendFile(filename, { dotfiles: "allow" });
 });
 
+router.get("/rules", (req, res) => res.render("rules"));
+
 router.get("/", async (req, res) => {
   const result = await GetPosts(
     "hot",
