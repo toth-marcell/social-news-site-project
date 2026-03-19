@@ -8,11 +8,18 @@
   <% } %>
   <p>Points: <%= profile.get("points") %></p>
   <p>A member since <%= dateFormat(profile.createdAt) %></p>
-  <span>
+  <p>
     view <%= profile.name %>'s posts:
     <a href="/?user=<%= profile.id %>">hot</a>
     <a href="/new?user=<%= profile.id %>">new</a>
-  </span>
+    <a href="/top?user=<%= profile.id %>">top</a>
+  </p>
+  <p>
+    view <%= profile.name %>'s comments:
+    <a href="/comments?user=<%= profile.id %>">hot</a>
+    <a href="/comments/new?user=<%= profile.id %>">new</a>
+    <a href="/comments/top?user=<%= profile.id %>">top</a>
+  </p>
   <h3>About</h3>
   <% if (profile.about) { for (paragraph of profile.about.split("\r\n\r\n")) {
   %>

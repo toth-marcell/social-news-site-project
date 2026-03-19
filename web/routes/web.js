@@ -12,6 +12,7 @@ import {
   DeletePost,
   EditComment,
   EditPost,
+  GetComments,
   GetPost,
   GetPosts,
   GetSingleComment,
@@ -54,6 +55,46 @@ router.get("/new", async (req, res) => {
     res.locals.user
   );
   res.render("index", result);
+});
+
+router.get("/top", async (req, res) => {
+  const result = await GetPosts(
+    "top",
+    req.query.offset,
+    req.query,
+    res.locals.user
+  );
+  res.render("index", result);
+});
+
+router.get("/comments", async (req, res) => {
+  const result = await GetComments(
+    "hot",
+    req.query.offset,
+    req.query,
+    res.locals.user
+  );
+  res.render("comments", result);
+});
+
+router.get("/comments/new", async (req, res) => {
+  const result = await GetComments(
+    "new",
+    req.query.offset,
+    req.query,
+    res.locals.user
+  );
+  res.render("comments", result);
+});
+
+router.get("/comments/top", async (req, res) => {
+  const result = await GetComments(
+    "top",
+    req.query.offset,
+    req.query,
+    res.locals.user
+  );
+  res.render("comments", result);
 });
 
 router.get("/posts/:id", async (req, res) => {

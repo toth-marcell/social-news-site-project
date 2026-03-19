@@ -47,6 +47,9 @@ export async function GetPosts(sort, offset = 0, filter, user) {
     case "new":
       order = [["id", "DESC"]];
       break;
+    case "top":
+      order = [["votes", "DESC"]];
+      break;
   }
   let filters = [];
   if (filter.linkType) {
@@ -293,4 +296,51 @@ export async function UpvoteComment(CommentId, user) {
   }
   await CommentVote.create({ CommentId, UserId: user.id });
   return { status: 201, msg: "Upvote added!", comment };
+}
+
+export async function GetComments(sort, offset = 0, filter, user) {
+  if (typeof offset == "string") offset = parseInt(offset);
+  let order;
+  switch (sort) {
+    case "hot":
+      order = [
+        [sequelize.fn("date", sequelize.col("Comment.createdAt")), "DESC"],
+        ["votes", "DESC"],
+      ];
+      break;
+    case "new":
+      order = [["id", "DESC"]];
+      break;
+    case "top":
+      order = [["votes", "DESC"]];
+      break;
+  }
+  let filters = [];
+  if (filter.user) {
+    filters.push({ UserId: filter.user });
+  }
+  const customAttrs = [CommentVotesAttr];
+  if (user) customAttrs.push(CommentVotedAttr(user.id));
+  const limit = 25;
+  const result = await Comment.findAndCountAll({
+    include: [
+      { model: User, attributes: ["name"] },
+      { model: Post, attributes: ["title"] },
+    ],
+    attributes: { include: customAttrs },
+    order,
+    limit,
+    offset,
+    where: filters,
+  });
+  return {
+    comments: result.rows.map((x) => {
+      const data = x.get();
+      data.voted = !!data.voted;
+      return data;
+    }),
+    count: result.count,
+    limit,
+    offset,
+  };
 }

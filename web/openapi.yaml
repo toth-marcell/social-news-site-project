@@ -36,6 +36,51 @@ components:
                 type: integer
               offset:
                 type: integer
+    comments:
+      description: Success!
+      content:
+        application/json:
+          schema:
+            properties:
+              comments:
+                type: array
+                items:
+                  properties:
+                    id:
+                      type: integer
+                    text:
+                      type: string
+                    createdAt:
+                      type: string
+                      format: date-time
+                    updatedAt:
+                      type: string
+                      format: date-time
+                    UserId:
+                      type: integer
+                    PostId:
+                      type: integer
+                    ParentId:
+                      type: integer
+                      nullable: true
+                    votes:
+                      type: integer
+                    User:
+                      properties:
+                        name:
+                          type: string
+                    Post:
+                      properties:
+                        title:
+                          type: string
+                    voted:
+                      type: boolean
+              count:
+                type: integer
+              limit:
+                type: integer
+              offset:
+                type: integer
     adminOnly:
       description: "You must be logged in as an admin to do that!"
       content:
@@ -342,6 +387,7 @@ paths:
     get:
       tags: [Posts]
       summary: Get all posts sorted by hot
+      description: In the "hot" sorting scheme, the most recent and most voted items are first
       security: [bearerAuth: []]
       parameters:
         - { $ref: "#/components/parameters/offset" }
@@ -379,6 +425,20 @@ paths:
     get:
       tags: [Posts]
       summary: Get all posts sorted by new
+      description: In the "new" sorting scheme, the newest items are first
+      security: [bearerAuth: []]
+      parameters:
+        - { $ref: "#/components/parameters/offset" }
+        - { $ref: "#/components/parameters/linkType" }
+        - { $ref: "#/components/parameters/category" }
+        - { $ref: "#/components/parameters/user" }
+      responses:
+        200: { $ref: "#/components/responses/posts" }
+  /posts/top:
+    get:
+      tags: [Posts]
+      summary: Get all posts sorted by top
+      description: In the "top" sorting scheme, the items with the most votes are first
       security: [bearerAuth: []]
       parameters:
         - { $ref: "#/components/parameters/offset" }
@@ -540,6 +600,39 @@ paths:
       responses:
         200:
           description: Success!
+  /comments:
+    get:
+      tags: [Comments]
+      summary: Get all comments sorted by hot
+      description: In the "hot" sorting scheme, the most recent and most voted items are first
+      security: [bearerAuth: []]
+      parameters:
+        - { $ref: "#/components/parameters/offset" }
+        - { $ref: "#/components/parameters/user" }
+      responses:
+        200: { $ref: "#/components/responses/comments" }
+  /comments/new:
+    get:
+      tags: [Comments]
+      summary: Get all comments sorted by new
+      description: In the "new" sorting scheme, the newest items are first
+      security: [bearerAuth: []]
+      parameters:
+        - { $ref: "#/components/parameters/offset" }
+        - { $ref: "#/components/parameters/user" }
+      responses:
+        200: { $ref: "#/components/responses/comments" }
+  /comments/top:
+    get:
+      tags: [Comments]
+      summary: Get all comments sorted by top
+      description: In the "top" sorting scheme, the items with the most votes are first
+      security: [bearerAuth: []]
+      parameters:
+        - { $ref: "#/components/parameters/offset" }
+        - { $ref: "#/components/parameters/user" }
+      responses:
+        200: { $ref: "#/components/responses/comments" }
   /postVote/{id}:
     post:
       parameters: [{ $ref: "#/components/parameters/idInPath" }]

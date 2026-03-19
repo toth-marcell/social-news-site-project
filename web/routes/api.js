@@ -12,6 +12,7 @@ import {
   DeletePost,
   EditComment,
   EditPost,
+  GetComments,
   GetPost,
   GetPosts,
   TopComment,
@@ -52,6 +53,46 @@ router.get("/posts", async (req, res) => {
 router.get("/posts/new", async (req, res) => {
   const result = await GetPosts(
     "new",
+    req.query.offset,
+    req.query,
+    res.locals.user
+  );
+  res.json(result);
+});
+
+router.get("/posts/top", async (req, res) => {
+  const result = await GetPosts(
+    "top",
+    req.query.offset,
+    req.query,
+    res.locals.user
+  );
+  res.json(result);
+});
+
+router.get("/comments", async (req, res) => {
+  const result = await GetComments(
+    "hot",
+    req.query.offset,
+    req.query,
+    res.locals.user
+  );
+  res.json(result);
+});
+
+router.get("/comments/new", async (req, res) => {
+  const result = await GetComments(
+    "new",
+    req.query.offset,
+    req.query,
+    res.locals.user
+  );
+  res.json(result);
+});
+
+router.get("/comments/top", async (req, res) => {
+  const result = await GetComments(
+    "top",
     req.query.offset,
     req.query,
     res.locals.user
