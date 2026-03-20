@@ -3,3 +3,4 @@ data
 erd.svg
 .env
 coverage
+tests.json

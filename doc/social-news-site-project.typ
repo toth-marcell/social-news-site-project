@@ -1,3 +1,7 @@
+#pdf.attach("social-news-site-project.typ", relationship: "source")
+#pdf.attach("../web/openapi.yaml", relationship: "data")
+#pdf.attach("../web/tests.json", relationship: "data")
+#pdf.attach("../web/erd.svg", relationship: "data")
 #let title = "Social news projekt"
 #let author = "Tóth Marcell"
 #set text(lang: "hu", font: "Inter", stylistic-set: (2, 7))
@@ -11,16 +15,22 @@
 })
 #show link: it => text(blue, it)
 #show raw: set text(font: "Hack")
+#show figure: set block(breakable: true)
+#show figure.where(
+  kind: table,
+): set figure.caption(position: top)
 
 #v(30%)
 #align(center)[
-  #image("logo.svg")
-  #text(2.5em, weight: "bold", title)
+  #image("../web/public/logo.svg", width: 30%),
+  #text(2.5em)[* #title *]
 
-  #author
+  #text(1.5em)[_ #author _]
 ]
 
 #outline(indent: 2em)
+#outline(indent: 2em, target: figure.where(kind: table), title: "Táblázatok")
+#outline(indent: 2em, target: figure.where(kind: image), title: "Ábrák")
 
 = Specifikáció
 <specification>
@@ -69,24 +79,53 @@ Emellett tudnak megjegyzéseket tenni a bejegyzésekre, egy hierarchikus komment
 Ez az adatbázis-diagram automatikusan van elkészítve az Sequelize ORM adatbázis definícióból, a `sequelize-erd` NPM csomaggal.
 
 Viszont mivel ez a csomag elég régen volt frissítve, nem 100%-ban korrekt a diagram, így ezt szerkesztenem kellett. Mivel a diagram csak egy svg, így Inkscape-ben ezt egyszerűen meg lehet tenni. A hiba azért van, mert a *Comment* tábla saját magára utal a _ParentId_ mezőjében, ezzel ábrázolja a kommentek alatti kommenteket. Ez a kapcsolat az automatikus diagram rosszul a *Comment*-<*CommentVote* kapcsolatra van rárajzolva, így: *Comment*>-<*CommentVote*. Tehát ez két külön nyíl lenne, ami lent a szerkesztett verzióban látható.
-#align(center, image("../web/erd.svg", height: 76%))
+#figure(image("../web/erd.svg", height: 75%), caption: "Adatbázis diagram")
 
 = API
 <api>
-Ez a rész az API OpenAPI specifikációjából van generálva, ami a `web/openapi.yaml` forrásfájlban van definiálva, és a szerveren elérhető az `/openapi.json` útvonalon. Ennek egy interaktív verzió elérhető a szerveren a `/api-docs` útvonalon, ami ennél a statikus oldalán sokkal hasznosabb az API megismerésére és #link(<manual-testing>)[manuális tesztelésére].
+Ez a rész az API OpenAPI specifikációjából van generálva, ami a `web/openapi.yaml` forrásfájlban van definiálva, és a szerveren elérhető a `/openapi.json` útvonalon.
+Ennek egy interaktív verziója elérhető a szerveren a `/api-docs` útvonalon, ami ennél az oldalán sokkal hasznosabb az API megismerésére és #link(<manual-testing>)[manuális tesztelésére], főleg hogy sokkal több információt tartalmaz, ami ebbe az egyszerű táblázatba nem fért bele.
 #let openapi = yaml("../web/openapi.yaml")
-#for (path, methods) in openapi.paths [
-  #for (method, details) in methods [
-    #if (method == "parameters") { continue }
-
-    *#upper(method)* #path
-  ]
-]
+#figure(
+  table(
+    columns: 3,
+    table.header([*Metódus*], [*Útvonal*], [*Leírás*]),
+    ..openapi
+      .paths
+      .pairs()
+      .map(((path, methods)) => {
+        methods
+          .pairs()
+          .filter(x => x.at(0) != "parameters")
+          .map(((method, details)) => {
+            return (
+              [
+                *#upper(method)*
+              ],
+              [
+                #path
+              ],
+              [
+                #details.summary
+              ],
+            )
+          })
+      })
+      .flatten(),
+  ),
+  caption: "API útvonalak",
+)
 = Tesztelés
 <testing>
 
 == Manuális tesztelés
 <manual-testing>
+
+== API manuális tesztelése
+Ugyan az API van automatikus tesztelve, lehetőség van manuálisan is tesztelni, illetve
+
+== Felhasználói felületek tesztelése
+A felhasználói felületeket (a weboldalt, asztali- és mobilalkalmazást) manuálisan teszteltem.
 
 == Automatikus tesztelés
 <automatic-testing>
@@ -94,30 +133,43 @@ Ez a rész az API OpenAPI specifikációjából van generálva, ami a `web/opena
 === Web szerver egység és integrációs tesztelése
 <web-automatic-testing>
 A web szerver tesztelése a `jest` és `supertest` NPM csomaggal történt. A `jest`-et használtam a tesztek kezelése, ez találja meg és futtatja a tesztfájlokat, és készítési el a tesztelés eredményét és a code coverage adatokat. A `supertest` a szerver futtatására van, hogy ne kelljen elindítani/megállítani a szervert manuálisan.
+A `web` könyvtárból futtatható a teszt a `pnpm test` paranccsal, vagy a `pnpm run testToJson` parancssal a JSON formátumú eredmények kiírásához.
 
 === Web szerver egység és integrációs teszteredmények
 
-#show table.header: it => text(weight: "bold", it)
-#let tests = json("tests.json")
+A következő táblázatok automatikus lettek generálva a `jest` JSON kimenetéből.
+
+#let tests = json("../web/tests.json")
 #for suite in tests.testResults [
-  ==== #suite.name.split(regex("/|\\\\")).last()
-  #table(
-    columns: 3,
-    table.header("Kategória", "Teszt neve", "Idő"),
-    ..suite
-      .assertionResults
-      .map(result => (
-        [
-          #result.ancestorTitles.join(" - ")
-        ],
-        [
-          #result.title
-        ],
-        [
-          #result.duration ms
-        ],
-      ))
-      .flatten(),
+  #let testFileName = suite.name.split(regex("/|\\\\")).last()
+  #figure(
+    table(
+      columns: (auto, 1fr, 1.2fr, 4em),
+      table.header([*Siker?*], [*Kategória*], [*Teszt neve*], [*Idő*]),
+      ..suite
+        .assertionResults
+        .map(result => (
+          [
+            #if not result.failing { sym.checkmark }
+          ],
+          [
+            #result.ancestorTitles.join(" - ")
+          ],
+          [
+            #result.title
+          ],
+          [
+            #result.duration ms
+          ],
+        ))
+        .flatten(),
+    ),
+    caption: [#testFileName teszt fájl eredményei],
   )
 ]
 
+= Felhasználói dokumentáció
+
+A felhasználók dönthetnek két felület közül, az asztali- és mobilalkalmazás csak az egyszerű használatra van készítve, lehet regisztrálni vagy belépni, majd böngészni a bejegyzések között, létrehozni bejegyzést, szavazni, olvasni és írni kommenteket, illetve szerkeszteni a saját tartalmat.
+Ezzel szemben a weboldal sokkal több funkciót tartalmaz: Meg lehet nézni felhasználók profilját, szűrni a bizonyos felhasználók bejegyzéseire és megjegyzéseire, szerkeszteni a saját profilt.
+Illetve csak a weboldalon érhetők el az adminisztrátori funkciók: napló olvasása, felhasználók szerkesztése.

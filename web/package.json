@@ -30,7 +30,8 @@
     "generateTestData": "node utils/generateTestData.js",
     "erd": "node utils/erd.js",
     "dev": "nodemon",
-    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --silent"
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --silent",
+    "testToJson": "node --experimental-vm-modules node_modules/jest/bin/jest.js --silent --json > tests.json"
   },
   "main": "server.js",
   "pnpm": {
