@@ -82,6 +82,10 @@ public class API
     {
         return (await http.GetFromJsonAsync<PostPage>($"posts/new?offset={offset}", jsonOptions))!;
     }
+    public async Task<PostPage> GetTopPostPage(int offset)
+    {
+        return (await http.GetFromJsonAsync<PostPage>($"posts/top?offset={offset}", jsonOptions))!;
+    }
     public async Task<PostWithComments> GetPostDetails(int id)
     {
         return (await http.GetFromJsonAsync<PostWithComments>($"posts/{id}", jsonOptions))!;

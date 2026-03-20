@@ -143,6 +143,9 @@ public partial class MainViewModel : ViewModelBase
                 case "new":
                     CurrentPage = await API.GetNewPostPage(offset);
                     break;
+                case "top":
+                    CurrentPage = await API.GetTopPostPage(offset);
+                    break;
             }
             foreach (Post post in CurrentPage.Posts)
             {

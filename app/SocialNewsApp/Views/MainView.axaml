@@ -25,6 +25,7 @@
 					<MenuItem Header="{Binding PostSort, StringFormat=_Sorting by {0}}">
 						<MenuItem Header="_hot" Command="{Binding ChangeSortCommand}" CommandParameter="hot"/>
 						<MenuItem Header="_new" Command="{Binding ChangeSortCommand}" CommandParameter="new"/>
+						<MenuItem Header="_top" Command="{Binding ChangeSortCommand}" CommandParameter="top"/>
 					</MenuItem>
 					<Separator Height="NaN" Width="1" IsVisible="{Binding IsLoggedIn}"/>
 					<MenuItem Command="{Binding NewPostCommand}" Header="_New post" IsVisible="{Binding IsLoggedIn}"/>
