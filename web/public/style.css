@@ -28,7 +28,7 @@ a:has(button) {
 main a > button {
   width: 100%;
 }
-h1 img {
+h1 svg {
   height: 2em;
 }
 h1 > a {
