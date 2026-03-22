@@ -7,10 +7,10 @@
   </label>
   <label>
     Password
-    <div id="passwordInputGrid">
+    <fieldset role="group">
       <input type="password" name="password" value="<%= password %>" id="passwordInput">
       <button type="button" class="outline" id="showPasswordButton" style="display: none;">show</button>
-    </div>
+    </fieldset>
   </label>
   <% if (typeof(msg) != "undefined") { %>
   <mark class="msg"><%= msg %></mark>
