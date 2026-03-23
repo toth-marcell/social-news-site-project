@@ -180,14 +180,29 @@ A következő táblázatok automatikus lettek generálva a `jest` JSON kimeneté
 = Felhasználói dokumentáció
 <user-documentation>
 
-A felhasználók dönthetnek két felület közül, az asztali- és mobilalkalmazás csak az egyszerű használatra van készítve, lehet regisztrálni vagy belépni, majd böngészni a bejegyzések között, létrehozni bejegyzést, szavazni, olvasni és írni kommenteket, illetve szerkeszteni a saját tartalmat.
+A felhasználók dönthetnek két felület közül: az asztali- és mobilalkalmazás csak az egyszerű használatra van készítve, lehet regisztrálni vagy belépni, majd böngészni a bejegyzések között, létrehozni bejegyzést, szavazni, olvasni és írni kommenteket, illetve szerkeszteni a saját tartalmat.
+
 Ezzel szemben a weboldal sokkal több funkciót tartalmaz: Meg lehet nézni felhasználók profilját, szűrni a bizonyos felhasználók bejegyzéseire és megjegyzéseire, szerkeszteni a saját profilt.
 Illetve csak a weboldalon érhetők el az adminisztrátori funkciók: napló olvasása, felhasználók szerkesztése.
 
 == Weboldal
-#figure([], caption: "Főoldal, első látogatás")
-#figure([], caption: "Regisztráció")
-#figure([], caption: "Belépés regisztráció után")
-#figure([], caption: "Főoldal, belépve")
-#figure([], caption: "Főoldal, adminisztrátor")
+#show image: it => block(stroke: black, it)
+Az első látogatáskor a főoldalon láthatjuk a bejegyzéseket, legelöl a mai legtöbbet szavazott bejegyzéseket.
+A jobb felső sarokban vannak linkek a regisztráció, illetve a bejelentkezés oldalakra, mivel nem vagyunk még bejelentkezve.
+#figure(image("screenshots/web/frontpage-first.png"), caption: "Web: Főoldal, első látogatás")
+#figure(image("screenshots/web/post-first.png"), caption: "Web: Egy bejegyzés")
+Ha rákattintunk egy posztra, láthatjuk a részleteit, ha vannak, kommenteket. Viszont mivel nem vagyunk bejelentkezve, mi nem tudunk válaszolni rá.
+Viszont ha be vagyunk jelentkezve, akkor látható egy megjegyzés mező és gomb, amivel a bejegyzésre tudunk kommentelve, illetve a kommenteken látható lesz egy válasz gomb.
+#figure(image("screenshots/web/post.png"), caption: "Web: Egy bejegyzés, bejelentkezve")
+A regisztrációhoz nyomjuk meg a jobb felső sarokban a regisztráció gombot, ami linkel a regisztrációs oldalra. Itt meg kell adnunk a kívánt nevet és jelszót.
+
+A regisztráció gombra kattintva két kimenet lehet:
+- ha sikeres a regisztráció, akkor átirányít a belépés oldalra, hogy be tudjunk lépni a frissen készített fiókunkba.
+- ha nem sikeres a regisztráció, akkor maradunk ezen az oldalon és kapunk egy hibaüzenetet
+
+#figure(image("screenshots/web/register.png"), caption: "Web: Regisztráció")
+#figure(image("screenshots/web/register-nametaken.png"), caption: "Web: Sikertelen regisztráció")
+#figure(image("screenshots/web/login-after-register.png"), caption: "Web: Belépés regisztráció után")
+#figure(image("screenshots/web/frontpage-after-login.png"), caption: "Web: Főoldal, belépve")
+#figure(image("screenshots/web/frontpage-admin.png"), caption: "Web: Főoldal, adminisztrátor")
 == Asztali alkalmazás
