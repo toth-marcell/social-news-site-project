@@ -103,7 +103,7 @@ public partial class MainViewModel : ViewModelBase
     // Main page
     [ObservableProperty]
     PostPage currentPage;
-    readonly API API = new("http://localhost:3000/api/");
+    readonly API API = new("https://social-news.toth-marcell.xyz/api/");
     public RelayCommand RefreshPostsCommand { get; set; }
     string postSort = "hot";
     public string PostSort
