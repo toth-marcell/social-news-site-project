@@ -47,7 +47,7 @@
 			<SelectableTextBlock Text="{Binding LinkType}" VerticalAlignment="Center"/>
 			<HyperlinkButton Content="{Binding Link}" NavigateUri="{Binding Link}" VerticalAlignment="Center"/>
 		</StackPanel>
-		<SelectableTextBlock Grid.Row="2" Text="{Binding Text}"/>
+		<SelectableTextBlock Grid.Row="2" Text="{Binding Paragraphs}"/>
 		<StackPanel Grid.Row="3" IsVisible="{Binding SubmitCommentCommand, Converter={x:Static ObjectConverters.IsNotNull}}">
 			<Label Target="commentField">New comment</Label>
 			<TextBox AcceptsReturn="True" Text="{Binding CommentField}" x:Name="commentField"/>

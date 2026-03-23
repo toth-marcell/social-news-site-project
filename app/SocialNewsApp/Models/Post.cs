@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
+using System.Linq;
 
 namespace SocialNewsApp.Models;
 
@@ -60,6 +61,7 @@ public partial class Post : PostContents
 }
 public partial class PostWithComments : Post
 {
+    public string Paragraphs => string.Join("\n", Text.Split("\r\n\r\n").Select(x => x.Replace("\r\n", " ")));
     [ObservableProperty]
     Comment[] comments;
     [ObservableProperty]

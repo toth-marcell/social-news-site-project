@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -44,4 +45,5 @@ public partial class Comment : ObservableObject
     bool isEditing = false;
     [ObservableProperty]
     string newText;
+    public string Paragraphs => string.Join("\n", Text.Split("\r\n\r\n").Select(x => x.Replace("\r\n", " ")));
 }

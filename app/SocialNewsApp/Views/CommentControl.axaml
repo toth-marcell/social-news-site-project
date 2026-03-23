@@ -37,7 +37,7 @@
 			<SelectableTextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
 			<SelectableTextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
 		</StackPanel>
-		<SelectableTextBlock Text="{Binding Text}" IsVisible="{Binding !IsEditing}"/>
+		<SelectableTextBlock Text="{Binding Paragraphs}" IsVisible="{Binding !IsEditing}"/>
 		<StackPanel IsVisible="{Binding IsEditing}">
 			<TextBox AcceptsReturn="True" Text="{Binding NewText}"/>
 			<Button HorizontalAlignment="Right" Command="{Binding EditCommand}" CommandParameter="{Binding NewText}" Margin="0,5,0,0">Save</Button>
