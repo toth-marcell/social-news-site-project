@@ -73,6 +73,7 @@ article a {
 }
 .msg-fail {
   --pico-mark-background-color: #d93526;
+  color: white;
 }
 article > svg {
   float: left;
