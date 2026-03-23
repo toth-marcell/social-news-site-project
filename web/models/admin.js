@@ -16,3 +16,19 @@ export async function GetLogs(offset = 0) {
     offset,
   };
 }
+
+export async function GetUsers(offset = 0) {
+  if (typeof offset == "string") offset = parseInt(offset);
+  const limit = 50;
+  const result = await User.findAndCountAll({
+    limit,
+    offset,
+    order: [["id", "DESC"]],
+  });
+  return {
+    users: result.rows,
+    count: result.count,
+    limit,
+    offset,
+  };
+}

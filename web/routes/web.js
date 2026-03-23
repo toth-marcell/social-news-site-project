@@ -2,7 +2,7 @@ import cookieParser from "cookie-parser";
 import express from "express";
 import WriteLog from "../middleware/log.js";
 import { AdminOnly, CookieAuth, LoggedInOnly } from "../middleware/webAuth.js";
-import { GetLogs } from "../models/admin.js";
+import { GetLogs, GetUsers } from "../models/admin.js";
 import { EditUser, GetProfile, Login, Register } from "../models/auth.js";
 import { Comment } from "../models/models.js";
 import {
@@ -330,9 +330,14 @@ router.post("/commentVote/:id", LoggedInOnly, async (req, res) => {
   res.redirect(redirectUrl);
 });
 
-router.get("/admin", LoggedInOnly, AdminOnly, async (req, res) => {
+router.get("/admin/logs", LoggedInOnly, AdminOnly, async (req, res) => {
   const result = await GetLogs(req.query.offset);
-  res.render("admin", result);
+  res.render("logs", result);
+});
+
+router.get("/admin/users", LoggedInOnly, AdminOnly, async (req, res) => {
+  const result = await GetUsers(req.query.offset);
+  res.render("users", result);
 });
 
 router.use((req, res, next) => {

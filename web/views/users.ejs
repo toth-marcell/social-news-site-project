@@ -1,0 +1,64 @@
+<%- include("head") -%>
+<section>
+  <h2>Users</h2>
+  <div class="grid">
+    <% if (offset != 0) { %>
+    <a href="/admin/users?offset=<%= offset - limit %>">
+      <button type="button"><%- include ("icons/left") -%></button>
+    </a>
+    <% } %>
+    <span class="centered-large-text"><%= offset %> - <%= (offset + limit > count) ? count : offset + limit %></span>
+    <% if (offset + limit < count) { %>
+    <a href="/admin/users?offset=<%= offset + limit %>">
+      <button type="button"><%- include ("icons/right") -%></button>
+    </a>
+    <% } %>
+  </div>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Id</th>
+        <th>Account created at</th>
+        <th>Account last edited</th>
+        <th>Name</th>
+        <th>Identicon</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (profile of users) { %>
+      <tr>
+        <td><%= profile.id %></td>
+        <td><%= dateFormat(profile.createdAt) %></td>
+        <td><%= dateFormat(profile.updatedAt) %></td>
+        <td>
+          <%= profile.name %>
+          <% if (profile.isAdmin) { %>
+          <mark>Admin</mark>
+          <% } %>
+        </td>
+        <td><%- profile.identicon %></td>
+        <td>
+          <a href="/users/<%= profile.id %>">
+            <button type="button" class="content-right"><%- include("icons/right.ejs") -%></button>
+          </a>
+        </td>
+      </tr>
+      <% } %>
+    </tbody>
+  </table>
+  <div class="grid">
+    <% if (offset != 0) { %>
+    <a href="/admin/users?offset=<%= offset - limit %>">
+      <button type="button"><%- include ("icons/left") -%></button>
+    </a>
+    <% } %>
+    <span class="centered-large-text"><%= offset %> - <%= (offset + limit > count) ? count : offset + limit %></span>
+    <% if (offset + limit < count) { %>
+    <a href="/admin/users?offset=<%= offset + limit %>">
+      <button type="button"><%- include ("icons/right") -%></button>
+    </a>
+    <% } %>
+  </div>
+</section>
+<%- include("foot") -%>
