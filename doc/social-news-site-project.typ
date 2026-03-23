@@ -43,7 +43,7 @@ Emellett tudnak megjegyzéseket tenni a bejegyzésekre, egy hierarchikus komment
 
 == Technológiák
 <technologies>
-- Weboldal: Express (Node.js) alapú szerver, ami EJS szerveroldali renderelést használ, illetve HTML űrlapokat a bemenethez. Reszponzív és követi az eszköz világos/sötét témáját.
+- Weboldal: Express (Node.js) alapú szerver, ami EJS szerveroldali renderelést használ, illetve HTML űrlapokat a bemenethez. Reszponzív és követi az eszköz világos/sötét témáját. Az SSR (szerver oldali renderelés) miatt használható böngészőoldali Javascript nélkül is, de pár kényelmi funkció csak azzal érhető el.
 - API: Express (Node.js) alapú REST API szerver, OpenAPI-al dokumentálva
 - Adatbázis: Sequelize ORM, sqlite-ra beállítva, de egyszerűen konfigurálható más relációs adatbázis használatára
 - Asztali és mobilalkalmazás: Avalonia C\# többplatformú applikáció, működik asztali operációs rendszereken és Androidon is (emellett az Avalonia használata miatt lehet egy iOS ás böngészős verzió is, de ezeket nem teszteltem, mivel nincs iOS eszközöm, a böngészős verzió pedig nem kell, van "natív" weboldal)
@@ -76,6 +76,10 @@ Emellett tudnak megjegyzéseket tenni a bejegyzésekre, egy hierarchikus komment
 
 = Adatbázis
 <database>
+
+Az adatbázis eléréséhez a Sequelize ORM-et használom. A `sqlite` adatbázisra van konfigurálva, mert így egyszerűbb a szerver futtatása, az adatbázis csak egy fájlban van tárolva, nem kell külön az adatbázis futtatásával foglalkozni. Viszont ha kellene, például a szoftver skálázása miatt, más adatbázist használni, a Sequelize használata miatt egyszerű átkonfigurálni.
+
+== Adatbázis diagram
 Ez az adatbázis-diagram automatikusan van elkészítve az Sequelize ORM adatbázis definícióból, a `sequelize-erd` NPM csomaggal.
 
 Viszont mivel ez a csomag elég régen volt frissítve, nem 100%-ban korrekt a diagram, így ezt szerkesztenem kellett. Mivel a diagram csak egy svg, így Inkscape-ben ezt egyszerűen meg lehet tenni. A hiba azért van, mert a *Comment* tábla saját magára utal a _ParentId_ mezőjében, ezzel ábrázolja a kommentek alatti kommenteket. Ez a kapcsolat az automatikus diagram rosszul a *Comment*-<*CommentVote* kapcsolatra van rárajzolva, így: *Comment*>-<*CommentVote*. Tehát ez két külön nyíl lenne, ami lent a szerkesztett verzióban látható.
@@ -126,6 +130,11 @@ Ugyan az API van automatikus tesztelve, lehetőség van manuálisan is tesztelni
 
 == Felhasználói felületek tesztelése
 A felhasználói felületeket (a weboldalt, asztali- és mobilalkalmazást) manuálisan teszteltem.
+Egy teljes kézi tesztelést úgy lehet végrehajtani, hogy követjük a #link(<user-documentation>)[felhasználói dokumentációt] és kipróbálunk minden egyes listázott funkciót.
+Minden gombnyomásnál pedig megnézzük, hogy az történt-e, amit vártunk.
+Ezt a felhasználói dokumentáció írása közben is megcsináltam, tehát azt mondhatjuk, minden ott listázott funkció megfelelően működik.
+
+A manuális tesztelés előtt, ha szeretnénk, hogy legyenek már felhasználók, bejegyzések és kommentek, ne üres legyen minden, futtassuk a `generateTestData` scriptet, pl. `pnpm run generateTestData`. Ez a script létrehoz sok adatot véletlenszerű nevekkel/szöveggel/stb.
 
 == Automatikus tesztelés
 <automatic-testing>
@@ -169,7 +178,16 @@ A következő táblázatok automatikus lettek generálva a `jest` JSON kimeneté
 ]
 
 = Felhasználói dokumentáció
+<user-documentation>
 
 A felhasználók dönthetnek két felület közül, az asztali- és mobilalkalmazás csak az egyszerű használatra van készítve, lehet regisztrálni vagy belépni, majd böngészni a bejegyzések között, létrehozni bejegyzést, szavazni, olvasni és írni kommenteket, illetve szerkeszteni a saját tartalmat.
 Ezzel szemben a weboldal sokkal több funkciót tartalmaz: Meg lehet nézni felhasználók profilját, szűrni a bizonyos felhasználók bejegyzéseire és megjegyzéseire, szerkeszteni a saját profilt.
 Illetve csak a weboldalon érhetők el az adminisztrátori funkciók: napló olvasása, felhasználók szerkesztése.
+
+== Weboldal
+#figure([], caption: "Főoldal, első látogatás")
+#figure([], caption: "Regisztráció")
+#figure([], caption: "Belépés regisztráció után")
+#figure([], caption: "Főoldal, belépve")
+#figure([], caption: "Főoldal, adminisztrátor")
+== Asztali alkalmazás
