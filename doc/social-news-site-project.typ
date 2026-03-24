@@ -2,6 +2,8 @@
 #pdf.attach("../web/openapi.yaml", relationship: "data")
 #pdf.attach("../web/tests.json", relationship: "data")
 #pdf.attach("../web/erd.svg", relationship: "data")
+#pdf.attach("uml/model-viewmodel.pdf", relationship: "data")
+#pdf.attach("uml/usecase.pdf", relationship: "data")
 #let title = "Social news projekt"
 #let author = "Tóth Marcell"
 #set text(12pt, lang: "hu", font: "Times New Roman")
@@ -97,7 +99,7 @@ Viszont mivel ez a csomag elég régen volt frissítve, nem 100%-ban korrekt a d
 #pagebreak()
 #figure(image("../web/erd.svg", height: 1fr), caption: "Adatbázis diagram")
 
-= API
+= REST API
 <api>
 Ez a rész az API OpenAPI specifikációjából van generálva, ami a `web/openapi.yaml` forrásfájlban van definiálva, és a szerveren elérhető a #link("https://social-news.toth-marcell.xyz/openapi.json")[/openapi.json] útvonalon.
 Ennek egy interaktív verziója elérhető a szerveren a #link("https://social-news.toth-marcell.xyz/api-docs/")[/api-docs] útvonalon, ami ennél az oldalán sokkal hasznosabb az API megismerésére és #link(<manual-testing>)[manuális tesztelésére], főleg hogy sokkal több információt tartalmaz, ami ebbe az egyszerű táblázatba nem fért bele.
@@ -131,6 +133,14 @@ Ennek egy interaktív verziója elérhető a szerveren a #link("https://social-n
   ),
   caption: "API útvonalak",
 )
+#set page("a3", flipped: true)
+= Avalonia asztali- és mobilalkalmazás osztálydiagram
+== ViewModel és Model osztályok
+#image("uml/model-viewmodel.pdf", height: 1fr)
+#set page("a4", flipped: true)
+= Használati eset diagram
+#image("uml/usecase.pdf", height: 1fr))
+#set page(flipped: false)
 = Tesztelés
 <testing>
 
