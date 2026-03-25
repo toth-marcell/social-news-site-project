@@ -2,6 +2,7 @@
 #pdf.attach("../web/openapi.yaml", relationship: "data")
 #pdf.attach("../web/tests.json", relationship: "data")
 #pdf.attach("../web/erd.svg", relationship: "data")
+#pdf.attach("uml/view-app.pdf", relationship: "data")
 #pdf.attach("uml/model-viewmodel.pdf", relationship: "data")
 #pdf.attach("uml/usecase.pdf", relationship: "data")
 #let title = "Social news projekt"
@@ -133,13 +134,13 @@ Ennek egy interaktív verziója elérhető a szerveren a #link("https://social-n
   ),
   caption: "API útvonalak",
 )
+= Asztali- és mobilalkalmazás osztálydiagramok
+#figure(image("uml/view-app.pdf", height: 1fr), caption: "View és App réteg osztályok")
 #set page("a3", flipped: true)
-= Avalonia asztali- és mobilalkalmazás osztálydiagram
-== ViewModel és Model osztályok
-#image("uml/model-viewmodel.pdf", height: 1fr)
+#figure(image("uml/model-viewmodel.pdf", height: 1fr), caption: "ViewModel és Model réteg osztályok")
 #set page("a4", flipped: true)
 = Használati eset diagram
-#image("uml/usecase.pdf", height: 1fr))
+#figure(image("uml/usecase.pdf", height: 1fr), caption: "Használati eset diagram")
 #set page(flipped: false)
 = Tesztelés
 <testing>
