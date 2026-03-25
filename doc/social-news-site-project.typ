@@ -218,6 +218,7 @@ A jobb felső sarokban vannak linkek a regisztráció, illetve a bejelentkezés 
 #figure(image("screenshots/web/post-first.png"), caption: "Web: Egy bejegyzés")
 Ha rákattintunk egy posztra, láthatjuk a részleteit, ha vannak, kommenteket. Viszont mivel nem vagyunk bejelentkezve, mi nem tudunk válaszolni rá.
 Viszont ha be vagyunk jelentkezve, akkor látható egy megjegyzés mező és gomb, amivel a bejegyzésre tudunk kommentelve, illetve a kommenteken látható lesz egy válasz gomb.
+<post-figure>
 #figure(image("screenshots/web/post.png"), caption: "Web: Egy bejegyzés, bejelentkezve")
 A regisztrációhoz nyomjuk meg a jobb felső sarokban a regisztráció gombot, ami linkel a regisztrációs oldalra.
 Itt meg kell adnunk a kívánt nevet és jelszót.
@@ -236,8 +237,24 @@ Az űrlap beküldése után két eredmény lehet:
 #figure(image("screenshots/web/frontpage-after-login.png"), caption: "Web: Főoldal, belépve")
 Ha be vagyunk lépve, akkor a felső menü megváltozik: a bal oldalán megjelenik egy gomb új bejegyzés létrehozásához, a jobb oldalán pedig látjuk a felhasználónevünket, pontjainkat, és egy a registráció/bejelentkezés gombok helyett egy kilépés gombot.
 
-Ha egy adminisztrátorként vagyunk belépve, akkor a felső navigációs menüben láthatunk még 2 gombot, a napló olvasására, és a felhasználók listázására.
+Ha egy adminisztrátorként vagyunk belépve, akkor a felső navigációs menüben láthatunk még 2 gombot, a napló olvasására, és a felhasználók listázására. Erre még visszatérünk.
 #figure(image("screenshots/web/frontpage-admin.png"), caption: "Web: Főoldal, adminisztrátor")
+Az új bejegyzés oldalon megadhatjuk az új bejegyzésünk tartalmát, és közzétehetjük azt.
+Egy bejegyzésnek meg kell felelnie a következő feltételeknek, amiket ha nem teljesítünk, megfelelő hibaüzenetet kapunk:
+- A Title és Category mezőket mindenképpen ki kell tölteni
+- Ha meg van adva Link akkor kell Link type, és fordítva is
+- A Link/Linktype és a Textből legalább az egyiknek kell lennie, de lehet mindkettő is
+Az új bejegyzés sikeres létrehozása után átirányít az oldalára, lásd #link(<post-figure>)[itt].
+#figure(image("screenshots/web/newpost.png"), caption: "Web: Új bejegyzés oldal")
+Az új bejegyzésünkre kommentelhetünk is. Egy kommentre csak annyi követelmény van, hogy nem lehet üres. Pontosan az is követelmény, hogy létezzen a bejegyzés van megjegyzés amire válaszol, de ilyen hibaüzenetet általában a felhasználó nem láthat (esetleg csak akkor, ha pont törölték a tartalmat amire kommentelni szeretett volna).
+
+Emellett meg lehet figyelni, hogy a saját tartalmunkon (posztjainkon és megjegyzéseinkek) vannak törlésre és szerkesztésre gombok. Ezeket csak akkor láthatjuk, ha a saját tartalmunkat nézzünk, vagy ha adminisztrátor vagyunk, akik törölhetnek és szerkeszthetnek bármit, ezzel biztosítják, hogy a weboldal szabályai (amik elérhetők az oldal láblécén egy linken) be vannak tartva.
+
+A törlés gomb megnyomásra törli a tartalmat. Ugyan lehetséges, hogy hibaüzenetet ad vissza (nincs jogosultság), de ez nem fog előfordulni a felhasználói felületen, mert a gomb eleve nem lesz látható ilyen esetben.
+
+A szerkesztés gomb mind a bejegyzéseknél és kommenteknél elirányít a megfelelő szerkesztési űrlaphoz. A szerkesztésénél ugyanazoknak a követelményeknek kell megfelelni, mint a létrehozásnál.
+#figure(image("screenshots/web/editpost.png"), caption: "Web: Bejegyzés szerkesztése oldal")
+#figure(image("screenshots/web/editcomment.png"), caption: "Web: Megjegyzés szerkesztése oldal")
 == Asztali- és mobilalkalmazás
 Az asztali és mobilalkalmazás ugyanabból a forráskódból készült, így ugyanazok a funkciók érhetők el.
 

@@ -139,15 +139,20 @@ export async function GetPost(id, user) {
 export async function CreatePost(title, link, linkType, text, category, user) {
   if (!(title && category))
     return { status: 400, msg: "The title and category must be filled!" };
+  if (link && !linkType)
+    return {
+      status: 400,
+      msg: "If the link is set the link type must be set too.",
+    };
+  if (linkType && !link)
+    return {
+      status: 400,
+      msg: "If the link type is set the link must be set too.",
+    };
   if (!((link && linkType) || text))
     return {
       status: 400,
       msg: "The link and link type; or the text field must be filled.",
-    };
-  if ((link && !linkType) || (linkType && !link))
-    return {
-      status: 400,
-      msg: "If the link is set the link type must be set too.",
     };
   const post = await user.createPost({
     title,
@@ -190,15 +195,20 @@ export async function EditPost(
     };
   if (!(title && category))
     return { status: 400, msg: "The title and category must be filled!" };
+  if (link && !linkType)
+    return {
+      status: 400,
+      msg: "If the link is set the link type must be set too.",
+    };
+  if (linkType && !link)
+    return {
+      status: 400,
+      msg: "If the link type is set the link must be set too.",
+    };
   if (!((link && linkType) || text))
     return {
       status: 400,
       msg: "The link and link type; or the text field must be filled.",
-    };
-  if ((link && !linkType) || (linkType && !link))
-    return {
-      status: 400,
-      msg: "If the link is set the link type must be set too.",
     };
   await post.update({ title, link, linkType, text, category });
   return { status: 200, msg: "Success!" };
