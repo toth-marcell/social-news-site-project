@@ -40,7 +40,9 @@
 			</Button>
 			<SelectableTextBlock Text="{Binding Category}" VerticalAlignment="Center"/>
 			<SelectableTextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
-			<SelectableTextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
+			<SelectableTextBlock VerticalAlignment="Center">by</SelectableTextBlock>
+			<Svg Source="{Binding User.Identicon}"/>
+			<SelectableTextBlock Text="{Binding User.Name}" VerticalAlignment="Center"/>
 		</StackPanel>
 		<StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="5">
 			<SelectableTextBlock Text="{Binding Title}" FontSize="20" VerticalAlignment="Center"/>

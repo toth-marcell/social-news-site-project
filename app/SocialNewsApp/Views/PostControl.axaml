@@ -30,7 +30,9 @@
 			</Button>
 			<TextBlock Text="{Binding Category}" VerticalAlignment="Center"/>
 			<TextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
-			<TextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
+			<TextBlock VerticalAlignment="Center">by</TextBlock>
+			<Svg Source="{Binding User.Identicon}"/>
+			<TextBlock Text="{Binding User.Name}" VerticalAlignment="Center"/>
 		</StackPanel>
 		<StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="5">
 			<TextBlock Text="{Binding Title}" FontSize="20" VerticalAlignment="Center"/>

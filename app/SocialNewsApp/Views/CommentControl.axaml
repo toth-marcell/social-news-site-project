@@ -35,7 +35,9 @@
 				<materialIcons:MaterialIcon Kind="Pencil"/>
 			</ToggleButton>
 			<SelectableTextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
-			<SelectableTextBlock Text="{Binding User.Name, StringFormat=by {0}}" VerticalAlignment="Center"/>
+			<SelectableTextBlock VerticalAlignment="Center">by</SelectableTextBlock>
+			<Svg Source="{Binding User.Identicon}"/>
+			<SelectableTextBlock Text="{Binding User.Name}" VerticalAlignment="Center"/>
 		</StackPanel>
 		<SelectableTextBlock Text="{Binding Paragraphs}" IsVisible="{Binding !IsEditing}"/>
 		<StackPanel IsVisible="{Binding IsEditing}">

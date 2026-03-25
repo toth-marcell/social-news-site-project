@@ -33,10 +33,12 @@
 					<MenuItem Command="{Binding LogInOrRegisterCommand}" Header="_Log in or register" IsVisible="{Binding !IsLoggedIn}"/>
 					<MenuItem IsEnabled="False" IsVisible="{Binding IsLoggedIn}">
 						<MenuItem.Header>
-							<MultiBinding StringFormat="Logged in as {0} ({1} points)">
-								<Binding Path="CurrentUser.Name"/>
-								<Binding Path="CurrentUser.Points"/>
-							</MultiBinding>
+							<StackPanel Orientation="Horizontal" Spacing="5">
+								<TextBlock VerticalAlignment="Center">Logged in as</TextBlock>
+								<Svg Source="{Binding CurrentUser.Identicon}" MaxHeight="25"/>
+								<TextBlock VerticalAlignment="Center" Text="{Binding CurrentUser.Name}"/>
+								<TextBlock VerticalAlignment="Center" Text="{Binding CurrentUser.Points, StringFormat=({0} points)}"/>
+							</StackPanel>
 						</MenuItem.Header>
 					</MenuItem>
 					<MenuItem Command="{Binding LogOutCommand}" Header="_Log out" IsVisible="{Binding IsLoggedIn}"/>

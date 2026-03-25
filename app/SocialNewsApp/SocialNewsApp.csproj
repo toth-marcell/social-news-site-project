@@ -20,7 +20,9 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Jdenticon-net" />
     <PackageReference Include="Material.Icons.Avalonia" />
     <PackageReference Include="MessageBox.Avalonia" />
+    <PackageReference Include="Svg.Controls.Avalonia" />
   </ItemGroup>
 </Project>
