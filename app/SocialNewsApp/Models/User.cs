@@ -21,4 +21,6 @@ public partial class User : UserName
     DateTimeOffset createdAt;
     [ObservableProperty]
     DateTimeOffset updatedAt;
+    [ObservableProperty]
+    int points;
 }

@@ -31,7 +31,15 @@
 					<MenuItem Command="{Binding NewPostCommand}" Header="_New post" IsVisible="{Binding IsLoggedIn}"/>
 					<Separator Height="NaN" Width="1"/>
 					<MenuItem Command="{Binding LogInOrRegisterCommand}" Header="_Log in or register" IsVisible="{Binding !IsLoggedIn}"/>
-					<MenuItem Command="{Binding LogOutCommand}" Header="{Binding CurrentUser.Name, StringFormat=_Log out (logged in as {0})}" IsVisible="{Binding IsLoggedIn}"/>
+					<MenuItem IsEnabled="False" IsVisible="{Binding IsLoggedIn}">
+						<MenuItem.Header>
+							<MultiBinding StringFormat="Logged in as {0} ({1} points)">
+								<Binding Path="CurrentUser.Name"/>
+								<Binding Path="CurrentUser.Points"/>
+							</MultiBinding>
+						</MenuItem.Header>
+					</MenuItem>
+					<MenuItem Command="{Binding LogOutCommand}" Header="_Log out" IsVisible="{Binding IsLoggedIn}"/>
 				</Menu>
 			</ScrollViewer>
 			<ScrollViewer Grid.Row="1" Margin="10" HorizontalScrollBarVisibility="Auto">
