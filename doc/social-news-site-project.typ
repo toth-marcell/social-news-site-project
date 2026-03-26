@@ -15,6 +15,12 @@
 #set heading(numbering: "1.")
 #set page(
   margin: 2.5cm,
+  header: [
+    #set par(first-line-indent: 0pt)
+    * #title * #h(1fr) _ #author _
+    #v(-.5em)
+    #line(length: 100%)
+  ],
   footer: context {
     align(center)[
       #counter(page).get().first() / #counter(page).final().first()
@@ -50,7 +56,7 @@
 
 == Projekt leírás
 <project-description>
-Ez a projekt egy #link("https://en.wikipedia.org/wiki/Social_news_website")["social news site"], tehát egy olyan weboldal (és hozzátartozó asztali, illetve mobilalkalmazás) ahol a felhasználók bejegyzéseket hozhatnak létre, amik általában linkeket tartalmaznak cikkekre, vagy blogbejegyzésekre (de tartalmazhatnak szöveget is).
+Ez a projekt egy #link("https://en.wikipedia.org/wiki/Social_news_website")["social news site"], tehát egy olyan weboldal (és hozzátartozó asztali, illetve mobil alkalmazás) ahol a felhasználók bejegyzéseket hozhatnak létre, amik általában linkeket tartalmaznak cikkekre, vagy blogbejegyzésekre (de tartalmazhatnak szöveget is).
 Más felhasználók pedig tudnak szavazni ezekre a bejegyzésekre, ezzel feljebb sorolva azokat a főoldalon.
 Emellett tudnak megjegyzéseket tenni a bejegyzésekre, egy hierarchikus komment rendszerben.
 
@@ -59,19 +65,19 @@ Emellett tudnak megjegyzéseket tenni a bejegyzésekre, egy hierarchikus komment
 - Weboldal: Express (Node.js) alapú szerver, ami EJS szerveroldali renderelést használ, illetve HTML űrlapokat a bemenethez. Reszponzív és követi az eszköz világos/sötét témáját. Az SSR (szerver oldali renderelés) miatt használható böngészőoldali Javascript nélkül is, de pár kényelmi funkció csak azzal érhető el.
 - API: Express (Node.js) alapú REST API szerver, OpenAPI-al dokumentálva
 - Adatbázis: Sequelize ORM, sqlite-ra beállítva, de egyszerűen konfigurálható más relációs adatbázis használatára
-- Asztali és mobilalkalmazás: Avalonia C\# többplatformú applikáció, működik asztali operációs rendszereken és Androidon is (emellett az Avalonia használata miatt lehet egy iOS és böngészős verzió is, de ezeket nem teszteltem, mivel nincs iOS eszközöm, a böngészős verzió pedig nem kell, van "natív" weboldal)
+- Asztali és mobil alkalmazás: Avalonia C\# többplatformú applikáció, működik asztali operációs rendszereken és Androidon is (emellett az Avalonia használata miatt lehet egy iOS és böngészős verzió is, de ezeket nem teszteltem, mivel nincs iOS eszközöm, a böngészős verzió pedig nem kell, van "natív" weboldal)
 
 == Fejlesztési eszközök
 <development-tools>
 - Visual Studio Code IDE a legtöbb dologhoz, a következő bővítményekkel:
   - Prettier a kód automatikus formázásához (kivéve a HTML/EJS-hez, ehhez a VSCode beépített formázóját használtam)
   - Tinymist Typst ennek a dokumentációnak a készítéséhez
-- Visual Studio IDE az Avalonia alapú asztali és mobilalkalmazáshoz az AXAML Viewer bővítménnyel
+- Visual Studio IDE az Avalonia alapú asztali és mobil alkalmazáshoz az AXAML Viewer bővítménnyel
 
 == Autentikáció
 <authentication>
 - JWT (json web token) alapú autentikáció, ami tartalmazza a belépett felhasználó azonosítóját
-  - a weboldalon ez egy cookieban van tárolva
+  - a weboldalon ez egy cookie-ban van tárolva
   - az API-nál ez az Authentication HTTP fejléc Bearer típusát használja
 
 === Szerepkörök
@@ -134,7 +140,8 @@ Ennek egy interaktív verziója elérhető a szerveren a #link("https://social-n
   ),
   caption: "API útvonalak",
 )
-= Asztali- és mobilalkalmazás osztálydiagramok
+= Asztali és mobil alkalmazás osztálydiagramok
+Ezeket a diagrammokat a draw.io segítségével készítettem.
 #figure(image("uml/view-app.pdf", height: 1fr), caption: "View és App réteg osztályok")
 #set page("a3", flipped: true)
 #figure(image("uml/model-viewmodel.pdf", height: 1fr), caption: "ViewModel és Model réteg osztályok")
@@ -152,20 +159,20 @@ Ennek egy interaktív verziója elérhető a szerveren a #link("https://social-n
 Ugyan az API van automatikus tesztelve, lehetőség van manuálisan is tesztelni, illetve
 
 == Felhasználói felületek tesztelése
-A felhasználói felületeket (a weboldalt, asztali- és mobilalkalmazást) manuálisan teszteltem.
+A felhasználói felületeket (a weboldalt, asztali  és mobil alkalmazást) manuálisan teszteltem.
 Egy teljes kézi tesztelést úgy lehet végrehajtani, hogy követjük a #link(<user-documentation>)[felhasználói dokumentációt] és kipróbálunk minden egyes listázott funkciót.
 Minden gombnyomásnál pedig megnézzük, hogy az történt-e, amit vártunk.
 Ezt a felhasználói dokumentáció írása közben is megcsináltam, tehát azt mondhatjuk, minden ott listázott funkció megfelelően működik.
 
-A manuális tesztelés előtt, ha szeretnénk, hogy legyenek már felhasználók, bejegyzések és kommentek, ne üres legyen minden, futtassuk a `generateTestData` scriptet, pl. `pnpm run generateTestData`. Ez a script létrehoz sok adatot véletlenszerű nevekkel/szöveggel/stb.
+A manuális tesztelés előtt, ha szeretnénk, hogy legyenek már felhasználók, bejegyzések és kommentek, ne üres legyen minden, futtassuk a `generateTestData` script-et, pl. `pnpm run generateTestData`. Ez a script létrehoz sok adatot véletlenszerű nevekkel/szöveggel/stb.
 
 == Automatikus tesztelés
 <automatic-testing>
 
 === Web szerver egység és integrációs tesztelése
 <web-automatic-testing>
-A web szerver tesztelése a `jest` és `supertest` NPM csomaggal történt. A `jest`-et használtam a tesztek kezelése, ez találja meg és futtatja a tesztfájlokat, és készítési el a tesztelés eredményét és a code coverage adatokat. A `supertest` a szerver futtatására van, hogy ne kelljen elindítani/megállítani a szervert manuálisan.
-A `web` könyvtárból futtatható a teszt a `pnpm test` paranccsal, vagy a `pnpm run testToJson` parancssal a JSON formátumú eredmények kiírásához.
+A web szerver tesztelése a `jest` és `supertest` NPM csomaggal történt. A `jest`-et használtam a tesztek kezelésére, ez találja meg és futtatja a tesztfájlokat, és készítési el a tesztelés eredményét és a code coverage adatokat. A `supertest` a szerver futtatására van, hogy ne kelljen elindítani/megállítani a szervert manuálisan.
+A `web` könyvtárból futtatható a teszt a `pnpm test` paranccsal, vagy a `pnpm run testToJson` parancssal, ha JSON formátumban szeretnénk az eredményeket.
 
 === Web szerver egység és integrációs teszteredmények
 
@@ -203,7 +210,7 @@ A következő táblázatok automatikus lettek generálva a `jest` JSON kimeneté
 = Felhasználói dokumentáció
 <user-documentation>
 
-A felhasználók dönthetnek két felület közül: az asztali- és mobilalkalmazás csak az egyszerű használatra van készítve, lehet regisztrálni vagy belépni, majd böngészni a bejegyzések között, létrehozni bejegyzést, szavazni, olvasni és írni kommenteket, illetve szerkeszteni a saját tartalmat.
+A felhasználók dönthetnek két felület közül: az asztali és mobil alkalmazás csak az egyszerű használatra van készítve, lehet regisztrálni vagy belépni, majd böngészni a bejegyzések között, létrehozni bejegyzést, szavazni, olvasni és írni kommenteket, illetve szerkeszteni a saját tartalmat.
 
 Ezzel szemben a weboldal sokkal több funkciót tartalmaz: Meg lehet nézni felhasználók profilját, szűrni a bizonyos felhasználók bejegyzéseire és megjegyzéseire, szerkeszteni a saját profilt.
 Illetve csak a weboldalon érhetők el az adminisztrátori funkciók: napló olvasása, felhasználók szerkesztése.
@@ -246,7 +253,9 @@ Egy bejegyzésnek meg kell felelnie a következő feltételeknek, amiket ha nem 
 - A Link/Linktype és a Textből legalább az egyiknek kell lennie, de lehet mindkettő is
 Az új bejegyzés sikeres létrehozása után átirányít az oldalára, lásd #link(<post-figure>)[itt].
 #figure(image("screenshots/web/newpost.png"), caption: "Web: Új bejegyzés oldal")
-Az új bejegyzésünkre kommentelhetünk is. Egy kommentre csak annyi követelmény van, hogy nem lehet üres. Pontosan az is követelmény, hogy létezzen a bejegyzés van megjegyzés amire válaszol, de ilyen hibaüzenetet általában a felhasználó nem láthat (esetleg csak akkor, ha pont törölték a tartalmat amire kommentelni szeretett volna).
+Az új bejegyzésünkre kommentelhetünk is.
+Egy kommentre csak annyi követelmény van, hogy nem lehet üres.
+Pontosan az is követelmény, hogy létezzen a bejegyzés vagy megjegyzés amire válaszol, de ilyen hibaüzenetet általában a felhasználó nem láthat (esetleg csak akkor, ha pont törölték a tartalmat amire kommentelni szeretett volna).
 
 Emellett meg lehet figyelni, hogy a saját tartalmunkon (posztjainkon és megjegyzéseinkek) vannak törlésre és szerkesztésre gombok. Ezeket csak akkor láthatjuk, ha a saját tartalmunkat nézzünk, vagy ha adminisztrátor vagyunk, akik törölhetnek és szerkeszthetnek bármit, ezzel biztosítják, hogy a weboldal szabályai (amik elérhetők az oldal láblécén egy linken) be vannak tartva.
 
@@ -255,8 +264,8 @@ A törlés gomb megnyomásra törli a tartalmat. Ugyan lehetséges, hogy hibaüz
 A szerkesztés gomb mind a bejegyzéseknél és kommenteknél elirányít a megfelelő szerkesztési űrlaphoz. A szerkesztésénél ugyanazoknak a követelményeknek kell megfelelni, mint a létrehozásnál.
 #figure(image("screenshots/web/editpost.png"), caption: "Web: Bejegyzés szerkesztése oldal")
 #figure(image("screenshots/web/editcomment.png"), caption: "Web: Megjegyzés szerkesztése oldal")
-== Asztali- és mobilalkalmazás
-Az asztali és mobilalkalmazás ugyanabból a forráskódból készült, így ugyanazok a funkciók érhetők el.
+== Asztali és mobil alkalmazás
+Az asztali és mobil alkalmazás ugyanabból a forráskódból készült, így ugyanazok a funkciók érhetők el.
 
 A telepítőkészleteik elérhetők a weboldalon: // TODO
 #outline(indent: 2em, target: figure.where(kind: table), title: "Táblázatok")
