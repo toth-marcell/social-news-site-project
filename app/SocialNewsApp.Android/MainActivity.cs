@@ -6,7 +6,7 @@ using Avalonia.Android;
 namespace SocialNewsApp.Android;
 
 [Activity(
-    Label = "SocialNewsApp.Android",
+    Label = "Social News",
     Theme = "@style/MyTheme.NoActionBar",
     Icon = "@drawable/icon",
     MainLauncher = true,
