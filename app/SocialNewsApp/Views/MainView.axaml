@@ -44,18 +44,16 @@
 					<MenuItem Command="{Binding LogOutCommand}" Header="_Log out" IsVisible="{Binding IsLoggedIn}"/>
 				</Menu>
 			</ScrollViewer>
-			<ScrollViewer Grid.Row="1" Margin="10" HorizontalScrollBarVisibility="Auto">
-				<StackPanel>
-					<ItemsControl ItemsSource="{Binding CurrentPage.Posts}">
-						<ItemsControl.ItemTemplate>
-							<DataTemplate DataType="m:Post">
-								<v:PostControl Margin="0,0,0,10"/>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-					<Button HorizontalAlignment="Center" Margin="5" Command="{Binding NextPageCommand}" IsVisible="{Binding CurrentPage.IsNextPageAvailable}">More</Button>
-				</StackPanel>
-			</ScrollViewer>
+			<StackPanel Grid.Row="1" Margin="10">
+				<ItemsControl ItemsSource="{Binding CurrentPage.Posts}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate DataType="m:Post">
+							<v:PostControl Margin="0,0,0,10"/>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+				<Button HorizontalAlignment="Center" Margin="5" Command="{Binding NextPageCommand}" IsVisible="{Binding CurrentPage.IsNextPageAvailable}">More</Button>
+			</StackPanel>
 		</Grid>
 		<!--Post details page-->
 		<Grid IsVisible="{Binding IsPostDetailsActive}">

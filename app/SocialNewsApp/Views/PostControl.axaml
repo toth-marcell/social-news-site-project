@@ -15,7 +15,7 @@
 			<RowDefinition Height="auto"/>
 			<RowDefinition/>
 		</Grid.RowDefinitions>
-		<StackPanel Orientation="Horizontal" Spacing="5">
+		<WrapPanel Orientation="Horizontal" ItemSpacing="5">
 			<Button VerticalAlignment="Center" IsVisible="{Binding Voted}" Opacity=".5" Command="{Binding UpvoteCommand}" Height="30">
 				<StackPanel Orientation="Horizontal" Spacing="5">
 					<materialIcons:MaterialIcon Kind="ArrowUpBold"/>
@@ -30,14 +30,16 @@
 			</Button>
 			<TextBlock Text="{Binding Category}" VerticalAlignment="Center"/>
 			<TextBlock Text="{Binding CreatedAt}" VerticalAlignment="Center"/>
-			<TextBlock VerticalAlignment="Center">by</TextBlock>
-			<Svg Source="{Binding User.Identicon}"/>
-			<TextBlock Text="{Binding User.Name}" VerticalAlignment="Center"/>
-		</StackPanel>
-		<StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="5">
+			<StackPanel Orientation="Horizontal" Spacing="5">
+				<TextBlock VerticalAlignment="Center">by</TextBlock>
+				<Svg Source="{Binding User.Identicon}" MaxHeight="25"/>
+				<TextBlock Text="{Binding User.Name}" VerticalAlignment="Center"/>
+			</StackPanel>
+		</WrapPanel>
+		<WrapPanel Grid.Row="1" Orientation="Horizontal" ItemSpacing="5">
 			<TextBlock Text="{Binding Title}" FontSize="20" VerticalAlignment="Center"/>
 			<TextBlock Text="{Binding LinkType}" VerticalAlignment="Center"/>
 			<HyperlinkButton Content="{Binding Link}" NavigateUri="{Binding Link}" VerticalAlignment="Center"/>
-		</StackPanel>
+		</WrapPanel>
 	</Grid>
 </UserControl>
