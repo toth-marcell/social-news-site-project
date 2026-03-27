@@ -31,7 +31,9 @@ export async function Login(name, password) {
       status: 400,
       msg: "You must fill out the name and password fields!",
     };
-  const user = await User.scope("includePassword").findOne({ where: { name } });
+  const user = await User.scope("includeEverything").findOne({
+    where: { name },
+  });
   if (user) {
     if (ComparePassword(password, user.password)) {
       return {
@@ -47,7 +49,15 @@ export async function Login(name, password) {
   return { status: 404, msg: "No user exists with that name!" };
 }
 
-export async function EditUser(profile, isAdmin, name, password, about, user) {
+export async function EditUser(
+  profile,
+  isAdmin,
+  name,
+  password,
+  email,
+  about,
+  user
+) {
   if (!user.isAdmin && profile.id != user.id)
     return {
       status: 403,
@@ -59,15 +69,18 @@ export async function EditUser(profile, isAdmin, name, password, about, user) {
       await profile.update({ isAdmin: false });
     else await profile.update({ isAdmin: true });
   }
-  await profile.update({ name, about });
+  await profile.update({ name, email, about });
   if (password) await profile.update({ password: HashPassword(password) });
   return { status: 200, msg: "Success!" };
 }
 
-export async function GetProfile(id) {
+export async function GetProfile(id, user) {
   const validId = (await User.findByPk(id, { attributes: ["id"] })) != null;
   if (!validId) return null;
-  return await User.findByPk(id, {
+  let userModel = User;
+  if (user && (user.isAdmin || user.id == id))
+    userModel = User.scope("includeEmail");
+  return await userModel.findByPk(id, {
     attributes: {
       include: [
         [

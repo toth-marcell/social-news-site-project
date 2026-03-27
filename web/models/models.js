@@ -15,6 +15,11 @@ export const User = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: "",
+    },
     about: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -33,9 +38,10 @@ export const User = sequelize.define(
     },
   },
   {
-    defaultScope: { attributes: { exclude: "password" } },
+    defaultScope: { attributes: { exclude: ["password", "email"] } },
     scopes: {
-      includePassword: {},
+      includeEverything: {},
+      includeEmail: { attributes: { exclude: ["password"] } },
     },
   }
 );

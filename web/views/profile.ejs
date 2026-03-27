@@ -51,7 +51,15 @@
     <label>
       Password
       <p><small>Leave empty if not changing it</small></p>
-      <input type="password" name="password" value="<%= password %>">
+      <fieldset role="group">
+        <input type="password" name="password" value="<%= password %>" id="passwordInput">
+        <button type="button" class="outline" id="showPasswordButton" style="display: none;">show</button>
+      </fieldset>
+    </label>
+    <label>
+      Email
+      <p><small>Only visible to admins, can be used to reset a forgotten password</small></p>
+      <input type="email" name="email" value="<%= email %>">
     </label>
     <label>
       About

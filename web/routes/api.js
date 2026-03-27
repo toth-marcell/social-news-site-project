@@ -176,7 +176,7 @@ router.post("/commentVote/:id", LoggedInOnly, async (req, res) => {
 });
 
 router.get("/me", LoggedInOnly, async (req, res) => {
-  const profile = await GetProfile(res.locals.user.id);
+  const profile = await GetProfile(res.locals.user.id, res.locals.user);
   if (!profile) return res.status(404).json({ msg: "No such user!" });
   res.json(profile);
 });
@@ -188,6 +188,7 @@ router.put("/me", LoggedInOnly, async (req, res) => {
     isAdmin,
     name,
     password,
+    email,
     about,
     res.locals.user
   );
@@ -195,7 +196,7 @@ router.put("/me", LoggedInOnly, async (req, res) => {
 });
 
 router.get("/users/:id", async (req, res) => {
-  const profile = await GetProfile(req.params.id);
+  const profile = await GetProfile(req.params.id, res.locals.user);
   if (!profile) return res.status(404).json({ msg: "No such user!" });
   res.json(profile);
 });
@@ -209,6 +210,7 @@ router.put("/users/:id", LoggedInOnly, async (req, res) => {
     isAdmin,
     name,
     password,
+    email,
     about,
     res.locals.user
   );

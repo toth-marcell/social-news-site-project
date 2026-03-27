@@ -142,26 +142,28 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/users/:id", async (req, res) => {
-  const profile = await GetProfile(req.params.id);
+  const profile = await GetProfile(req.params.id, res.locals.user);
   if (!profile) return res.render("msg", { msg_fail: "No such user!" });
   res.render("profile", {
     profile,
     name: profile.name,
     password: "",
+    email: profile.email,
     about: profile.about,
     isAdmin: profile.isAdmin,
   });
 });
 
 router.post("/users/:id", LoggedInOnly, async (req, res) => {
-  const profile = await GetProfile(req.params.id);
+  const profile = await GetProfile(req.params.id, res.locals.user);
   if (!profile) return res.render("msg", { msg_fail: "No such user!" });
-  const { isAdmin, name, password, about } = req.body;
+  const { isAdmin, name, password, email, about } = req.body;
   const result = await EditUser(
     profile,
     isAdmin,
     name,
     password,
+    email,
     about,
     res.locals.user
   );
@@ -171,6 +173,7 @@ router.post("/users/:id", LoggedInOnly, async (req, res) => {
     isAdmin,
     name,
     password,
+    email,
     about,
     msg_fail: result.msg,
   });
