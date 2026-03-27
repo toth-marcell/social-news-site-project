@@ -21,6 +21,8 @@ export async function Register(name, password, about) {
     };
   if (await User.findOne({ where: { name } }))
     return { status: 400, msg: "That name is already taken!" };
+  if (password.length < 8)
+    return { status: 400, msg: "A password must have at least 8 characters!" };
   await User.create({ name, password: HashPassword(password), about });
   return { status: 200, msg: "Success! You can now log in." };
 }
@@ -70,7 +72,14 @@ export async function EditUser(
     else await profile.update({ isAdmin: true });
   }
   await profile.update({ name, email, about });
-  if (password) await profile.update({ password: HashPassword(password) });
+  if (password) {
+    if (password.length < 8)
+      return {
+        status: 400,
+        msg: "A password must have at least 8 characters!",
+      };
+    await profile.update({ password: HashPassword(password) });
+  }
   return { status: 200, msg: "Success!" };
 }
 
