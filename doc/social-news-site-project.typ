@@ -219,7 +219,7 @@ Illetve csak a weboldalon érhetők el az adminisztrátori funkciók: napló olv
 #show image: it => block(stroke: black, it)
 A weboldal elérhető itt: https://social-news.toth-marcell.xyz/
 
-Az első látogatáskor a főoldalon láthatjuk a bejegyzéseket, legelöl a mai legtöbbet szavazott bejegyzéseket.
+Az első látogatáskor a főoldalon láthatjuk a bejegyzéseket, legelöl a mai legtöbbet szavazott bejegyzéseket. A felső navigációs rész bal oldalán lehet más rendezési típust is választani.
 A jobb felső sarokban vannak linkek a regisztráció, illetve a bejelentkezés oldalakra, mivel nem vagyunk még bejelentkezve.
 #figure(image("screenshots/web/frontpage-first.png"), caption: "Web: Főoldal, első látogatás")
 #figure(image("screenshots/web/post-first.png"), caption: "Web: Egy bejegyzés")
@@ -230,6 +230,7 @@ Viszont ha be vagyunk jelentkezve, akkor látható egy megjegyzés mező és gom
 A regisztrációhoz nyomjuk meg a jobb felső sarokban a regisztráció gombot, ami linkel a regisztrációs oldalra.
 Itt meg kell adnunk a kívánt nevet és jelszót.
 A jelszó alapból ki van csillagozva, a jobb oldalán van egy gomb, amivel meg lehet jeleníteni, vagy újból elrejteni.
+A biztonság miatt a jelszónak minimum 8 karakterből kell állnia.
 
 A regisztráció gombra kattintva két kimenet lehet:
 - ha sikeres a regisztráció, akkor átirányít a belépés oldalra, hogy be tudjunk lépni a frissen készített fiókunkba.
@@ -264,6 +265,16 @@ A törlés gomb megnyomásra törli a tartalmat. Ugyan lehetséges, hogy hibaüz
 A szerkesztés gomb mind a bejegyzéseknél és kommenteknél elirányít a megfelelő szerkesztési űrlaphoz. A szerkesztésénél ugyanazoknak a követelményeknek kell megfelelni, mint a létrehozásnál.
 #figure(image("screenshots/web/editpost.png"), caption: "Web: Bejegyzés szerkesztése oldal")
 #figure(image("screenshots/web/editcomment.png"), caption: "Web: Megjegyzés szerkesztése oldal")
+Bárhol, ahol egy felhasználó neve van, láthatunk egy profilképet is, egy úgynevezett identicon-t, ami a felhasználó nevéből van automatikusan generálva. Ezek linkelnek a felhasználó profil oldalára. A saját profilt meg lehet nyitni a navigációs sávból is.
+
+A profil oldalon láthatjuk az adott felhasználó nevét, identicon-ját, pontszámát (bejegyzéseinek és megjegyzéseinek szavazatai összegét), regisztrációja dátumát és a leírását.
+Innen listázhatjuk a bejegyzésit vagy megjegyzéseit is, a választott rendezési típussal.
+#figure(image("screenshots/web/profile.png"), caption: "Web: Egy felhasználói profil")
+Ha a saját profilunkon vagyunk, akkor azt szerkeszthetjük, illetve az adminisztrátorok tudják az összes felhasználót szerkeszteni, és akár adminná tenni őket.
+
+A profil szerkesztésénél lehet változtatni a jelszót is, ha nem adunk meg új jelszót, akkor nem változik. Viszont a többi mezőt ki kell tölteni, különben az az adat törlődik (kivéve a névnél, hiszen kötelező egy felhasználónak hogy neve legyen).
+#figure(image("screenshots/web/profile-own.png"), caption: "Web: Saját profil")
+#figure(image("screenshots/web/profile-admin.png"), caption: "Web: Egy felhasználói profil adminként")
 == Asztali és mobil alkalmazás
 Az asztali és mobil alkalmazás ugyanabból a forráskódból készült, így ugyanazok a funkciók érhetők el.
 
