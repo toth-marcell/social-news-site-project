@@ -1,7 +1,13 @@
 <% pageName = "Edit comment" %>
 <%- include("head") -%>
 <form method="post">
-  <h2>Edit comment with id <%= id %></h2>
+  <h2>Edit comment by
+    <a href="/users/<%= UserId %>">
+      <%- User.identicon -%>
+      <%= User.name %>
+    </a>
+    with id <%= id %>
+  </h2>
   <label>
     Text
     <textarea name="text" rows="5"><%= text %></textarea>

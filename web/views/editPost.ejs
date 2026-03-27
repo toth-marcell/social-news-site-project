@@ -1,7 +1,13 @@
 <% pageName = "Edit post" %>
 <%- include("head") -%>
 <form method="post">
-    <h2>Edit post by <%= User.name %> with id <%= id %></h2>
+    <h2>Edit post by
+        <a href="/users/<%= UserId %>">
+            <%- User.identicon -%>
+            <%= User.name %>
+        </a>
+        with id <%= id %>
+    </h2>
     <p>
         The title and category must be filled. The link and link type; or the text
         field must be filled.

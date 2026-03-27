@@ -4,7 +4,7 @@ import WriteLog from "../middleware/log.js";
 import { AdminOnly, CookieAuth, LoggedInOnly } from "../middleware/webAuth.js";
 import { GetLogs, GetUsers } from "../models/admin.js";
 import { EditUser, GetProfile, Login, Register } from "../models/auth.js";
-import { Comment } from "../models/models.js";
+import { Comment, User } from "../models/models.js";
 import {
   ChildComment,
   CreatePost,
@@ -285,7 +285,7 @@ router.post("/comments/:id", LoggedInOnly, async (req, res) => {
 });
 
 router.get("/editcomment/:id", LoggedInOnly, async (req, res) => {
-  const comment = await Comment.findByPk(req.params.id);
+  const comment = await Comment.findByPk(req.params.id, { include: User });
   if (!comment)
     return res.status(404).render("msg", { msg_fail: "No such comment!" });
   if (!res.locals.user.isAdmin && comment.UserId != res.locals.user.id) {
@@ -301,7 +301,13 @@ router.post("/editcomment/:id", LoggedInOnly, async (req, res) => {
   const { text } = req.body;
   const result = await EditComment(id, text, res.locals.user);
   if (result.status == 200) return res.redirect(`/comments/${req.params.id}`);
-  res.render("editComment", { id, text, msg_fail: result.msg });
+  res.render("editComment", {
+    id,
+    text,
+    msg_fail: result.msg,
+    User: result.comment.User,
+    UserId: result.comment.User.id,
+  });
 });
 
 router.post("/deletecomment/:id", LoggedInOnly, async (req, res) => {

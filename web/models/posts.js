@@ -267,17 +267,19 @@ export async function DeleteComment(id, user) {
 }
 
 export async function EditComment(id, text, user) {
-  if (!text) return { status: 400, msg: "You can't have an empty comment!" };
-  const comment = await Comment.findByPk(id);
-  if (!comment) return { status: 404, msg: "No such comment!" };
+  const comment = await Comment.findByPk(id, { include: User });
+  if (!text)
+    return { status: 400, msg: "You can't have an empty comment!", comment };
+  if (!comment) return { status: 404, msg: "No such comment!", comment };
   if (!user.isAdmin && comment.UserId != user.id) {
     return {
       status: 403,
       msg: "You can only edit your own comments, unless you are an admin.",
+      comment,
     };
   }
   await comment.update({ text });
-  return { status: 200, msg: "Success!" };
+  return { status: 200, msg: "Success!", comment };
 }
 
 export async function UpvotePost(PostId, user) {
