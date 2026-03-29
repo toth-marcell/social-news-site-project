@@ -15,12 +15,14 @@
 #set heading(numbering: "1.")
 #set page(
   margin: 2.5cm,
-  header: [
-    #set par(first-line-indent: 0pt)
-    * #title * #h(1fr) _ #author _
-    #v(-.5em)
-    #line(length: 100%)
-  ],
+  header: context {
+    if (counter(page).get().first() != 1) [
+      #set par(first-line-indent: 0pt)
+      * #title * #h(1fr) _ #author _
+      #v(-.5em)
+      #line(length: 100%)
+    ]
+  },
   footer: context {
     align(center)[
       #counter(page).get().first() / #counter(page).final().first()
@@ -278,6 +280,44 @@ A profil szerkesztésénél lehet változtatni a jelszót is, ha nem adunk meg �
 == Asztali és mobil alkalmazás
 Az asztali és mobil alkalmazás ugyanabból a forráskódból készült, így ugyanazok a funkciók érhetők el.
 
-A telepítőkészleteik elérhetők a weboldalon: // TODO
+A telepítőkészleteik elérhetők a weboldalon:
+- Android: https://social-news.toth-marcell.xyz/xyz.toth_marcell.social_news.apk
+- Windows: https://social-news.toth-marcell.xyz/SocialNewsApp.Desktop.zip
+
+#set grid(columns: (4fr, 1fr), column-gutter: .2cm)
+Hasonlóan a weboldalhoz, az első megnyitáskor láthatjuk a bejegyzéseket, legelöl a mai legtöbbet szavazott bejegyzéseket. A felső navigációs rész bal oldalán lehet más rendezési típust is választani, illetve frissíteni a listát.
+A navigációs sáv jobb oldalán lehet megnyitni a bejelentkezés és regisztráció oldalt.
+#grid(
+  figure(image("screenshots/desktop/first.png"), caption: "Windows: főoldal"),
+  figure(image("screenshots/mobile/first.jpg"), caption: "Mobil: főoldal"),
+)
+#grid(
+  figure(image("screenshots/desktop/first-loggedin.png"), caption: "Windows: főoldal, belépve"),
+  figure(image("screenshots/mobile/first-loggedin.jpg"), caption: "Mobil: főoldal, belépve"),
+)
+#grid(
+  figure(image("screenshots/desktop/login-or-register.png"), caption: "Windows: Bejelentkezés vagy regisztráció"),
+  figure(image("screenshots/mobile/login-or-register.jpg"), caption: "Mobil: Bejelentkezés vagy regisztráció"),
+)
+#grid(
+  figure(image("screenshots/desktop/post.png"), caption: "Windows: Egy bejegyzés"),
+  figure(image("screenshots/mobile/post.jpg"), caption: "Mobil: Egy bejegyzés"),
+)
+#grid(
+  figure(image("screenshots/desktop/post-edit.png"), caption: "Windows: Bejegyzés szerkesztése"),
+  figure(image("screenshots/mobile/post-edit.jpg"), caption: "Mobil: Bejegyzés szerkesztése"),
+)
+#grid(
+  figure(image("screenshots/desktop/comment-reply.png"), caption: "Windows: Válaszolás egy megjegyzésre"),
+  figure(image("screenshots/mobile/comment-reply.jpg"), caption: "Mobil: Válaszolás egy megjegyzésre"),
+)
+#grid(
+  figure(image("screenshots/desktop/comment-edit.png"), caption: "Windows: Megjegyzés szerkesztése"),
+  figure(image("screenshots/mobile/comment-edit.jpg"), caption: "Mobil: Megjegyzés szerkesztése"),
+)
+#grid(
+  figure(image("screenshots/desktop/newpost.png"), caption: "Windows: Új bejegyzés"),
+  figure(image("screenshots/mobile/newpost.jpg"), caption: "Mobil: Új bejegyzés"),
+)
 #outline(indent: 2em, target: figure.where(kind: table), title: "Táblázatok")
 #outline(indent: 2em, target: figure.where(kind: image), title: "Ábrák")
