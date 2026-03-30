@@ -81,6 +81,7 @@ Emellett tudnak megjegyzéseket tenni a bejegyzésekre, egy hierarchikus komment
 - JWT (json web token) alapú autentikáció, ami tartalmazza a belépett felhasználó azonosítóját
   - a weboldalon ez egy cookie-ban van tárolva
   - az API-nál ez az Authentication HTTP fejléc Bearer típusát használja
+- Egy bejelentkezés 1 évig él, utána újra be kell lépni
 
 === Szerepkörök
 <roles>
@@ -95,6 +96,22 @@ Emellett tudnak megjegyzéseket tenni a bejegyzésekre, egy hierarchikus komment
   - megnézheti a naplót
   - listázhatja a felhasználókat
   - módosíthatja bármelyik felhasználó adatait, és adminisztrátorrá teheti őket, vagy elveheti admin státuszukat (viszont nem a sajátját)
+
+== Futtatás fejlesztőként
+=== Weboldal és API szerver
+A szerver a `web` könyvtárban található. Telepíteni kell a (p)npm függőségeket, és átmásolni,illetve szerkeszteni a `.env.example` fájlt a `.env` névre.
+Ezután el lehet indítani a szervert vagy a `pnpm start`-al, production futtatásra, vagy `pnpm dev`-el, ami egy fejlesztői szervert indít, ami figyeli a fájlváltozást, és újraindítja a szervert, ha módosult.
+
+=== .env konfiguráció
+- `PORT`: a port, amin a szerver fut
+- `SECRET`: titok JWT aláíráshoz
+- `SITENAME`: a weboldal neve, ami több helyen előfordul
+- `DEFAULT_ADMIN_NAME` és `DEFAULT_ADMIN_PASSWORD`: a szerver indulás közben elkészít ezekkel az adatokkal egy felhasználót. Ha ezekből legalább egy üres vagy nincs beállítva, akkor ez nem történik meg. Akkor sem történik meg, ha a megadott felhasználónév már létezik.
+
+=== Mobil és asztali alkalmazás
+Az `app` mappában található az Avalonia solution.
+A Visual Studio IDE vagy a `dotnet`-el lehet összerakni asztali operációs rendszerre és Androidra.
+Egy böngészős és egy iOS verzió is támogatott elvileg a solution által, de ezek nincsenek tesztelve, mivel van natív weboldal, és nincs hozzáférésem iOS eszközhöz.
 
 = Adatbázis
 <database>
