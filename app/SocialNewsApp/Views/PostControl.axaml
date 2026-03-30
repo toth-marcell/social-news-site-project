@@ -37,7 +37,7 @@
 			</StackPanel>
 		</WrapPanel>
 		<WrapPanel Grid.Row="1" Orientation="Horizontal" ItemSpacing="5">
-			<TextBlock Text="{Binding Title}" FontSize="20" VerticalAlignment="Center"/>
+			<TextBlock Text="{Binding Title}" FontSize="20" VerticalAlignment="Center" TextWrapping="Wrap"/>
 			<TextBlock Text="{Binding LinkType}" VerticalAlignment="Center"/>
 			<HyperlinkButton Content="{Binding Link}" NavigateUri="{Binding Link}" VerticalAlignment="Center"/>
 		</WrapPanel>
