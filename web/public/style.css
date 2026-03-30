@@ -9,14 +9,14 @@ body {
 header.container {
   padding: 0;
 }
-nav li {
+header nav li {
   margin-right: 5px;
 }
-nav {
+header nav {
   display: grid;
   grid-template-columns: auto 1fr auto;
 }
-nav > ul:nth-child(3) {
+header nav > ul:nth-child(3) {
   justify-self: end;
 }
 h1 > a,
@@ -98,15 +98,18 @@ article:has(svg)::after {
   width: fit-content;
   float: right;
 }
+footer nav ul {
+  display: block;
+}
 @media (max-width: 1280px) {
-  nav {
+  header nav {
     grid-template-columns: auto 1fr;
     padding-inline: 15px;
   }
-  nav > ul:first-child {
+  header nav > ul:first-child {
     grid-column: 1 / -1;
   }
-  nav li:has(h1) {
+  header nav li:has(h1) {
     padding: 0;
   }
   h1 {
@@ -123,7 +126,7 @@ article:has(svg)::after {
   }
 }
 @media (max-width: 768px) {
-  nav {
+  header nav {
     grid-template-columns: 1fr;
   }
 }
