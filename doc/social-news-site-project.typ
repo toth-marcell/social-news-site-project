@@ -1,3 +1,4 @@
+#import "@preview/dtree:0.1.0": dtree
 #pdf.attach("social-news-site-project.typ", relationship: "source")
 #pdf.attach("../web/openapi.yaml", relationship: "data")
 #pdf.attach("../web/tests.json", relationship: "data")
@@ -82,6 +83,8 @@ Emellett tudnak megjegyzéseket tenni a bejegyzésekre, egy hierarchikus komment
   - a weboldalon ez egy cookie-ban van tárolva
   - az API-nál ez az Authentication HTTP fejléc Bearer típusát használja
 - Egy bejelentkezés 1 évig él, utána újra be kell lépni
+- A jelszavaknak min 8 karakterből kell állniuk
+- A jelszó hash-elés először sha256-al hasheli, majd bcrypt-el a jelszavakat, így nem probléma a bcrypt max bemenethossza, lehet hosszabb jelszót (passphrase) is használni.
 
 === Szerepkörök
 <roles>
@@ -111,8 +114,145 @@ Ezután el lehet indítani a szervert vagy a `pnpm start`-al, production futtat�
 === Mobil és asztali alkalmazás
 Az `app` mappában található az Avalonia solution.
 A Visual Studio IDE vagy a `dotnet`-el lehet összerakni asztali operációs rendszerre és Androidra.
-Egy böngészős és egy iOS verzió is támogatott elvileg a solution által, de ezek nincsenek tesztelve, mivel van natív weboldal, és nincs hozzáférésem iOS eszközhöz.
+Egy böngészős és egy iOS verzió is támogatott elvileg a solution által, de ezek nincsenek tesztelve, csak esetleges jövőbeli fejlesztésként hagytam ott, mivel van natív weboldal, és nincs hozzáférésem iOS eszközhöz.
 
+Ha szeretnénk, hogy más szervert használjon a program (pl. a lokális szervert, amit éppen fejlesztünk), azt a `app\SocialNewsApp\ViewModels\MainViewModel.cs` fájlban lehet átírni.
+Az Android alkalmazásnál fontos megjegyezni, hogy alapértelmezetten biztonsági okokból titkosítás nélküli http-n keresztül nem tud kommunikálni.
+Ha viszont fejlesztésnél valószínűleg nem akarjuk a https-t megcsinálni, akkor ezt ki lehet kapcsolni, lásd a kommentet a `app\SocialNewsApp.Android\Properties\AndroidManifest.xml` fájlban.
+
+= Forráskód térkép
+Itt látható a forráskód mappái és fájljai kommentelve. Az ábra nem egy konkrét mélységig ábrázolja a fájlokat, mert egyes fájlokhoz nem szükséges egyéni leírás (pl. a dokumentációban a képeknek, az EJS sablonoknak, stb.).
+#{
+  show figure: set align(left)
+  figure(
+    dtree(
+      ```
+      doc
+       screenshots/ - Képernyőképek a felhasználói felületekről
+         desktop/
+         mobile/
+         web/
+       social-news-site-project.typ - Dokumentáció tartalma
+       uml/ - UML diagramok
+        model-viewmodel.drawio.svg - Avalonia projekt Model és ViewModel rétegek osztálydiagramja
+        usecase.drawio.svg - Használati eset diagram
+        view-app.drawio.svg - Avalonia projekt View és App rétegek osztálydiagramja
+      ```,
+      size: 13pt,
+    ),
+    caption: "Dokumentáció forráskód térkép",
+    kind: "diagram",
+    supplement: "Diagram",
+  )
+  figure(
+    dtree(
+      ```
+      app
+       Directory.Packages.props
+       SocialNewsApp/ - platformfüggetlen fájlok
+        App.axaml
+        App.axaml.cs - belépőpont
+        Assets/
+         logo.png
+        Models/
+         API.cs
+         Comment.cs
+         Message.cs
+         MessageWithToken.cs
+         NamePassword.cs
+         Post.cs
+         PostPage.cs
+         User.cs
+        Persistence/
+         SettingsStorage.cs
+        SocialNewsApp.csproj
+        ViewLocator.cs
+        ViewModels/
+         MainViewModel.cs
+         PostEditorViewModel.cs
+         ViewModelBase.cs
+        Views/
+         CommentControl.axaml
+         MainView.axaml
+         MainWindow.axaml
+         PostControl.axaml
+         PostDetailsControl.axaml
+         PostEditorControl.axaml
+         CommentControl.axaml.cs
+         MainView.axaml.cs
+         MainWindow.axaml.cs
+         PostControl.axaml.cs
+         PostDetailsControl.axaml.cs
+         PostEditorControl.axaml.cs
+       SocialNewsApp.Android/
+        Icon.png
+        MainActivity.cs - Android aktivitás konfigurációja
+        Properties/
+         AndroidManifest.xml - Android alkalmazás konfigurációja
+        Resources/
+         AboutResources.txt
+         drawable/
+          splash_screen.xml - betöltési képernyő definíció
+         values/ - betöltési képernyő színek
+         values-night/ - betöltési képernyő színek sötét módra
+        SocialNewsApp.Android.csproj
+       SocialNewsApp.Browser/ - böngészős nézet, nem használt, lehet jövőbeli fejlesztés
+       SocialNewsApp.Desktop/ - asztali alkalmazás, nem szükséges szerkesztése
+       SocialNewsApp.iOS/ - iOS applikáció, nem használt, lehet jövőbeli fejlesztés
+       SocialNewsApp.sln
+      ```,
+      size: 13pt,
+    ),
+    caption: "Asztali és mobilalkalmazás forráskód térkép",
+    kind: "diagram",
+    supplement: "Diagram",
+  )
+  figure(
+    dtree(
+      ```
+      web
+       jest.config.mjs - teszt keretrendszer konfiguráció
+       middleware/
+        apiAuth.js - header alapú autentikáció az API-hoz
+        log.js - naplózási middleware
+        webAuth.js - cookie alapú autentikáció a weboldalhoz
+       models/
+        admin.js - adminisztrátori funkciókhoz függvények
+        auth.js - függvények autentikáció és felhasználó kezeléshez
+        models.js - adatbázis táblák definíciója
+        posts.js - függvények bejegyzések és megjegyzések kezeléséhez
+       openapi.yaml - API útvonalak dokumentációja
+       package.json - npm függőségek, scriptek
+       pnpm-lock.yaml - pnpm lockfájl
+       public/ - weboldalon nyilvános fájlok (ide lehet tenni a dokumentáció PDF-et és telepítőkészleteket)
+        logo.svg
+        script.js
+        style.css
+       routes/
+        api.js - API útvonalak
+        web.js - weboldal útvonalak
+       server.js - fő fájl, ezt futtatjuk a szerver indításához
+       tests/ - automatikus teszt fájlok
+        api.test.js
+        auth.test.js
+        defaultAdmin.test.js
+        erd.test.js
+        server.test.js
+        setup.js - tesztelő környezet előkészítés
+        teardown.js - tesztelő környezet szétszedés
+       utils/
+        defaultAdmin.js - automatikus admin készítése
+        erd.js - automatikus adatbázis-diagram generálás
+        generateTestData.js - véletlenszerű adatok generálása manuális teszteléshez
+       views/ - EJS sablonok a weboldalhoz
+      ```,
+      size: 13pt,
+    ),
+    caption: "Web és API szerver forráskód térkép",
+    kind: "diagram",
+    supplement: "Diagram",
+  )
+}
 = Adatbázis
 <database>
 
@@ -128,7 +268,7 @@ Viszont mivel ez a csomag elég régen volt frissítve, nem 100%-ban korrekt a d
 = REST API
 <api>
 Ez a rész az API OpenAPI specifikációjából van generálva, ami a `web/openapi.yaml` forrásfájlban van definiálva, és a szerveren elérhető a #link("https://social-news.toth-marcell.xyz/openapi.json")[/openapi.json] útvonalon.
-Ennek egy interaktív verziója elérhető a szerveren a #link("https://social-news.toth-marcell.xyz/api-docs/")[/api-docs] útvonalon, ami ennél az oldalán sokkal hasznosabb az API megismerésére és #link(<manual-testing>)[manuális tesztelésére], főleg hogy sokkal több információt tartalmaz, ami ebbe az egyszerű táblázatba nem fért bele.
+Ennek egy interaktív verziója elérhető a szerveren a #link("https://social-news.toth-marcell.xyz/api-docs/")[/api-docs] útvonalon, ami ennél az oldalán sokkal hasznosabb az API megismerésére és #link(<manual-testing>)[manuális tesztelésére], főleg hogy sokkal több információt tartalmaz, ami ebbe az egyszerű táblázatba nem fért bele, mint például részletes leírás minden útvonalról, és a pontos bemeneti és kimeneti sémák.
 #let openapi = yaml("../web/openapi.yaml")
 #figure(
   table(
@@ -190,7 +330,8 @@ Ezeket a diagrammokat a draw.io segítségével készítettem.
 <manual-testing>
 
 == API manuális tesztelése
-Ugyan az API van automatikus tesztelve, lehetőség van manuálisan is tesztelni, illetve
+Ugyan az API van automatikus is tesztelve, lehetőség van manuálisan is tesztelni.
+Erre a legjobb az OpenAPI definíció alapján készült interaktív oldal: https://social-news.toth-marcell.xyz/api-docs
 
 == Felhasználói felületek tesztelése
 A felhasználói felületeket (a weboldalt, asztali  és mobil alkalmazást) manuálisan teszteltem.

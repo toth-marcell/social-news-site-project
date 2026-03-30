@@ -1,3 +1,5 @@
+Projekt dokumentáció: https://social-news.toth-marcell.xyz/social-news-site-project.pdf
+
 # Social news site project
 
 https://social-news.toth-marcell.xyz/
