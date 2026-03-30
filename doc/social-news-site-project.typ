@@ -102,14 +102,16 @@ Emellett tudnak megjegyzéseket tenni a bejegyzésekre, egy hierarchikus komment
 
 == Futtatás fejlesztőként
 === Weboldal és API szerver
-A szerver a `web` könyvtárban található. Telepíteni kell a (p)npm függőségeket, és átmásolni,illetve szerkeszteni a `.env.example` fájlt a `.env` névre.
+A szerver a `web` könyvtárban található. Telepíteni kell a (p)npm függőségeket, és átmásolni, illetve szerkeszteni a `.env.example` fájlt a `.env` névre.
 Ezután el lehet indítani a szervert vagy a `pnpm start`-al, production futtatásra, vagy `pnpm dev`-el, ami egy fejlesztői szervert indít, ami figyeli a fájlváltozást, és újraindítja a szervert, ha módosult.
 
 === .env konfiguráció
 - `PORT`: a port, amin a szerver fut
 - `SECRET`: titok JWT aláíráshoz
 - `SITENAME`: a weboldal neve, ami több helyen előfordul
-- `DEFAULT_ADMIN_NAME` és `DEFAULT_ADMIN_PASSWORD`: a szerver indulás közben elkészít ezekkel az adatokkal egy felhasználót. Ha ezekből legalább egy üres vagy nincs beállítva, akkor ez nem történik meg. Akkor sem történik meg, ha a megadott felhasználónév már létezik.
+- `DEFAULT_ADMIN_NAME` és `DEFAULT_ADMIN_PASSWORD`: a szerver indulás közben elkészít ezekkel az adatokkal egy adminisztrátor felhasználót.
+  Ha ezekből legalább egy üres vagy nincs beállítva, akkor ez nem történik meg.
+  Akkor sem történik meg, ha a megadott névvel már létezik felhasználó.
 
 === Mobil és asztali alkalmazás
 Az `app` mappában található az Avalonia solution.
@@ -138,7 +140,7 @@ Itt látható a forráskód mappái és fájljai kommentelve. Az ábra nem egy k
         usecase.drawio.svg - Használati eset diagram
         view-app.drawio.svg - Avalonia projekt View és App rétegek osztálydiagramja
       ```,
-      size: 13pt,
+      size: 10.9pt,
     ),
     caption: "Dokumentáció forráskód térkép",
     kind: "diagram",
@@ -201,7 +203,7 @@ Itt látható a forráskód mappái és fájljai kommentelve. Az ábra nem egy k
        SocialNewsApp.iOS/ - iOS applikáció, nem használt, lehet jövőbeli fejlesztés
        SocialNewsApp.sln
       ```,
-      size: 13pt,
+      size: 10.9pt,
     ),
     caption: "Asztali és mobilalkalmazás forráskód térkép",
     kind: "diagram",
@@ -224,7 +226,7 @@ Itt látható a forráskód mappái és fájljai kommentelve. Az ábra nem egy k
        openapi.yaml - API útvonalak dokumentációja
        package.json - npm függőségek, scriptek
        pnpm-lock.yaml - pnpm lockfájl
-       public/ - weboldalon nyilvános fájlok (ide lehet tenni a dokumentáció PDF-et és telepítőkészleteket)
+       public/ - weboldal nyilvános fájlok (ide lehet tenni dokumentációt, telepítőkészleteket)
         logo.svg
         script.js
         style.css
@@ -246,7 +248,7 @@ Itt látható a forráskód mappái és fájljai kommentelve. Az ábra nem egy k
         generateTestData.js - véletlenszerű adatok generálása manuális teszteléshez
        views/ - EJS sablonok a weboldalhoz
       ```,
-      size: 13pt,
+      size: 10.9pt,
     ),
     caption: "Web és API szerver forráskód térkép",
     kind: "diagram",
@@ -391,7 +393,7 @@ Ezzel szemben a weboldal sokkal több funkciót tartalmaz: Meg lehet nézni felh
 Illetve csak a weboldalon érhetők el az adminisztrátori funkciók: napló olvasása, felhasználók szerkesztése.
 
 == Weboldal
-#show image: it => block(stroke: black, it)
+#show image: it => block(stroke: (paint: black, thickness: .2em), it)
 A weboldal elérhető itt: https://social-news.toth-marcell.xyz/
 
 Az első látogatáskor a főoldalon láthatjuk a bejegyzéseket, legelöl a mai legtöbbet szavazott bejegyzéseket. A felső navigációs rész bal oldalán lehet más rendezési típust is választani.
@@ -418,7 +420,7 @@ Az űrlap beküldése után két eredmény lehet:
 - ha sikeres, a szerver beállítja az autentikációs tokent cookie-ként, és átirányít a főoldalra
 #figure(image("screenshots/web/login-after-register.png"), caption: "Web: Belépés regisztráció után")
 #figure(image("screenshots/web/frontpage-after-login.png"), caption: "Web: Főoldal, belépve")
-Ha be vagyunk lépve, akkor a felső menü megváltozik: a bal oldalán megjelenik egy gomb új bejegyzés létrehozásához, a jobb oldalán pedig látjuk a felhasználónevünket, pontjainkat, és egy a registráció/bejelentkezés gombok helyett egy kilépés gombot.
+Ha be vagyunk lépve, akkor a felső menü megváltozik: a bal oldalán megjelenik egy gomb új bejegyzés létrehozásához, a jobb oldalán pedig látjuk a felhasználónevünket, pontjainkat, és egy a regisztráció/bejelentkezés gombok helyett egy kilépés gombot.
 
 Ha egy adminisztrátorként vagyunk belépve, akkor a felső navigációs menüben láthatunk még 2 gombot, a napló olvasására, és a felhasználók listázására. Erre még visszatérünk.
 #figure(image("screenshots/web/frontpage-admin.png"), caption: "Web: Főoldal, adminisztrátor")
@@ -427,7 +429,7 @@ Az új bejegyzés oldalon megadhatjuk az új bejegyzésünk tartalmát, és köz
 Egy bejegyzésnek meg kell felelnie a következő feltételeknek, amiket ha nem teljesítünk, megfelelő hibaüzenetet kapunk:
 - A Title és Category mezőket mindenképpen ki kell tölteni
 - Ha meg van adva Link akkor kell Link type, és fordítva is
-- A Link/Linktype és a Textből legalább az egyiknek kell lennie, de lehet mindkettő is
+- A Link/Link type és a Text-ből legalább az egyiknek kell lennie, de lehet mindkettő is
 Az új bejegyzés sikeres létrehozása után átirányít az oldalára, lásd #link(<post-figure>)[itt].
 #figure(image("screenshots/web/newpost.png"), caption: "Web: Új bejegyzés oldal")
 Az új bejegyzésünkre kommentelhetünk is.
@@ -438,19 +440,25 @@ Emellett meg lehet figyelni, hogy a saját tartalmunkon (posztjainkon és megjeg
 
 A törlés gomb megnyomásra törli a tartalmat. Ugyan lehetséges, hogy hibaüzenetet ad vissza (nincs jogosultság), de ez nem fog előfordulni a felhasználói felületen, mert a gomb eleve nem lesz látható ilyen esetben.
 
-A szerkesztés gomb mind a bejegyzéseknél és kommenteknél elirányít a megfelelő szerkesztési űrlaphoz. A szerkesztésénél ugyanazoknak a követelményeknek kell megfelelni, mint a létrehozásnál.
+A szerkesztés gomb mind a bejegyzéseknél és kommenteknél elirányít a megfelelő szerkesztési űrlaphoz. A szerkesztésnél ugyanazoknak a követelményeknek kell megfelelni, mint a létrehozásnál.
 #figure(image("screenshots/web/editpost.png"), caption: "Web: Bejegyzés szerkesztése oldal")
 #figure(image("screenshots/web/editcomment.png"), caption: "Web: Megjegyzés szerkesztése oldal")
 Bárhol, ahol egy felhasználó neve van, láthatunk egy profilképet is, egy úgynevezett identicon-t, ami a felhasználó nevéből van automatikusan generálva. Ezek linkelnek a felhasználó profil oldalára. A saját profilt meg lehet nyitni a navigációs sávból is.
 
 A profil oldalon láthatjuk az adott felhasználó nevét, identicon-ját, pontszámát (bejegyzéseinek és megjegyzéseinek szavazatai összegét), regisztrációja dátumát és a leírását.
-Innen listázhatjuk a bejegyzésit vagy megjegyzéseit is, a választott rendezési típussal.
+Innen listázhatjuk a bejegyzéseit vagy megjegyzéseit is, a választott rendezési típussal.
 #figure(image("screenshots/web/profile.png"), caption: "Web: Egy felhasználói profil")
-Ha a saját profilunkon vagyunk, akkor azt szerkeszthetjük, illetve az adminisztrátorok tudják az összes felhasználót szerkeszteni, és akár adminná tenni őket.
+Ha a saját profilunkon vagyunk, akkor azt szerkeszthetjük, illetve az adminisztrátorok tudják az összes felhasználót szerkeszteni, és akár adminisztrátorrá tenni őket.
 
 A profil szerkesztésénél lehet változtatni a jelszót is, ha nem adunk meg új jelszót, akkor nem változik. Viszont a többi mezőt ki kell tölteni, különben az az adat törlődik (kivéve a névnél, hiszen kötelező egy felhasználónak hogy neve legyen).
 #figure(image("screenshots/web/profile-own.png"), caption: "Web: Saját profil")
-#figure(image("screenshots/web/profile-admin.png"), caption: "Web: Egy felhasználói profil adminként")
+#figure(image("screenshots/web/profile-admin.png"), caption: "Web: Egy felhasználói profil adminisztrátorként")
+És végül az adminisztrátori funkciók:
+
+A napló oldal listázza a szerver által kapott kéréseket adatait: idő, metódus, útvonal, és ha be volt jelentkezve valaki, akkor egy link a profiljára. Oldalakra van bontva, felül és alul is vannak nyilak (a képen csak egy nyíl mert az első oldalon vagyunk).
+#figure(image("screenshots/web/logs.png"), caption: "Web: Napló")
+A felhasználó lista értelemszerűen listázza az összes felhasználót, látható az összes felhasználó adata és egyszerűen le lehet jutni a profil oldalukra.
+#figure(image("screenshots/web/users.png"), caption: "Web: Felhasználó lista")
 == Asztali és mobil alkalmazás
 Az asztali és mobil alkalmazás ugyanabból a forráskódból készült, így ugyanazok a funkciók érhetők el.
 
@@ -467,7 +475,7 @@ A navigációs sáv jobb oldalán lehet megnyitni a bejelentkezés és regisztr�
   figure(image("screenshots/desktop/first.png"), caption: "Windows: főoldal"),
   figure(image("screenshots/mobile/first.jpg"), caption: "Mobil: főoldal"),
 )
-A bejelentkezés és regisztráció oldalon be kell írnunk egy felhasználónevet és egy jelszót, majd megnyomni vagy a bejelentkezés, vagy a registráció gombot.
+A bejelentkezés és regisztráció oldalon be kell írnunk egy felhasználónevet és egy jelszót, majd megnyomni vagy a bejelentkezés, vagy a regisztráció gombot.
 Az eredményről (siker vagy hibaüzenet) egy felugró ablak értesít.
 Ha bejelentkezést csináltunk, és sikeres, akkor visszairányít a főoldalra.
 #grid(
