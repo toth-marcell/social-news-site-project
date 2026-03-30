@@ -1,7 +1,11 @@
-<%- include("head") -%> <% if (typeof(msg) != "undefined") { %>
+<% pageName = undefined %>
+<%- include("head") -%>
+<% if (typeof(msg) != "undefined") { %>
 <mark class="msg"><%= msg %></mark>
-<% } %> <% if (typeof(msg_fail) != "undefined") { %>
+<% } else if (typeof(msg_fail) != "undefined") { %>
 <mark class="msg msg-fail"><%= msg_fail %></mark>
-<% } %> <% if (typeof(links) != "undefined") { %> <% for (link of links) { %>
+<% } %>
+<% if (typeof(links) != "undefined") { for (link of links) { %>
 <a href="<%= link.href %>"><button><%= link.text %></button></a>
-<% }} %> <%- include("foot") -%>
+<% }} %>
+<%- include("foot") -%>
