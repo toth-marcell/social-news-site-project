@@ -13,7 +13,7 @@ export function ComparePassword(inputPass, hashedPass) {
   return compareSync(lengthHashed, hashedPass);
 }
 
-export async function Register(name, password, about) {
+export async function Register(name, password, email, about) {
   if (!(name && password))
     return {
       status: 400,
@@ -23,6 +23,8 @@ export async function Register(name, password, about) {
     return { status: 400, msg: "That name is already taken!" };
   if (password.length < 8)
     return { status: 400, msg: "A password must have at least 8 characters!" };
+  if (email && !email.includes("@"))
+    return { status: 400, msg: "An email address must contain an @ sign!" };
   await User.create({ name, password: HashPassword(password), about });
   return { status: 200, msg: "Success! You can now log in." };
 }
@@ -71,6 +73,8 @@ export async function EditUser(
       await profile.update({ isAdmin: false });
     else await profile.update({ isAdmin: true });
   }
+  if (email && !email.includes("@"))
+    return { status: 400, msg: "An email address must contain an @ sign!" };
   await profile.update({ name, email, about });
   if (password) {
     if (password.length < 8)

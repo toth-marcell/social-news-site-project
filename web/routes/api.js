@@ -29,8 +29,8 @@ router.use(BearerAuth);
 router.use(WriteLog);
 
 router.post("/register", async (req, res) => {
-  const { name, password, about } = req.body ?? {};
-  const result = await Register(name, password, about);
+  const { name, password, email, about } = req.body ?? {};
+  const result = await Register(name, password, email, about);
   res.status(result.status).json({ msg: result.msg });
 });
 
@@ -227,6 +227,8 @@ router.use((req, res, next) => {
 });
 
 router.use((err, req, res, next) => {
-  console.error(err.stack);
+  if (err.type == "entity.parse.failed")
+    return res.status(400).json({ msg: "Invalid JSON!" });
+  console.error(err);
   res.status(500).json({ msg: "Internal Server Error" });
 });

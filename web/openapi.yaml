@@ -241,6 +241,9 @@ paths:
                 password:
                   type: string
                   format: password
+                email:
+                  type: string
+                  format: email
                 about:
                   type: string
       responses:
@@ -328,8 +331,8 @@ paths:
         401: { $ref: "#/components/responses/unauthorized" }
     put:
       tags: [Users]
-      summary: Edit your name, password and about text
-      description: The username and about text must be sent (unless you want to delete the about text). The password is only updated if a non-empty password is sent. isAdmin is optional as a non-admin, and required if you are an admin, but only actually edited if you are an admin (but you cannot take away your own admin status).
+      summary: Edit your name, password, email, and about text
+      description: The username, email and about text must be sent (unless you want to delete the email or about text). The password is only updated if a non-empty password is sent. isAdmin is optional as a non-admin, and required if you are an admin, but only actually edited if you are an admin (but you cannot take away your own admin status).
       security: [bearerAuth: []]
       requestBody:
         content:
@@ -344,6 +347,9 @@ paths:
                 password:
                   type: string
                   format: password
+                email:
+                  type: string
+                  format: email
                 about:
                   type: string
       responses:
@@ -361,8 +367,8 @@ paths:
         401: { $ref: "#/components/responses/unauthorized" }
     put:
       tags: [Users]
-      summary: Edit a specific user's name, password and about text as an admin
-      description: The username and about text must be sent (unless you want to delete the about text). The password is only updated if a non-empty password is sent. isAdmin is optional as a non-admin, and required if you are an admin, but only actually edited if you are an admin (but you cannot take away your own admin status).
+      summary: Edit a specific user's name, password, email, and about text
+      description: The username, email and about text must be sent (unless you want to delete the email or about text). The password is only updated if a non-empty password is sent. isAdmin is optional as a non-admin, and required if you are an admin, but only actually edited if you are an admin (but you cannot take away your own admin status).
       security: [bearerAuth: []]
       requestBody:
         content:
@@ -377,6 +383,9 @@ paths:
                 password:
                   type: string
                   format: password
+                email:
+                  type: string
+                  format: email
                 about:
                   type: string
       responses:
