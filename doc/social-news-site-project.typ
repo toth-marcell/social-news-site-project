@@ -39,6 +39,7 @@
 #show figure.where(
   kind: table,
 ): set figure.caption(position: top)
+#show figure.caption: set par(justify: false)
 
 #v(30%)
 #align(center)[
@@ -274,26 +275,21 @@ Ennek egy interaktív verziója elérhető a szerveren a #link("https://social-n
 #let openapi = yaml("../web/openapi.yaml")
 #figure(
   table(
-    columns: 3,
-    table.header([*Metódus*], [*Útvonal*], [*Leírás*]),
+    columns: 4,
+    table.header([*Kategória*], [*Metódus*], [*Útvonal*], [*Leírás*]),
     ..openapi
       .paths
       .pairs()
       .map(((path, methods)) => {
         methods
           .pairs()
-          .filter(x => x.at(0) != "parameters")
+          .filter(x => x.first() != "parameters")
           .map(((method, details)) => {
             return (
-              [
-                *#upper(method)*
-              ],
-              [
-                #path
-              ],
-              [
-                #details.summary
-              ],
+              details.tags.first(),
+              upper(method),
+              path,
+              details.summary,
             )
           })
       })
@@ -400,8 +396,8 @@ Az első látogatáskor a főoldalon láthatjuk a bejegyzéseket, legelöl a mai
 A jobb felső sarokban vannak linkek a regisztráció, illetve a bejelentkezés oldalakra, mivel nem vagyunk még bejelentkezve.
 #figure(image("screenshots/web/frontpage-first.png"), caption: "Web: Főoldal, első látogatás")
 #figure(image("screenshots/web/post-first.png"), caption: "Web: Egy bejegyzés")
-Ha rákattintunk egy posztra, láthatjuk a részleteit, és ha vannak, a kommenteket, és azokon lévő kommenteket (ezt úgy látjuk, hogy a mélyebb megjegyzéseken bal oldali margó van). Viszont mivel nem vagyunk bejelentkezve, mi nem tudunk válaszolni rá.
-Viszont ha be vagyunk jelentkezve, akkor látható egy megjegyzés mező és gomb, amivel a bejegyzésre tudunk kommentelve, illetve a kommenteken látható lesz egy válasz gomb.
+Ha rákattintunk egy posztra, láthatjuk a részleteit, és ha vannak, a kommenteket, és az azokon lévő kommenteket (ezt úgy látjuk, hogy a mélyebb megjegyzéseken egyre nagyobb bal oldali margó van).
+Mivel nem vagyunk bejelentkezve, mi nem tudunk megjegyzést írni, de ha be lennénk jelentkezve, akkor látható egy megjegyzés mező és gomb, amivel a bejegyzésre tudunk kommentelni, illetve a kommenteken látható lesz egy válasz gomb, ami átirányít egy űrlapra, ahol beírhatjuk a válaszunkat.
 <post-figure>
 #figure(image("screenshots/web/post.png"), caption: "Web: Egy bejegyzés, bejelentkezve")
 A regisztrációhoz nyomjuk meg a jobb felső sarokban a regisztráció gombot, ami linkel a regisztrációs oldalra.
