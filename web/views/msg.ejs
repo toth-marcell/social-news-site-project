@@ -5,7 +5,9 @@
 <% } else if (typeof(msg_fail) != "undefined") { %>
 <mark class="msg msg-fail"><%= msg_fail %></mark>
 <% } %>
-<% if (typeof(links) != "undefined") { for (link of links) { %>
-<a href="<%= link.href %>"><button><%= link.text %></button></a>
-<% }} %>
+<div class="grid">
+  <% if (typeof(links) != "undefined") { for (link of links) { %>
+  <a href="<%= link.href %>"><button><%= link.text %></button></a>
+  <% }} %>
+</div>
 <%- include("foot") -%>

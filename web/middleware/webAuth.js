@@ -13,6 +13,18 @@ export async function CookieAuth(req, res, next) {
   next();
 }
 
+export function LoggedOutOnly(req, res, next) {
+  if (!res.locals.user) next();
+  else
+    res.status(401).render("msg", {
+      msg_fail: "You're already logged in!",
+      links: [
+        { text: "Go to frontpage", href: "/" },
+        { text: "Log out", href: `/logout?redirect=${req.path}` },
+      ],
+    });
+}
+
 export function LoggedInOnly(req, res, next) {
   if (res.locals.user) next();
   else

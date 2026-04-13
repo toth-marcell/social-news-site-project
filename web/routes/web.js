@@ -1,7 +1,12 @@
 import cookieParser from "cookie-parser";
 import express from "express";
 import WriteLog from "../middleware/log.js";
-import { AdminOnly, CookieAuth, LoggedInOnly } from "../middleware/webAuth.js";
+import {
+  AdminOnly,
+  CookieAuth,
+  LoggedInOnly,
+  LoggedOutOnly,
+} from "../middleware/webAuth.js";
 import { GetLogs, GetUsers } from "../models/admin.js";
 import { EditUser, GetProfile, Login, Register } from "../models/auth.js";
 import { Comment, User } from "../models/models.js";
@@ -105,10 +110,10 @@ router.get("/posts/:id", async (req, res) => {
   else res.status(result.status).render("msg", { msg_fail: result.msg });
 });
 
-router.get("/register", (req, res) =>
+router.get("/register", LoggedOutOnly, (req, res) =>
   res.render("register", { name: "", password: "", confirmPassword: "" })
 );
-router.post("/register", async (req, res) => {
+router.post("/register", LoggedOutOnly, async (req, res) => {
   const { name, password, confirmPassword } = req.body;
   if (password != confirmPassword)
     return res.render("register", {
@@ -130,10 +135,10 @@ router.post("/register", async (req, res) => {
   }
 });
 
-router.get("/login", (req, res) =>
+router.get("/login", LoggedOutOnly, (req, res) =>
   res.render("login", { name: "", password: "" })
 );
-router.post("/login", async (req, res) => {
+router.post("/login", LoggedOutOnly, async (req, res) => {
   const { name, password } = req.body;
   const result = await Login(name, password);
   if (result.status == 200) {
@@ -148,7 +153,7 @@ router.post("/login", async (req, res) => {
 
 router.get("/logout", (req, res) => {
   res.clearCookie("token");
-  res.redirect("/");
+  res.redirect(req.query.redirect || "/");
 });
 
 router.get("/users/:id", async (req, res) => {
