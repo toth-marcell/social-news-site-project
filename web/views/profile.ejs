@@ -49,11 +49,18 @@
       <input type="text" name="name" value="<%= name %>">
     </label>
     <label>
-      Password
+      New password
       <p><small>Leave empty if not changing it</small></p>
-      <fieldset role="group">
-        <input type="password" name="password" value="<%= password %>" id="passwordInput">
-        <button type="button" class="outline" id="showPasswordButton" style="display: none;">show</button>
+      <fieldset role="group" class="passwordInputGroup">
+        <input type="password" name="password" value="<%= password %>">
+        <button type="button" class="outline">show</button>
+      </fieldset>
+    </label>
+    <label>
+      Confirm new password
+      <fieldset role="group" class="passwordInputGroup">
+        <input type="password" name="confirmPassword" value="<%= confirmPassword %>">
+        <button type="button" class="outline">show</button>
       </fieldset>
     </label>
     <label>

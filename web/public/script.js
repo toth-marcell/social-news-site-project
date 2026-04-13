@@ -1,14 +1,18 @@
 function OnLoad() {
-  const showPasswordButton = document.getElementById("showPasswordButton");
-  const passwordInput = document.getElementById("passwordInput");
-  showPasswordButton.addEventListener("click", () => {
-    if (passwordInput.type == "password") {
-      passwordInput.type = "text";
-      showPasswordButton.innerText = "hide";
-    } else {
-      passwordInput.type = "password";
-      showPasswordButton.innerText = "show";
-    }
-  });
-  showPasswordButton.style.display = "block";
+  for (passwordInputGroup of document.getElementsByClassName(
+    "passwordInputGroup"
+  )) {
+    const input = passwordInputGroup.querySelector("input");
+    const button = passwordInputGroup.querySelector("button");
+    button.addEventListener("click", () => {
+      if (input.type == "password") {
+        input.type = "text";
+        button.innerText = "hide";
+      } else {
+        input.type = "password";
+        button.innerText = "show";
+      }
+    });
+    button.style.display = "block";
+  }
 }

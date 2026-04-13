@@ -106,17 +106,27 @@ router.get("/posts/:id", async (req, res) => {
 });
 
 router.get("/register", (req, res) =>
-  res.render("register", { name: "", password: "" })
+  res.render("register", { name: "", password: "", confirmPassword: "" })
 );
 router.post("/register", async (req, res) => {
-  const { name, password } = req.body;
+  const { name, password, confirmPassword } = req.body;
+  if (password != confirmPassword)
+    return res.render("register", {
+      name,
+      password,
+      confirmPassword,
+      msg_fail: "The password and confirm password fields don't match!",
+    });
   const result = await Register(name, password);
   if (result.status == 200) {
     res.render("login", { name: "", password: "", msg: result.msg });
   } else {
-    res
-      .status(result.status)
-      .render("register", { name, password, msg_fail: result.msg });
+    res.status(result.status).render("register", {
+      name,
+      password,
+      confirmPassword,
+      msg_fail: result.msg,
+    });
   }
 });
 
@@ -148,6 +158,7 @@ router.get("/users/:id", async (req, res) => {
     profile,
     name: profile.name,
     password: "",
+    confirmPassword: "",
     email: profile.email,
     about: profile.about,
     isAdmin: profile.isAdmin,
@@ -157,7 +168,18 @@ router.get("/users/:id", async (req, res) => {
 router.post("/users/:id", LoggedInOnly, async (req, res) => {
   const profile = await GetProfile(req.params.id, res.locals.user);
   if (!profile) return res.render("msg", { msg_fail: "No such user!" });
-  const { isAdmin, name, password, email, about } = req.body;
+  const { isAdmin, name, password, confirmPassword, email, about } = req.body;
+  if (password != confirmPassword)
+    return res.render("profile", {
+      profile,
+      isAdmin,
+      name,
+      password,
+      confirmPassword,
+      email,
+      about,
+      msg_fail: "The password and confirm password fields don't match!",
+    });
   const result = await EditUser(
     profile,
     isAdmin,
@@ -173,6 +195,7 @@ router.post("/users/:id", LoggedInOnly, async (req, res) => {
     isAdmin,
     name,
     password,
+    confirmPassword,
     email,
     about,
     msg_fail: result.msg,

@@ -90,7 +90,8 @@ article:has(svg)::after {
   text-align: center;
   margin: auto;
 }
-#showPasswordButton {
+.passwordInputGroup > button {
+  display: none;
   min-width: 5em;
   padding: 0;
 }
