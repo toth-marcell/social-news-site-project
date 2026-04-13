@@ -1,13 +1,13 @@
 <% pageName = "Frontpage" %>
 <%- include("head") -%>
-<details open>
+<details <%= filterActive ? "open" : null %>>
   <summary role="button" class="outline contrast">
     Filters
   </summary>
   <form class="grid">
     <label>
       by link type
-      <input type="text" name="user" value="<%= filter.category %>">
+      <input type="text" name="linkType" value="<%= filter.linkType %>">
     </label>
     <label>
       by category

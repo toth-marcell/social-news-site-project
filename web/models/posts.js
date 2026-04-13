@@ -64,9 +64,9 @@ export async function GetPosts(sort, offset = 0, filter, user) {
         where: { name: filter.user },
         attributes: ["id"],
       });
-      if (user) filter.user = user.id;
-    }
-    filters.push({ UserId: filter.user });
+      if (user) filters.push({ UserId: user.id });
+      else filters.push({ UserId: filter.user });
+    } else filters.push({ UserId: filter.user });
   }
   const customAttrs = [PostVotesAttr];
   if (user) customAttrs.push(PostVotedAttr(user.id));

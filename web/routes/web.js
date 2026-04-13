@@ -44,35 +44,27 @@ router.get("/pico.css", (req, res) => {
 
 router.get("/rules", (req, res) => res.render("rules"));
 
-router.get("/", async (req, res) => {
-  const result = await GetPosts(
-    "hot",
-    req.query.offset,
-    req.query,
-    res.locals.user
-  );
-  res.render("index", result);
-});
-
-router.get("/new", async (req, res) => {
-  const result = await GetPosts(
-    "new",
-    req.query.offset,
-    req.query,
-    res.locals.user
-  );
-  res.render("index", result);
-});
-
-router.get("/top", async (req, res) => {
-  const result = await GetPosts(
-    "top",
-    req.query.offset,
-    req.query,
-    res.locals.user
-  );
-  res.render("index", result);
-});
+function RenderPosts(sort) {
+  return async (req, res) => {
+    const result = await GetPosts(
+      sort,
+      req.query.offset,
+      req.query,
+      res.locals.user
+    );
+    result.filterActive = false;
+    for (const filter of Object.values(result.filter)) {
+      if (filter != "") {
+        result.filterActive = true;
+        break;
+      }
+    }
+    res.render("index", result);
+  };
+}
+router.get("/", RenderPosts("hot"));
+router.get("/new", RenderPosts("new"));
+router.get("/top", RenderPosts("top"));
 
 router.get("/comments", async (req, res) => {
   const result = await GetComments(
