@@ -157,7 +157,15 @@ router.get("/logout", (req, res) => {
 });
 
 router.get("/users/:id", async (req, res) => {
-  const profile = await GetProfile(req.params.id, res.locals.user);
+  const { id } = req.params;
+  if (isNaN(parseInt(id))) {
+    const user = await User.findOne({
+      where: { name: id },
+      attributes: ["id"],
+    });
+    if (user) return res.redirect(`/users/${user.id}`);
+  }
+  const profile = await GetProfile(id, res.locals.user);
   if (!profile) return res.render("msg", { msg_fail: "No such user!" });
   res.render("profile", {
     profile,
