@@ -59,6 +59,13 @@ export async function GetPosts(sort, offset = 0, filter, user) {
     filters.push({ category: filter.category });
   }
   if (filter.user) {
+    if (isNaN(parseInt(filter.user))) {
+      const user = await User.findOne({
+        where: { name: filter.user },
+        attributes: ["id"],
+      });
+      if (user) filter.user = user.id;
+    }
     filters.push({ UserId: filter.user });
   }
   const customAttrs = [PostVotesAttr];
@@ -81,6 +88,7 @@ export async function GetPosts(sort, offset = 0, filter, user) {
     count: result.count,
     limit,
     offset,
+    filter,
   };
 }
 

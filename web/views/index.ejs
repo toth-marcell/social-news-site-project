@@ -1,5 +1,25 @@
 <% pageName = "Frontpage" %>
 <%- include("head") -%>
+<details open>
+  <summary role="button" class="outline contrast">
+    Filters
+  </summary>
+  <form class="grid">
+    <label>
+      by link type
+      <input type="text" name="user" value="<%= filter.category %>">
+    </label>
+    <label>
+      by category
+      <input type="text" name="category" value="<%= filter.category %>">
+    </label>
+    <label>
+      by user (name or id)
+      <input type="text" name="user" value="<%= filter.user %>">
+    </label>
+    </div>
+    <button type="submit">Apply filters</button>
+</details>
 <% for (post of posts) { %>
 <article id="p<%= post.id %>">
   <div>
