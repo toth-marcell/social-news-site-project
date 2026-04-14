@@ -24,12 +24,12 @@
   </form>
 </details>
 <% for (post of posts) { %>
-<article id="p<%= post.id %>">
+<article>
   <div>
-    <form action="/postVote/<%= post.id %>?redirect=/#p<%= post.id %>" method="post">
-      <button class="<%= post.voted ? 'outline' : '' %>">
+    <form action="/postVote/<%= post.id %>" method="post">
+      <button type="submit" class="<%= post.voted ? 'outline ' : '' %>postVoteButton" data-id="<%= post.id %>">
         <%- include("icons/upvoteArrow") -%>
-        <%= post.votes %>
+        <span><%= post.votes %></span>
       </button>
     </form>
     <a href="/?category=<%= post.category %>"><button class="outline"><%= post.category %></button></a>

@@ -43,10 +43,9 @@ article > * {
   margin-right: 10px;
 }
 article button,
-article > div > form > button[type="submit"] {
+article > div > form > button[type="submit"],
+article > div > form > button[type="button"] {
   padding: 5px;
-}
-article > div > form > button[type="submit"] {
   margin: 0;
 }
 article h2 {

@@ -1,4 +1,4 @@
-function OnLoad() {
+async function OnLoad() {
   for (passwordInputGroup of document.getElementsByClassName(
     "passwordInputGroup"
   )) {
@@ -14,5 +14,27 @@ function OnLoad() {
       }
     });
     button.style.display = "block";
+  }
+
+  if (await cookieStore.get("token")) {
+    for (postVoteButton of document.getElementsByClassName("postVoteButton")) {
+      const button = postVoteButton;
+      button.addEventListener("click", async () => {
+        const result = await fetch(`/postVote/${button.dataset.id}`, {
+          method: "post",
+        });
+        if (result.ok) {
+          const votesSpan = button.querySelector("span");
+          if (button.classList.contains("outline")) {
+            votesSpan.innerText = parseInt(votesSpan.innerText) - 1;
+            button.classList.remove("outline");
+          } else {
+            votesSpan.innerText = parseInt(votesSpan.innerText) + 1;
+            button.classList.add("outline");
+          }
+        }
+      });
+      button.type = "button";
+    }
   }
 }
