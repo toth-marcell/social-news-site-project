@@ -28,7 +28,15 @@ for (let i = 0; i < faker.number.int({ min: 100, max: 200 }); i++) {
                   "website",
                   "pdf",
                 ]),
-                category: faker.book.genre(),
+                category: faker.helpers.arrayElement([
+                  "Politics",
+                  "Crime",
+                  "Economy",
+                  "Health",
+                  "Sports",
+                  "Entertainment",
+                  "Weather",
+                ]),
               });
             } else {
               post = await user.createPost({

@@ -22,6 +22,7 @@
   </label>
   <label>
     Link type
+    <p><small>It's recommended to use one of the listed link types.</small></p>
     <%- include("linkTypes") -%>
     <input type="text" name="linkType" value="<%= linkType %>" list="linkTypes">
   </label>
@@ -31,7 +32,9 @@
   </label>
   <label>
     Category
-    <input type="text" name="category" value="<%= category %>" required>
+    <p><small>It's recommended to use one of the listed categories.</small></p>
+    <%- include("categories") -%>
+    <input type="text" name="category" value="<%= category %>" list="categories" required>
   </label>
   <% if (typeof(msg) != "undefined") { %>
   <mark class="msg"><%= msg %></mark>

@@ -7,11 +7,13 @@
   <form class="grid">
     <label>
       by link type
-      <input type="text" name="linkType" value="<%= filter.linkType %>">
+      <%- include("linkTypes") -%>
+      <input type="text" name="linkType" value="<%= filter.linkType %>" list="linkTypes">
     </label>
     <label>
       by category
-      <input type="text" name="category" value="<%= filter.category %>">
+      <%- include("categories") -%>
+      <input type="text" name="category" value="<%= filter.category %>" list="categories">
     </label>
     <label>
       by user (name or id)
