@@ -53,6 +53,7 @@ function RenderPosts(sort) {
       res.locals.user
     );
     result.filterActive = false;
+    delete result.filter.offset;
     for (const filter of Object.values(result.filter)) {
       if (filter != "") {
         result.filterActive = true;
