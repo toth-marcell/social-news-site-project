@@ -403,13 +403,12 @@ Mivel nem vagyunk bejelentkezve, mi nem tudunk megjegyzést írni, de ha be lenn
 A regisztrációhoz nyomjuk meg a jobb felső sarokban a regisztráció gombot, ami linkel a regisztrációs oldalra.
 Itt meg kell adnunk a kívánt nevet és jelszót.
 A jelszó alapból ki van csillagozva, a jobb oldalán van egy gomb, amivel meg lehet jeleníteni, vagy újból elrejteni.
-A biztonság miatt a jelszónak minimum 8 karakterből kell állnia.
-
+A biztonság miatt a jelszónak minimum 8 karakterből kell állnia, és hogy megerősítsük, hogy nem írtuk el, kétszer kell beírni.
+#figure(image("screenshots/web/register.png"), caption: "Web: Regisztráció")
 A regisztráció gombra kattintva két kimenet lehet:
 - ha sikeres a regisztráció, akkor átirányít a belépés oldalra, hogy be tudjunk lépni a frissen készített fiókunkba.
-- ha nem sikeres a regisztráció, akkor maradunk ezen az oldalon és kapunk egy hibaüzenetet
-#figure(image("screenshots/web/register.png"), caption: "Web: Regisztráció")
-#figure(image("screenshots/web/register-nametaken.png"), caption: "Web: Sikertelen regisztráció")
+- ha nem sikeres a regisztráció, akkor maradunk ezen az oldalon és kapunk egy hibaüzenetet, ez lehet például azért, mert a jelszó nincs meg a min. 8 karakter, vagy ha a választott felhasználónévvel már létezik egy felhasználó.
+#figure(image("screenshots/web/register-err.png"), caption: "Web: Sikertelen regisztráció")
 A belépés oldalra eljutunk a sikeres regisztráció után, vagy meglátogathatjuk a jobb felső sarokban található gombbal. Itt is egy felhasználónevet és jelszót kell megadni, és a jelszó itt is megnézhető/elrejthető.
 Az űrlap beküldése után két eredmény lehet:
 - ha nem sikeres a bejelentkezés, akkor maradunk az oldalon és kapunk egy hibaüzenetet
@@ -436,7 +435,7 @@ Emellett meg lehet figyelni, hogy a saját tartalmunkon (posztjainkon és megjeg
 
 A törlés gomb megnyomásra törli a tartalmat. Ugyan lehetséges, hogy hibaüzenetet ad vissza (nincs jogosultság), de ez nem fog előfordulni a felhasználói felületen, mert a gomb eleve nem lesz látható ilyen esetben.
 
-A szerkesztés gomb mind a bejegyzéseknél és kommenteknél elirányít a megfelelő szerkesztési űrlaphoz. A szerkesztésnél ugyanazoknak a követelményeknek kell megfelelni, mint a létrehozásnál.
+A szerkesztés gomb mind a bejegyzéseknél és kommenteknél elirányít a megfelelő szerkesztési űrlaphoz. A szerkesztésnél ugyanazoknak a követelményeknek kell megfelelni, mint a létrehozásnál (#link(<post-constraints>)[a bejegyzés követelményit lásd itt])
 #figure(image("screenshots/web/editpost.png"), caption: "Web: Bejegyzés szerkesztése oldal")
 #figure(image("screenshots/web/editcomment.png"), caption: "Web: Megjegyzés szerkesztése oldal")
 Bárhol, ahol egy felhasználó neve van, láthatunk egy profilképet is, egy úgynevezett identicon-t, ami a felhasználó nevéből van automatikusan generálva. Ezek linkelnek a felhasználó profil oldalára. A saját profilt meg lehet nyitni a navigációs sávból is.
