@@ -8,9 +8,9 @@
   </label>
   <label>
     Password
-    <fieldset role="group">
-      <input type="password" name="password" value="<%= password %>" id="passwordInput">
-      <button type="button" class="outline" id="showPasswordButton" style="display: none;">show</button>
+    <fieldset role="group" class="passwordInputGroup">
+      <input type="password" name="password" value="<%= password %>">
+      <button type="button" class="outline">show</button>
     </fieldset>
   </label>
   <% if (typeof(msg) != "undefined") { %>
