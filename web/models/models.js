@@ -79,11 +79,19 @@ export const Comment = sequelize.define("Comment", {
 Comment.belongsTo(User);
 User.hasMany(Comment);
 
-Comment.belongsTo(Post);
-Post.hasMany(Comment);
+Comment.belongsTo(Post, { onDelete: "CASCADE" });
+Post.hasMany(Comment, { onDelete: "CASCADE" });
 
-Comment.belongsTo(Comment, { foreignKey: "ParentId", as: "Parent" });
-Comment.hasMany(Comment, { foreignKey: "ParentId", as: "Children" });
+Comment.belongsTo(Comment, {
+  foreignKey: "ParentId",
+  as: "Parent",
+  onDelete: "CASCADE",
+});
+Comment.hasMany(Comment, {
+  foreignKey: "ParentId",
+  as: "Children",
+  onDelete: "CASCADE",
+});
 
 export const PostVote = sequelize.define("PostVote");
 User.belongsToMany(Post, { through: PostVote, as: "VotedPosts" });
