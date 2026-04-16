@@ -396,8 +396,10 @@ Az első látogatáskor a főoldalon láthatjuk a bejegyzéseket, legelöl a mai
 A jobb felső sarokban vannak linkek a regisztráció, illetve a bejelentkezés oldalakra, mivel nem vagyunk még bejelentkezve.
 #figure(image("screenshots/web/frontpage-first.png"), caption: "Web: Főoldal, első látogatás")
 #figure(image("screenshots/web/post-first.png"), caption: "Web: Egy bejegyzés")
+#v(-.5em)
 Ha rákattintunk egy posztra, láthatjuk a részleteit, és ha vannak, a kommenteket, és az azokon lévő kommenteket (ezt úgy látjuk, hogy a mélyebb megjegyzéseken egyre nagyobb bal oldali margó van).
 Mivel nem vagyunk bejelentkezve, mi nem tudunk megjegyzést írni, de ha be lennénk jelentkezve, akkor látható egy megjegyzés mező és gomb, amivel a bejegyzésre tudunk kommentelni, illetve a kommenteken látható lesz egy válasz gomb, ami átirányít egy űrlapra, ahol beírhatjuk a válaszunkat.
+#v(-.5em)
 <post-figure>
 #figure(image("screenshots/web/post.png"), caption: "Web: Egy bejegyzés, bejelentkezve")
 A regisztrációhoz nyomjuk meg a jobb felső sarokban a regisztráció gombot, ami linkel a regisztrációs oldalra.
@@ -420,13 +422,13 @@ Ha be vagyunk lépve, akkor a felső menü megváltozik: a bal oldalán megjelen
 Ha egy adminisztrátorként vagyunk belépve, akkor a felső navigációs menüben láthatunk még 2 gombot, a napló olvasására, és a felhasználók listázására. Erre még visszatérünk.
 #figure(image("screenshots/web/frontpage-admin.png"), caption: "Web: Főoldal, adminisztrátor")
 <post-constraints>
+#figure(image("screenshots/web/newpost.png"), caption: "Web: Új bejegyzés oldal")
 Az új bejegyzés oldalon megadhatjuk az új bejegyzésünk tartalmát, és közzétehetjük azt.
 Egy bejegyzésnek meg kell felelnie a következő feltételeknek, amiket ha nem teljesítünk, megfelelő hibaüzenetet kapunk:
 - A Title és Category mezőket mindenképpen ki kell tölteni
 - Ha meg van adva Link akkor kell Link type, és fordítva is
 - A Link/Link type és a Text-ből legalább az egyiknek kell lennie, de lehet mindkettő is
 Az új bejegyzés sikeres létrehozása után átirányít az oldalára, lásd #link(<post-figure>)[itt].
-#figure(image("screenshots/web/newpost.png"), caption: "Web: Új bejegyzés oldal")
 Az új bejegyzésünkre kommentelhetünk is.
 Egy kommentre csak annyi követelmény van, hogy nem lehet üres.
 Pontosan az is követelmény, hogy létezzen a bejegyzés vagy megjegyzés amire válaszol, de ilyen hibaüzenetet általában a felhasználó nem láthat (esetleg csak akkor, ha pont törölték a tartalmat amire kommentelni szeretett volna).
@@ -436,6 +438,7 @@ Emellett meg lehet figyelni, hogy a saját tartalmunkon (posztjainkon és megjeg
 A törlés gomb megnyomásra törli a tartalmat. Ugyan lehetséges, hogy hibaüzenetet ad vissza (nincs jogosultság), de ez nem fog előfordulni a felhasználói felületen, mert a gomb eleve nem lesz látható ilyen esetben.
 
 A szerkesztés gomb mind a bejegyzéseknél és kommenteknél elirányít a megfelelő szerkesztési űrlaphoz. A szerkesztésnél ugyanazoknak a követelményeknek kell megfelelni, mint a létrehozásnál (#link(<post-constraints>)[a bejegyzés követelményit lásd itt])
+#v(-.7em)
 #figure(image("screenshots/web/editpost.png"), caption: "Web: Bejegyzés szerkesztése oldal")
 #figure(image("screenshots/web/editcomment.png"), caption: "Web: Megjegyzés szerkesztése oldal")
 Bárhol, ahol egy felhasználó neve van, láthatunk egy profilképet is, egy úgynevezett identicon-t, ami a felhasználó nevéből van automatikusan generálva. Ezek linkelnek a felhasználó profil oldalára. A saját profilt meg lehet nyitni a navigációs sávból is.
@@ -448,9 +451,10 @@ Ha a saját profilunkon vagyunk, akkor azt szerkeszthetjük, illetve az adminisz
 A profil szerkesztésénél lehet változtatni a jelszót is, ha nem adunk meg új jelszót, akkor nem változik. Viszont a többi mezőt ki kell tölteni, különben az az adat törlődik (kivéve a névnél, hiszen kötelező egy felhasználónak hogy neve legyen).
 #figure(image("screenshots/web/profile-own.png"), caption: "Web: Saját profil")
 #figure(image("screenshots/web/profile-admin.png"), caption: "Web: Egy felhasználói profil adminisztrátorként")
+#pagebreak()
 És végül az adminisztrátori funkciók:
-
 A napló oldal listázza a szerver által kapott kéréseket adatait: idő, metódus, útvonal, és ha be volt jelentkezve valaki, akkor egy link a profiljára. Oldalakra van bontva, felül és alul is vannak nyilak (a képen csak egy nyíl mert az első oldalon vagyunk).
+#v(-.7em)
 #figure(image("screenshots/web/logs.png"), caption: "Web: Napló")
 A felhasználó lista értelemszerűen listázza az összes felhasználót, látható az összes felhasználó adata és egyszerűen le lehet jutni a profil oldalukra.
 #figure(image("screenshots/web/users.png"), caption: "Web: Felhasználó lista")
